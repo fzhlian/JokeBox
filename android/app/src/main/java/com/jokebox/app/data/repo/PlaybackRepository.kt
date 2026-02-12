@@ -21,8 +21,22 @@ class PlaybackRepository(
 
     fun observeUnplayedCount(): Flow<Int> = jokeDao.observeUnplayedCount()
 
+    fun observeUnplayedCount(ageGroup: AgeGroup): Flow<Int> = jokeDao.observeUnplayedCountByAge(ageGroup.value)
+
     suspend fun next(ageGroup: AgeGroup, language: String): JokeUiItem? {
-        val joke = jokeDao.pickNextUnplayed(ageGroup.value, language) ?: return null
+        val normalizedLanguage = normalizeLanguageTag(language)
+        val exactCandidates = linkedSetOf(language, normalizedLanguage, normalizedLanguage.substringBefore('-'))
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+
+        val joke = exactCandidates.firstNotNullOfOrNull { lang ->
+            jokeDao.pickNextUnplayed(ageGroup.value, lang)
+        } ?: run {
+            val prefix = normalizedLanguage.substringBefore('-').ifBlank { normalizedLanguage }
+            jokeDao.pickNextUnplayedByLanguagePrefix(ageGroup.value, "$prefix%")
+        } ?: jokeDao.pickNextUnplayedByAge(ageGroup.value)
+        ?: return null
+
         playedDao.upsert(PlayedEntity(joke.id, System.currentTimeMillis()))
         val state = playbackStateDao.get() ?: PlaybackStateEntity(
             key = "main",
@@ -71,6 +85,17 @@ class PlaybackRepository(
             updatedAt = System.currentTimeMillis()
         )
         playbackStateDao.upsert(state.copy(lastJokeId = null, playedCount = 0, updatedAt = System.currentTimeMillis()))
+    }
+}
+
+private fun normalizeLanguageTag(language: String): String {
+    val normalized = language.trim().replace('_', '-').lowercase()
+    return when {
+        normalized.startsWith("zh-hant") || normalized.startsWith("zh-tw") || normalized.startsWith("zh-hk") -> "zh-Hant"
+        normalized.startsWith("zh-hans") || normalized.startsWith("zh-cn") || normalized == "zh" -> "zh-Hans"
+        normalized.startsWith("en") -> "en"
+        normalized.isBlank() -> "zh-Hans"
+        else -> language.trim()
     }
 }
 

@@ -1,9 +1,8 @@
-﻿# HarmonyOS NEXT Scaffold
+﻿# HarmonyOS NEXT Runnable Skeleton
 
-本目录与 `harmony/` 保持同构，面向 HarmonyOS NEXT 的 ArkTS/ArkUI Next 实现。
+已补齐可运行骨架（ArkUI Next + RDB）：
+- `entry/src/main/ets/data/RdbStore.ets`：RDB 初始化与建表。
+- `entry/src/main/ets/data/Repositories.ets`：Source DAO 示例。
+- `entry/src/main/ets/pages/Index.ets`：AgeGate/Main/Sources/Settings 页面流转。
 
-当前已完成：
-- 数据模型字段规范：`models.ets`
-- 流水线接口骨架：`pipeline.ets`
-
-后续开发建议：优先实现 RDB + Preferences + 前台增量处理策略。
+建议在 DevEco Studio 的 HarmonyOS NEXT 工程中挂载该目录并运行。

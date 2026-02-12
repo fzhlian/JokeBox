@@ -81,11 +81,24 @@ interface JokeDao {
     )
     suspend fun pickNextUnplayed(ageGroup: Int, language: String): JokeEntity?
 
+    @Query(
+        "SELECT j.* FROM joke j LEFT JOIN played p ON j.id = p.jokeId WHERE p.jokeId IS NULL AND j.ageGroup = :ageGroup AND j.language LIKE :languagePrefix ORDER BY j.createdAt ASC LIMIT 1"
+    )
+    suspend fun pickNextUnplayedByLanguagePrefix(ageGroup: Int, languagePrefix: String): JokeEntity?
+
+    @Query(
+        "SELECT j.* FROM joke j LEFT JOIN played p ON j.id = p.jokeId WHERE p.jokeId IS NULL AND j.ageGroup = :ageGroup ORDER BY j.createdAt ASC LIMIT 1"
+    )
+    suspend fun pickNextUnplayedByAge(ageGroup: Int): JokeEntity?
+
     @Query("SELECT * FROM joke WHERE id = :id")
     suspend fun getById(id: String): JokeEntity?
 
     @Query("SELECT COUNT(*) FROM joke j LEFT JOIN played p ON j.id = p.jokeId WHERE p.jokeId IS NULL")
     fun observeUnplayedCount(): Flow<Int>
+
+    @Query("SELECT COUNT(*) FROM joke j LEFT JOIN played p ON j.id = p.jokeId WHERE p.jokeId IS NULL AND j.ageGroup = :ageGroup")
+    fun observeUnplayedCountByAge(ageGroup: Int): Flow<Int>
 
     @Query("DELETE FROM joke WHERE sourceType IN (:types)")
     suspend fun deleteBySourceTypes(types: List<SourceType>)

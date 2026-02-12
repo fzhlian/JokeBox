@@ -34,13 +34,13 @@
     "type": "BUILTIN",
     "name": "JokeAPI Single",
     "enabled": true,
-    "supportedLanguages": ["en"],
+    "supportedLanguages": ["en", "zh"],
     "licenseNote": "JokeAPI (Sv443). Follow API terms and fair usage.",
     "toSNote": "https://jokeapi.dev/",
     "configJson": {
       "request": {
         "method": "GET",
-        "url": "https://v2.jokeapi.dev/joke/Any?type=single&amount={{limit}}&lang=en&blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
+        "url": "https://v2.jokeapi.dev/joke/Any?type=single&amount={{limit}}&lang={{lang}}&blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
         "headers": {
           "Accept": "application/json",
           "User-Agent": "JokeBox/0.1"

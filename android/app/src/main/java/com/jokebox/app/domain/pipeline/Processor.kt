@@ -82,7 +82,7 @@ class Processor(
         val hashId = Hashing.sha256Hex(contentNorm, 32)
         if (jokeDao.exists(hashId)) return ProcessDecision.DROPPED_DUP
 
-        val language = JsonPath.getString(root, languagePath) ?: raw.language ?: defaultLanguage
+        val language = normalizeLanguageTag(JsonPath.getString(root, languagePath) ?: raw.language ?: defaultLanguage)
         val simHash = SimHash64.compute(contentNorm)
         val bucket = SimHash64.bucket(simHash)
         val nearCandidates = jokeDao.listByBucket(age, language, bucket.length, bucket)
@@ -108,6 +108,17 @@ class Processor(
             )
         )
         return ProcessDecision.ACCEPTED
+    }
+}
+
+private fun normalizeLanguageTag(language: String): String {
+    val normalized = language.trim().replace('_', '-').lowercase()
+    return when {
+        normalized.startsWith("zh-hant") || normalized.startsWith("zh-tw") || normalized.startsWith("zh-hk") -> "zh-Hant"
+        normalized.startsWith("zh-hans") || normalized.startsWith("zh-cn") || normalized == "zh" -> "zh-Hans"
+        normalized.startsWith("en") -> "en"
+        normalized.isBlank() -> "zh-Hans"
+        else -> language.trim()
     }
 }
 

@@ -1,12 +1,8 @@
-﻿# HarmonyOS Scaffold
+﻿# HarmonyOS Runnable Skeleton
 
-本目录包含鸿蒙版 JokeBox 的第一批同构定义（与 Android 一致的数据模型与流水线接口）。
+已补齐可运行骨架（ArkUI + RDB）：
+- `entry/src/main/ets/data/RdbStore.ets`：RDB 初始化与建表。
+- `entry/src/main/ets/data/Repositories.ets`：Source DAO 示例。
+- `entry/src/main/ets/pages/Index.ets`：AgeGate/Main/Sources/Settings 页面流转。
 
-当前已完成：
-- 数据模型字段规范：`models.ets`
-- 流水线接口骨架：`pipeline.ets`
-
-下一步可直接实现：
-1. RDB 实体映射与 DAO
-2. Fetcher/Importer/Processor 实现
-3. ArkUI 页面（AgeSelect/Main/Sources/Settings）
+建议：在 DevEco Studio 新建 Stage 模型工程后，将上述 `entry/src/main/ets` 目录直接覆盖对应位置运行。

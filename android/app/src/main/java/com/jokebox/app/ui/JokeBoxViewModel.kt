@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -65,8 +67,13 @@ class JokeBoxViewModel(
         DisplaySettings(language, feature)
     }
 
+    private val ageScopedUnplayedFlow = settingsStore.selectedAgeGroupFlow
+        .flatMapLatest { ageGroup ->
+            if (ageGroup == null) flowOf(0) else playbackRepository.observeUnplayedCount(ageGroup)
+        }
+
     private val playbackStatsFlow = combine(
-        playbackRepository.observeUnplayedCount(),
+        ageScopedUnplayedFlow,
         rawQueueDao.observeCount(RawStatus.PENDING)
     ) { unplayed, pending ->
         PlaybackStats(unplayed, pending)

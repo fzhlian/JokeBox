@@ -1,0 +1,339 @@
+下面是**重新整理后的完整编程方案**（一个合并版 App：内置合规源 + 用户自带来源/导入，并带强制合规提示；异步分龄+相近去重后台流水线；多语言随系统/可手动；Android/鸿蒙/鸿蒙NEXT 三端）。你可以直接把“Codex 执行清单”整段丢给 Codex 生成工程。
+
+---
+
+# 笑话 App 合并版编程方案（Android / HarmonyOS / HarmonyOS NEXT）
+
+## 1. 目标与核心体验
+
+### 1.1 产品目标
+
+* 首次启动选择年龄段：**少年 / 青年 / 成人**，确认后**永久锁定不可修改**（除非清除应用数据/卸载重装）。
+* 自动获取笑话并存入本地：
+
+  * **内置合规源（默认启用）**
+  * **用户自带来源**：用户自定义 API/RSS 或离线导入文件
+* **异步后台处理**：抓到多少、处理出多少、就能播放多少（边处理边可播）。
+* 播放方式：用户手动 **上一个 / 下一个**；已播内容不重复；可**星标收藏**。
+* 更新：手动更新 + 自动/定期更新。
+* 语音播放：多种自然亲和音色 + 语速/音调设置。
+* 语言：**界面语言**与**抓取内容语言**默认随系统自动匹配，也可手动指定。
+
+---
+
+## 2. 合规与“违规提示”机制（必须实现）
+
+### 2.1 来源类型
+
+1. **内置合规源（BUILTIN）**
+
+* 只内置明确允许使用/许可清晰的 API/RSS/开放数据源
+* 每个源带 `licenseNote/ToSNote` 在“来源管理”展示
+
+2. **用户自定义在线源（USER_ONLINE）**
+
+* 用户填写 URL/参数/Header/Token（如需要）
+* App 仅按配置调用，不提供任何绕过/破解能力
+* 第一次启用必须完成“合规声明确认”
+
+3. **用户离线导入（USER_OFFLINE）**
+
+* 支持 JSON/CSV/TXT/HTML(离线文件) 导入
+* 只解析用户提供文件，不联网抓取
+* 第一次导入必须完成“合规声明确认”
+
+### 2.2 强制合规声明（一次性确认 + 可查看）
+
+当用户首次执行以下任一动作时强制弹窗/页面：
+
+* 新增或启用 **USER_ONLINE**
+* 执行 **离线导入**
+
+声明内容要求包含：
+
+* 用户确认对内容拥有授权/遵守 ToS/robots/版权等
+* 用户对来源合法性负责
+* 若来源涉嫌侵权/违规应停止使用并删除内容
+
+建议实现为：
+
+* 必须勾选同意 + **输入确认文本**（默认启用）
+* 写入 `Settings.complianceAccepted=true` 后才允许继续
+
+并提供：
+
+* “查看合规声明”入口
+* “清空用户来源数据”（删除 USER_* 来源配置与其导入/抓取的本地内容）
+
+---
+
+## 3. 系统架构总览（纯客户端，多来源，异步流水线）
+
+### 3.1 两层内容库：RawQueue 与 ReadyJokes
+
+* **RawQueue**：刚抓到/导入的原始数据（待处理）
+* **ReadyJokes**：处理完成可播放的笑话库
+
+### 3.2 三个后台模块
+
+1. **Fetcher（抓取器）**
+
+* 遍历启用的 `BUILTIN + USER_ONLINE` 来源
+* 依据 `contentLanguage` 选择源/参数
+* 将抓到的 items 以 raw 形式写入 RawQueue（PENDING）
+
+2. **Importer（导入器）**
+
+* 用户导入文件时把数据写入 RawQueue（PENDING）
+
+3. **Processor（处理器）**
+
+* 从 RawQueue 取 PENDING 批量处理：
+
+  * normalize（标准化）
+  * 分龄过滤（ContentPolicy）
+  * 精确去重（hash）
+  * 相近去重（SimHash + 桶）
+  * 通过则写入 ReadyJokes（Joke 表），raw 标 DONE
+  * 不通过则 raw 标 DROPPED（记录原因）
+
+**UI** 监听 ReadyJokes：新增即刻可播。
+
+---
+
+## 4. 本地数据模型（跨端一致）
+
+> 各端用各自数据库实现：Android Room；鸿蒙/Next RDB；设置用 DataStore/Preferences/Settings 表均可。
+
+### 4.1 SourceConfig（来源配置）
+
+* `sourceId` (UUID)
+* `type`：`BUILTIN | USER_ONLINE | USER_OFFLINE`
+* `name`
+* `enabled` (bool)
+* `supportedLanguages`（builtin用；user可空）
+* `configJson`（仅 USER_ONLINE 需要：请求+解析+映射）
+* `licenseNote`（builtin必填，user可选）
+* `createdAt, updatedAt`
+
+### 4.2 RawQueue（原始队列）
+
+* `rawId`（自增或 UUID）
+* `ownerSourceId`
+* `ownerSourceType`
+* `language`（源返回或客户端推断）
+* `ageGroupHint`（可空）
+* `payloadJson`
+* `fetchedAt`
+* `status`：`PENDING | PROCESSING | DONE | DROPPED | FAILED`
+* `failCount`
+* `lastError`
+* `dropReason`（可选）
+
+### 4.3 Joke（可播放库）
+
+* `id`：优先源 id；否则 `hashId = sha256(contentNorm)`（截断到 16~32 字节 hex）
+* `ageGroup`：0/1/2
+* `language`：`zh-Hans/zh-Hant/en/...`
+* `content`
+* `contentNorm`
+* `simHash`：64-bit hex
+* `sourceId`、`sourceType`
+* `sourceUrl`（可选）
+* `createdAt, updatedAt`
+
+### 4.4 播放与收藏
+
+* `Played(jokeId, playedAt)`
+* `Favorite(jokeId, starredAt)`
+* `PlaybackState(key="main", lastJokeId, playedCount, updatedAt)`
+
+### 4.5 Settings（关键项）
+
+* `ageGroup`、`ageLocked=true/false`
+* `complianceAccepted=true/false`
+* `uiLanguageMode=SYSTEM|MANUAL`、`uiLanguage`
+* `contentLanguageMode=SYSTEM|MANUAL`、`contentLanguage`
+* `autoUpdateEnabled`、`autoProcessEnabled`
+* `lastUpdateAt`
+* `ttsVoiceProfileId`、`ttsSpeed`、`ttsPitch`
+* `nearDedupThreshold`（可隐藏）
+
+---
+
+## 5. 文本标准化、分龄、去重与相近去重
+
+### 5.1 标准化 normalize -> contentNorm
+
+* trim
+* 英文转小写
+* 全角/半角归一
+* 连续空白压缩
+* 去零宽字符
+* 可选：繁简归一（若你愿意引入库）
+
+### 5.2 分龄过滤 ContentPolicy（本地二次过滤）
+
+* 少年最严、青年次之、成人最宽，但仍保底屏蔽仇恨/违法/极端暴力煽动。
+* 若源无分龄字段：
+
+  * 少年/青年：宁可丢弃也不“误放”
+  * 成人：可放宽，但仍过底线策略
+
+### 5.3 精确去重
+
+* `hashId = sha256(contentNorm)`
+* id 已存在则跳过
+
+### 5.4 相近去重（客户端可跑）
+
+* SimHash 64-bit（中文用 3-gram；英文可 token 化）
+* 只在同 `(ageGroup + language)` 范围内比较
+* 桶策略：用 simhash 前 N 位做桶键，仅与同桶/邻桶比较
+* 汉明距离阈值默认 4（可在高级设置调）
+
+---
+
+## 6. 播放逻辑（不重复、上一个/下一个、播完提示）
+
+### 6.1 Next
+
+* 从 ReadyJokes 中取“未播放”的一条（可按时间、或随机）
+* 写入 Played
+* 更新 PlaybackState
+* 如果没有未播放：
+
+  * 若 RawQueue 仍有待处理：提示“正在处理，请稍候”
+  * 否则提示“已播完”，提供：
+
+    * 更新笑话库
+    * 重置已播记录（清空 Played）
+
+### 6.2 Prev
+
+* 维护 `historyStack`（内存 + 可选持久化最近 N 条）
+* Prev 不改变 Played（保持“不重复”）
+
+---
+
+## 7. 更新与后台策略（省电与实时兼顾）
+
+* 前台：Processor 采用“间歇批处理”（每次处理 50 条或 1–2 秒）
+* Ready 未播数低于阈值（如 <10）时加快处理或触发更新提示
+* 后台：
+
+  * Android：WorkManager 周期任务（如 12h/24h），可配置仅 Wi-Fi/充电
+  * 鸿蒙/Next：若定时后台能力不足，退化为“启动/回前台检查 lastUpdateAt 后轻量更新”
+
+---
+
+## 8. 语音播放（TTS）与多音色
+
+### 8.1 TTS 抽象
+
+* `TtsEngine.listVoices() / setVoice() / speak() / stop()`
+
+### 8.2 实现策略
+
+* 优先本地 TTS（Android TextToSpeech；鸿蒙/Next 若有则接入）
+* 可选云 TTS：仅做占位接口与配置入口（用户自填 key），用于更自然音色
+* 提供：
+
+  * 音色选择（至少 3 个）
+  * 语速/音调调节
+
+---
+
+## 9. 多语言策略（UI 与内容语言独立）
+
+* `uiLanguageMode`：SYSTEM/MANUAL
+* `contentLanguageMode`：SYSTEM/MANUAL
+
+SYSTEM：
+
+* UI：随系统 locale
+* 内容：请求源时用 system language；并按 language 过滤播放库
+
+MANUAL：
+
+* UI：切换应用语言
+* 内容：按用户指定语言抓取/过滤
+
+---
+
+# 10. Codex 可执行工程任务清单（合并版，一次生成三端）
+
+把下面整段交给 Codex：
+
+```text
+生成一个合并版 Joke App：Android(Kotlin+Compose)+Harmony(ArkTS/ArkUI)+Harmony NEXT(ArkTS/ArkUI Next)。
+
+核心要求：
+- 首次启动选择年龄段（少年/青年/成人）并永久锁定不可修改（除非清数据）
+- 多来源：内置合规源 + 用户自定义在线源 + 用户离线导入
+- 用户首次启用自定义源或离线导入时必须展示“合规声明/违规提示”并强制确认（勾选+输入确认文本），写入 complianceAccepted=true
+- 异步后台流水线：Fetcher/Importer/Processor；边处理边可播放
+- 分龄过滤 + 精确去重 + 相近去重（SimHash+桶）
+- 播放：上一个/下一个；已播不重复；星标收藏；播完提示更新或重置已播
+- 多语言：UI语言与内容语言都支持 SYSTEM/MANUAL；至少 zh-Hans/zh-Hant/en
+- TTS：本地TTS多音色 + 语速/音调；云TTS只做占位接口（可配置key）
+
+A. 数据层（每端）
+1) DB 表：
+   - SourceConfig(sourceId,type,name,enabled,supportedLanguages,configJson,licenseNote,createdAt,updatedAt)
+   - RawQueue(rawId,ownerSourceId,ownerSourceType,language,ageGroupHint,payloadJson,fetchedAt,status,failCount,lastError,dropReason)
+   - Joke(id,ageGroup,language,content,contentNorm,simHash,sourceId,sourceType,sourceUrl,createdAt,updatedAt)
+   - Played(jokeId,playedAt)
+   - Favorite(jokeId,starredAt)
+   - PlaybackState(key,lastJokeId,playedCount,updatedAt)
+   - Settings(key,value) 或平台首选项 + 必要的封装
+2) 内置 sources.json（至少3个示例源占位配置，包含 licenseNote/ToSNote）
+3) User Online Source 的 configJson 支持：
+   - request(method,url,headers,query,body)
+   - response(itemsPath,cursorPath)
+   - mapping(content,title,ageHint,language,sourceUrl)
+   - 支持占位符 {{lang}} {{limit}} {{cursor}}
+
+B. 处理逻辑（每端）
+1) normalize(text) -> contentNorm
+2) ContentPolicy：三套规则（少年/青年/成人），少年/青年更严格，成人仍屏蔽仇恨/违法/极端暴力煽动
+3) exactDedup：sha256(contentNorm) 作为hashId
+4) nearDedup：simhash64(contentNorm)；按(ageGroup+language)分桶比对；汉明距离阈值默认4
+5) Processor 批处理 RawQueue：PENDING -> PROCESSING -> DONE/DROPPED/FAILED（失败重试，failCount限制）
+
+C. 异步流水线
+1) Fetcher：遍历 enabled 的 BUILTIN + USER_ONLINE；按 contentLanguage 请求；写入 RawQueue(PENDING)
+2) Importer：JSON/CSV/TXT/HTML 离线导入 -> RawQueue(PENDING)
+3) Processor：后台间歇批处理；每产生一条 Joke(Ready) UI 即可播放
+4) UI 显示：未播数量、后台处理中数量、来源状态
+
+D. UI（每端）
+1) AgeSelect：首次强制选择并锁定；后续不提供修改入口
+2) Main：显示笑话；Prev/Next；星标；朗读/停止；未播/处理中提示；播完提示更新/重置已播
+3) Sources：
+   - 内置源：开关 + licenseNote 展示
+   - 用户在线源：新增/编辑/启用/删除（新增或首次启用前必须完成合规声明确认）
+   - 离线导入：导入入口（首次导入前必须完成合规声明确认）；清空用户数据按钮
+4) Settings：
+   - UI语言 SYSTEM/MANUAL
+   - 内容语言 SYSTEM/MANUAL
+   - 自动更新/后台处理开关
+   - TTS 音色/语速/音调
+   - 清空已播
+   - 查看合规声明
+
+E. 平台实现细节
+Android：
+- Kotlin/Compose/Room/DataStore/WorkManager/TextToSpeech/Coroutines+Flow
+- WorkManager 周期更新（12h/24h）+ 网络约束；前台 Processor 协程间歇批处理
+Harmony & NEXT：
+- ArkTS/ArkUI/RDB/Preferences
+- 若支持后台任务则定时执行 Fetch+Process；否则在启动/回前台检查 lastUpdateAt 做轻量更新
+- TTS：平台本地TTS可用则接入，否则云TTS占位并用音频播放器播放
+
+所有网络/解析错误必须可见提示并允许重试；单源失败不影响其他源；所有入库必须走 normalize->policy->exact->near。
+```
+
+---
+
+如果你现在就想让 Codex 一次生成就能跑通“抓取→入 RawQueue→后台处理→Main 可播”，你只要再给我一点点信息：你准备内置的那几个合规源里，**每个源返回的一条 item 的 JSON 示例**（content 字段叫什么、列表路径是什么）。我就能把 `sources.json` 与 `mapping/itemsPath` 写成可直接工作的版本。

@@ -1,0 +1,375 @@
+﻿package com.jokebox.app.ui
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.jokebox.app.data.db.RawQueueDao
+import com.jokebox.app.data.model.AgeGroup
+import com.jokebox.app.data.model.LanguageMode
+import com.jokebox.app.data.model.RawStatus
+import com.jokebox.app.data.repo.PlaybackRepository
+import com.jokebox.app.data.repo.SettingsStore
+import com.jokebox.app.data.repo.SourceRepository
+import com.jokebox.app.domain.pipeline.Fetcher
+import com.jokebox.app.domain.pipeline.Importer
+import com.jokebox.app.domain.pipeline.Processor
+import com.jokebox.app.domain.tts.TtsEngine
+import com.jokebox.app.ui.state.MainUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+
+class JokeBoxViewModel(
+    private val settingsStore: SettingsStore,
+    private val sourceRepository: SourceRepository,
+    private val playbackRepository: PlaybackRepository,
+    private val fetcher: Fetcher,
+    private val importer: Importer,
+    private val processor: Processor,
+    private val ttsEngine: TtsEngine,
+    rawQueueDao: RawQueueDao
+) : ViewModel() {
+    private val localState = MutableStateFlow(MainUiState())
+
+    private val baseSettingsFlow = combine(
+        settingsStore.ageLockedFlow,
+        settingsStore.selectedAgeGroupFlow,
+        settingsStore.complianceAcceptedFlow
+    ) { ageLocked, ageGroup, compliance ->
+        Triple(ageLocked, ageGroup, compliance)
+    }
+
+    private val languageSettingsFlow = combine(
+        settingsStore.uiLanguageModeFlow,
+        settingsStore.uiLanguageFlow,
+        settingsStore.contentLanguageModeFlow,
+        settingsStore.contentLanguageSelectedFlow
+    ) { uiMode, uiLang, contentMode, contentLang ->
+        LanguageSettings(uiMode, uiLang, contentMode, contentLang)
+    }
+
+    private val featureSettingsFlow = combine(
+        settingsStore.autoUpdateEnabledFlow,
+        settingsStore.autoProcessEnabledFlow,
+        settingsStore.ttsSpeedFlow,
+        settingsStore.ttsPitchFlow
+    ) { autoUpdate, autoProcess, ttsSpeed, ttsPitch ->
+        FeatureSettings(autoUpdate, autoProcess, ttsSpeed, ttsPitch)
+    }
+
+    private val displaySettingsFlow = combine(languageSettingsFlow, featureSettingsFlow) { language, feature ->
+        DisplaySettings(language, feature)
+    }
+
+    private val playbackStatsFlow = combine(
+        playbackRepository.observeUnplayedCount(),
+        rawQueueDao.observeCount(RawStatus.PENDING)
+    ) { unplayed, pending ->
+        PlaybackStats(unplayed, pending)
+    }
+
+    val uiState: StateFlow<MainUiState> = combine(
+        localState,
+        playbackStatsFlow,
+        sourceRepository.observeSources(),
+        baseSettingsFlow,
+        displaySettingsFlow
+    ) { local, stats, sources, base, display ->
+        local.copy(
+            initialized = true,
+            unplayedCount = stats.unplayed,
+            processingCount = stats.pending,
+            sources = sources,
+            ageLocked = base.first,
+            selectedAgeGroup = base.second,
+            complianceAccepted = base.third,
+            uiLanguageMode = display.language.uiMode,
+            uiLanguage = display.language.uiLanguage,
+            contentLanguageMode = display.language.contentMode,
+            contentLanguage = display.language.contentLanguage,
+            autoUpdateEnabled = display.feature.autoUpdate,
+            autoProcessEnabled = display.feature.autoProcess,
+            ttsSpeed = display.feature.ttsSpeed,
+            ttsPitch = display.feature.ttsPitch
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MainUiState())
+
+    fun completeOnboarding(ageGroup: AgeGroup) {
+        viewModelScope.launch {
+            settingsStore.lockAgeGroup(ageGroup)
+            settingsStore.setComplianceAccepted(true)
+            localState.value = localState.value.copy(message = "初始化完成")
+        }
+    }
+
+    fun loadNext() {
+        viewModelScope.launch {
+            val ageGroup = settingsStore.getAgeGroup()
+            if (ageGroup == null) {
+                localState.value = localState.value.copy(message = "请先完成首次设置")
+                return@launch
+            }
+            val language = settingsStore.contentLanguageFlow.first()
+            val joke = playbackRepository.next(ageGroup, language)
+            if (joke == null) {
+                localState.value = localState.value.copy(message = "已播完，可更新或重置已播", currentJoke = null)
+            } else {
+                localState.value = localState.value.copy(currentJoke = joke, message = null)
+            }
+        }
+    }
+
+    fun loadPrev() {
+        viewModelScope.launch {
+            val joke = playbackRepository.prev()
+            if (joke == null) {
+                localState.value = localState.value.copy(message = "没有更早的历史")
+            } else {
+                localState.value = localState.value.copy(currentJoke = joke, message = null)
+            }
+        }
+    }
+
+    fun toggleFavorite() {
+        viewModelScope.launch {
+            val current = localState.value.currentJoke ?: return@launch
+            val nowFavorite = playbackRepository.toggleFavorite(current.id)
+            localState.value = localState.value.copy(
+                currentJoke = current.copy(favorite = nowFavorite),
+                message = if (nowFavorite) "已收藏" else "已取消收藏"
+            )
+        }
+    }
+
+    fun speakCurrent() {
+        viewModelScope.launch {
+            val joke = uiState.value.currentJoke ?: return@launch
+            ttsEngine.speak(joke.content, uiState.value.ttsSpeed, uiState.value.ttsPitch)
+            localState.value = localState.value.copy(message = "开始朗读")
+        }
+    }
+
+    fun stopSpeak() {
+        viewModelScope.launch {
+            ttsEngine.stop()
+            localState.value = localState.value.copy(message = "已停止朗读")
+        }
+    }
+
+    fun runManualUpdate() {
+        viewModelScope.launch {
+            val fetch = fetcher.fetchOnce()
+            if (fetch.isFailure) {
+                localState.value = localState.value.copy(message = "抓取失败：${fetch.exceptionOrNull()?.message}")
+                return@launch
+            }
+            processPending("更新完成：抓取${fetch.getOrDefault(0)}")
+        }
+    }
+
+    fun runProcessOnly() {
+        viewModelScope.launch {
+            processPending("处理完成")
+        }
+    }
+
+    fun resetPlayed() {
+        viewModelScope.launch {
+            playbackRepository.resetPlayed()
+            localState.value = localState.value.copy(message = "已重置已播记录")
+        }
+    }
+
+    fun setSourceEnabled(sourceId: String, enabled: Boolean) {
+        viewModelScope.launch {
+            sourceRepository.setSourceEnabled(sourceId, enabled)
+            localState.value = localState.value.copy(message = "来源状态已更新")
+        }
+    }
+
+    fun deleteSource(sourceId: String) {
+        viewModelScope.launch {
+            sourceRepository.deleteSourceById(sourceId)
+            localState.value = localState.value.copy(message = "来源已删除")
+        }
+    }
+
+    fun addUserOnlineSource(
+        name: String,
+        url: String,
+        itemsPath: String,
+        contentPath: String,
+        languagePath: String,
+        sourceUrlPath: String,
+        licenseNote: String
+    ) {
+        viewModelScope.launch {
+            sourceRepository.addUserOnlineSource(
+                name = name,
+                url = url,
+                itemsPath = itemsPath,
+                contentPath = contentPath,
+                languagePath = languagePath.ifBlank { null },
+                sourceUrlPath = sourceUrlPath.ifBlank { null },
+                licenseNote = licenseNote.ifBlank { null }
+            )
+            localState.value = localState.value.copy(message = "已新增用户在线来源")
+        }
+    }
+
+    fun updateUserOnlineSource(
+        sourceId: String,
+        name: String,
+        url: String,
+        itemsPath: String,
+        contentPath: String,
+        languagePath: String,
+        sourceUrlPath: String,
+        licenseNote: String
+    ) {
+        viewModelScope.launch {
+            sourceRepository.updateUserOnlineSource(
+                sourceId = sourceId,
+                name = name,
+                url = url,
+                itemsPath = itemsPath,
+                contentPath = contentPath,
+                languagePath = languagePath.ifBlank { null },
+                sourceUrlPath = sourceUrlPath.ifBlank { null },
+                licenseNote = licenseNote.ifBlank { null }
+            )
+            localState.value = localState.value.copy(message = "来源已更新")
+        }
+    }
+
+    fun testUserOnlineSource(url: String, itemsPath: String, contentPath: String) {
+        viewModelScope.launch {
+            val result = sourceRepository.testUserOnlineSource(url, itemsPath, contentPath)
+            localState.value = if (result.isSuccess) {
+                localState.value.copy(message = "连接测试成功，解析到${result.getOrDefault(0)}条")
+            } else {
+                localState.value.copy(message = "连接测试失败：${result.exceptionOrNull()?.message}")
+            }
+        }
+    }
+
+    fun importOfflineText(format: String, text: String) {
+        viewModelScope.launch {
+            if (text.isBlank()) {
+                localState.value = localState.value.copy(message = "离线内容为空")
+                return@launch
+            }
+            val language = settingsStore.contentLanguageFlow.first()
+            importer.importText(
+                sourceId = "user-offline",
+                text = text,
+                language = language,
+                format = format
+            )
+            processPending("离线导入完成")
+        }
+    }
+
+    fun clearUserSourceData() {
+        viewModelScope.launch {
+            sourceRepository.clearUserSourcesAndData()
+            settingsStore.resetPlaybackAndUserDataPreferences()
+            localState.value = localState.value.copy(message = "已清空用户来源数据")
+        }
+    }
+
+    fun setUiLanguageMode(mode: LanguageMode) {
+        viewModelScope.launch { settingsStore.setUiLanguageMode(mode) }
+    }
+
+    fun setUiLanguage(value: String) {
+        viewModelScope.launch { settingsStore.setUiLanguage(value) }
+    }
+
+    fun setContentLanguageMode(mode: LanguageMode) {
+        viewModelScope.launch { settingsStore.setContentLanguageMode(mode) }
+    }
+
+    fun setContentLanguage(value: String) {
+        viewModelScope.launch { settingsStore.setContentLanguage(value) }
+    }
+
+    fun setAutoUpdateEnabled(enabled: Boolean) {
+        viewModelScope.launch { settingsStore.setAutoUpdateEnabled(enabled) }
+    }
+
+    fun setAutoProcessEnabled(enabled: Boolean) {
+        viewModelScope.launch { settingsStore.setAutoProcessEnabled(enabled) }
+    }
+
+    fun setTtsSpeed(value: Float) {
+        viewModelScope.launch { settingsStore.setTtsSpeed(value) }
+    }
+
+    fun setTtsPitch(value: Float) {
+        viewModelScope.launch { settingsStore.setTtsPitch(value) }
+    }
+
+    private suspend fun processPending(prefix: String) {
+        val ageGroup = settingsStore.getAgeGroup() ?: AgeGroup.ADULT
+        val language = settingsStore.contentLanguageFlow.first()
+        val threshold = settingsStore.getNearDedupThreshold()
+        val processed = processor.processBatch(ageGroup, language, threshold)
+        localState.value = localState.value.copy(
+            message = "$prefix，入库${processed.getOrDefault(0)}"
+        )
+    }
+}
+
+private data class LanguageSettings(
+    val uiMode: LanguageMode,
+    val uiLanguage: String,
+    val contentMode: LanguageMode,
+    val contentLanguage: String
+)
+
+private data class FeatureSettings(
+    val autoUpdate: Boolean,
+    val autoProcess: Boolean,
+    val ttsSpeed: Float,
+    val ttsPitch: Float
+)
+
+private data class DisplaySettings(
+    val language: LanguageSettings,
+    val feature: FeatureSettings
+)
+
+private data class PlaybackStats(
+    val unplayed: Int,
+    val pending: Int
+)
+
+class JokeBoxViewModelFactory(
+    private val settingsStore: SettingsStore,
+    private val sourceRepository: SourceRepository,
+    private val playbackRepository: PlaybackRepository,
+    private val fetcher: Fetcher,
+    private val importer: Importer,
+    private val processor: Processor,
+    private val ttsEngine: TtsEngine,
+    private val rawQueueDao: RawQueueDao
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        return JokeBoxViewModel(
+            settingsStore = settingsStore,
+            sourceRepository = sourceRepository,
+            playbackRepository = playbackRepository,
+            fetcher = fetcher,
+            importer = importer,
+            processor = processor,
+            ttsEngine = ttsEngine,
+            rawQueueDao = rawQueueDao
+        ) as T
+    }
+}

@@ -1,0 +1,24 @@
+# General
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Android
+android/.gradle/
+android/local.properties
+android/**/build/
+android/**/.cxx/
+android/.idea/
+android/*.iml
+
+# Harmony
+harmony/.hvigor/
+harmony/**/build/
+harmony-next/.hvigor/
+harmony-next/**/build/
+
+# Tool outputs
+emulator_screen.png
+*.apk
+*.hprof

@@ -1,0 +1,92 @@
+﻿[
+  {
+    "sourceId": "builtin-icanhazdadjoke",
+    "type": "BUILTIN",
+    "name": "icanhazdadjoke Search",
+    "enabled": true,
+    "supportedLanguages": ["en"],
+    "licenseNote": "API by icanhazdadjoke. Respect API usage policy and attribution requirements.",
+    "toSNote": "https://icanhazdadjoke.com/api",
+    "configJson": {
+      "request": {
+        "method": "GET",
+        "url": "https://icanhazdadjoke.com/search?term=dad&limit={{limit}}",
+        "headers": {
+          "Accept": "application/json",
+          "User-Agent": "JokeBox/0.1 (https://example.com)"
+        }
+      },
+      "response": {
+        "itemsPath": "results",
+        "cursorPath": "next_page"
+      },
+      "mapping": {
+        "content": "joke",
+        "title": "id",
+        "ageHint": "",
+        "language": "",
+        "sourceUrl": ""
+      }
+    }
+  },
+  {
+    "sourceId": "builtin-jokeapi",
+    "type": "BUILTIN",
+    "name": "JokeAPI Single",
+    "enabled": true,
+    "supportedLanguages": ["en"],
+    "licenseNote": "JokeAPI (Sv443). Follow API terms and fair usage.",
+    "toSNote": "https://jokeapi.dev/",
+    "configJson": {
+      "request": {
+        "method": "GET",
+        "url": "https://v2.jokeapi.dev/joke/Any?type=single&amount={{limit}}&lang=en&blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
+        "headers": {
+          "Accept": "application/json",
+          "User-Agent": "JokeBox/0.1"
+        }
+      },
+      "response": {
+        "itemsPath": "jokes",
+        "cursorPath": ""
+      },
+      "mapping": {
+        "content": "joke",
+        "title": "id",
+        "ageHint": "",
+        "language": "lang",
+        "sourceUrl": ""
+      }
+    }
+  },
+  {
+    "sourceId": "builtin-chucknorris",
+    "type": "BUILTIN",
+    "name": "Chuck Norris Search",
+    "enabled": true,
+    "supportedLanguages": ["en"],
+    "licenseNote": "Internet Chuck Norris Database API. Use according to API policy.",
+    "toSNote": "https://api.chucknorris.io/",
+    "configJson": {
+      "request": {
+        "method": "GET",
+        "url": "https://api.chucknorris.io/jokes/search?query=life",
+        "headers": {
+          "Accept": "application/json",
+          "User-Agent": "JokeBox/0.1"
+        }
+      },
+      "response": {
+        "itemsPath": "result",
+        "cursorPath": ""
+      },
+      "mapping": {
+        "content": "value",
+        "title": "id",
+        "ageHint": "",
+        "language": "",
+        "sourceUrl": "url"
+      }
+    }
+  }
+]

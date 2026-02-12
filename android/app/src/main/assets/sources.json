@@ -6,7 +6,7 @@
     "enabled": true,
     "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
     "licenseNote": "BTStu 公共接口，需遵守来源方使用规范。",
-    "toSNote": "http://api.btstu.cn/",
+    "toSNote": "https://api.btstu.cn/",
     "configJson": {
       "request": {
         "method": "GET",
@@ -22,6 +22,66 @@
       },
       "mapping": {
         "content": "text",
+        "title": "",
+        "ageHint": "",
+        "language": "",
+        "sourceUrl": ""
+      }
+    }
+  },
+  {
+    "sourceId": "builtin-lolimi-cn-joke-json",
+    "type": "BUILTIN",
+    "name": "讲个笑话 API（Lolimi JSON）",
+    "enabled": true,
+    "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
+    "licenseNote": "Lolimi 公共接口，需遵守来源方使用规范。",
+    "toSNote": "https://api.lolimi.cn/",
+    "configJson": {
+      "request": {
+        "method": "GET",
+        "url": "https://api.lolimi.cn/API/xiaohua/api.php?type=json",
+        "headers": {
+          "Accept": "application/json",
+          "User-Agent": "JokeBox/0.1"
+        }
+      },
+      "response": {
+        "itemsPath": "$",
+        "cursorPath": ""
+      },
+      "mapping": {
+        "content": "text",
+        "title": "",
+        "ageHint": "",
+        "language": "",
+        "sourceUrl": ""
+      }
+    }
+  },
+  {
+    "sourceId": "builtin-lolimi-cn-joke-text",
+    "type": "BUILTIN",
+    "name": "讲个笑话 API（Lolimi 文本）",
+    "enabled": true,
+    "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
+    "licenseNote": "Lolimi 公共接口，需遵守来源方使用规范。",
+    "toSNote": "https://api.lolimi.cn/",
+    "configJson": {
+      "request": {
+        "method": "GET",
+        "url": "https://api.lolimi.cn/API/xiaohua/api.php",
+        "headers": {
+          "Accept": "text/plain",
+          "User-Agent": "JokeBox/0.1"
+        }
+      },
+      "response": {
+        "itemsPath": "items",
+        "cursorPath": ""
+      },
+      "mapping": {
+        "content": "content",
         "title": "",
         "ageHint": "",
         "language": "",

@@ -58,10 +58,11 @@ class JokeBoxViewModel(
     private val featureSettingsFlow = combine(
         settingsStore.autoUpdateEnabledFlow,
         settingsStore.autoProcessEnabledFlow,
+        settingsStore.ttsVoiceProfileIdFlow,
         settingsStore.ttsSpeedFlow,
         settingsStore.ttsPitchFlow
-    ) { autoUpdate, autoProcess, ttsSpeed, ttsPitch ->
-        FeatureSettings(autoUpdate, autoProcess, ttsSpeed, ttsPitch)
+    ) { autoUpdate, autoProcess, ttsVoiceProfileId, ttsSpeed, ttsPitch ->
+        FeatureSettings(autoUpdate, autoProcess, ttsVoiceProfileId, ttsSpeed, ttsPitch)
     }
 
     private val displaySettingsFlow = combine(languageSettingsFlow, featureSettingsFlow) { language, feature ->
@@ -101,6 +102,7 @@ class JokeBoxViewModel(
             contentLanguage = display.language.contentLanguage,
             autoUpdateEnabled = display.feature.autoUpdate,
             autoProcessEnabled = display.feature.autoProcess,
+            ttsVoiceProfileId = display.feature.ttsVoiceProfileId,
             ttsSpeed = display.feature.ttsSpeed,
             ttsPitch = display.feature.ttsPitch
         )
@@ -126,7 +128,9 @@ class JokeBoxViewModel(
             if (joke == null) {
                 localState.value = localState.value.copy(message = "已播完，可更新或重置已播", currentJoke = null)
             } else {
+                val voiceProfileId = settingsStore.ttsVoiceProfileIdFlow.first()
                 localState.value = localState.value.copy(currentJoke = joke, message = null)
+                ttsEngine.speak(joke.content, uiState.value.ttsSpeed, uiState.value.ttsPitch, voiceProfileId)
             }
         }
     }
@@ -156,7 +160,12 @@ class JokeBoxViewModel(
     fun speakCurrent() {
         viewModelScope.launch {
             val joke = uiState.value.currentJoke ?: return@launch
-            ttsEngine.speak(joke.content, uiState.value.ttsSpeed, uiState.value.ttsPitch)
+            ttsEngine.speak(
+                joke.content,
+                uiState.value.ttsSpeed,
+                uiState.value.ttsPitch,
+                uiState.value.ttsVoiceProfileId
+            )
             localState.value = localState.value.copy(message = "开始朗读")
         }
     }
@@ -171,26 +180,21 @@ class JokeBoxViewModel(
     fun runManualUpdate() {
         viewModelScope.launch {
             sourceRepository.ensureBuiltinSourcesLoaded()
-            val fetch = fetcher.fetchOnce()
-            if (fetch.isFailure) {
-                localState.value = localState.value.copy(message = "抓取失败：${fetch.exceptionOrNull()?.message}")
-                return@launch
-            }
-            val fetched = fetch.getOrDefault(0)
-            val processed = processPending("更新完成：抓取$fetched")
-            if (fetched == 0 && processed == 0) {
-                val language = settingsStore.contentLanguageFlow.first()
-                importer.importText(
-                    sourceId = "builtin-fallback-zh",
-                    text = fallbackZhJokes().joinToString("\n"),
-                    language = language,
-                    format = "txt"
-                )
-                val fallbackProcessed = processPending("更新完成：抓取$fetched（已启用内置中文兜底）")
-                if (fallbackProcessed == 0) {
-                    localState.value = localState.value.copy(message = "更新完成：暂无可用数据源，请检查来源配置")
-                }
-            }
+            runFetchAndProcess(prefix = "更新完成")
+        }
+    }
+
+    fun clearLibraryAndRefetchChinese() {
+        viewModelScope.launch {
+            settingsStore.setContentLanguageMode(LanguageMode.MANUAL)
+            settingsStore.setContentLanguage("zh-Hans")
+            sourceRepository.ensureBuiltinSourcesLoaded()
+            sourceRepository.clearAllFetchedData()
+            playbackRepository.clearFavorites()
+            playbackRepository.resetPlayed()
+            localState.value = localState.value.copy(currentJoke = null, message = "已清空笑话库，开始重抓中文数据")
+            runFetchAndProcess(prefix = "中文重抓完成")
+            loadNext()
         }
     }
 
@@ -337,6 +341,19 @@ class JokeBoxViewModel(
         viewModelScope.launch { settingsStore.setTtsPitch(value) }
     }
 
+    fun setTtsVoiceProfileId(value: String) {
+        viewModelScope.launch {
+            settingsStore.setTtsVoiceProfileId(value)
+            localState.value = localState.value.copy(
+                message = if (value == "default") {
+                    "已切换到系统默认音色"
+                } else {
+                    "已切换到豆包角色档位（当前设备未接入豆包 speakerId 时会回退系统音色）"
+                }
+            )
+        }
+    }
+
     private suspend fun processPending(prefix: String): Int {
         val ageGroup = settingsStore.getAgeGroup() ?: AgeGroup.ADULT
         val language = settingsStore.contentLanguageFlow.first()
@@ -347,6 +364,29 @@ class JokeBoxViewModel(
             message = "$prefix，入库$inserted"
         )
         return inserted
+    }
+
+    private suspend fun runFetchAndProcess(prefix: String) {
+        val fetch = fetcher.fetchOnce()
+        if (fetch.isFailure) {
+            localState.value = localState.value.copy(message = "抓取失败：${fetch.exceptionOrNull()?.message}")
+            return
+        }
+        val fetched = fetch.getOrDefault(0)
+        val processed = processPending("$prefix：抓取$fetched")
+        if (fetched == 0 && processed == 0) {
+            val language = settingsStore.contentLanguageFlow.first()
+            importer.importText(
+                sourceId = "builtin-fallback-zh",
+                text = fallbackZhJokes().joinToString("\n"),
+                language = language,
+                format = "txt"
+            )
+            val fallbackProcessed = processPending("$prefix：抓取$fetched（已启用内置中文兜底）")
+            if (fallbackProcessed == 0) {
+                localState.value = localState.value.copy(message = "$prefix：暂无可用数据源，请检查来源配置")
+            }
+        }
     }
 }
 
@@ -373,6 +413,7 @@ private data class LanguageSettings(
 private data class FeatureSettings(
     val autoUpdate: Boolean,
     val autoProcess: Boolean,
+    val ttsVoiceProfileId: String,
     val ttsSpeed: Float,
     val ttsPitch: Float
 )

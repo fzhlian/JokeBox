@@ -20,6 +20,7 @@ data class MainUiState(
     val contentLanguage: String = "zh-Hans",
     val autoUpdateEnabled: Boolean = true,
     val autoProcessEnabled: Boolean = true,
+    val ttsVoiceProfileId: String = "default",
     val ttsSpeed: Float = 1f,
     val ttsPitch: Float = 1f,
     val message: String? = null

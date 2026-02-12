@@ -55,6 +55,8 @@ class SettingsStore(private val context: Context) {
     val autoProcessEnabledFlow: Flow<Boolean> = context.settingsDataStore.data.map { it[Keys.autoProcessEnabled] ?: true }
     val ttsSpeedFlow: Flow<Float> = context.settingsDataStore.data.map { it[Keys.ttsSpeed] ?: 1f }
     val ttsPitchFlow: Flow<Float> = context.settingsDataStore.data.map { it[Keys.ttsPitch] ?: 1f }
+    val ttsVoiceProfileIdFlow: Flow<String> =
+        context.settingsDataStore.data.map { it[Keys.ttsVoiceProfileId] ?: "default" }
 
     val contentLanguageFlow: Flow<String> = context.settingsDataStore.data.map { pref ->
         val mode = LanguageMode.valueOf(pref[Keys.contentLanguageMode] ?: LanguageMode.SYSTEM.name)
@@ -114,6 +116,10 @@ class SettingsStore(private val context: Context) {
 
     suspend fun setTtsPitch(value: Float) {
         context.settingsDataStore.edit { it[Keys.ttsPitch] = value.coerceIn(0.5f, 2.0f) }
+    }
+
+    suspend fun setTtsVoiceProfileId(value: String) {
+        context.settingsDataStore.edit { it[Keys.ttsVoiceProfileId] = value.ifBlank { "default" } }
     }
 
     suspend fun resetPlaybackAndUserDataPreferences() {

@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
                         onNext = vm::loadNext,
                         onFavorite = vm::toggleFavorite,
                         onUpdate = vm::runManualUpdate,
+                        onClearAndRefetchChinese = vm::clearLibraryAndRefetchChinese,
                         onResetPlayed = vm::resetPlayed,
                         onSpeak = vm::speakCurrent,
                         onStopSpeak = vm::stopSpeak,
@@ -57,6 +58,7 @@ class MainActivity : ComponentActivity() {
                         onSetContentLanguage = vm::setContentLanguage,
                         onSetAutoUpdateEnabled = vm::setAutoUpdateEnabled,
                         onSetAutoProcessEnabled = vm::setAutoProcessEnabled,
+                        onSetTtsVoiceProfileId = vm::setTtsVoiceProfileId,
                         onSetTtsSpeed = vm::setTtsSpeed,
                         onSetTtsPitch = vm::setTtsPitch
                     )

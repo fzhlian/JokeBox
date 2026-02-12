@@ -82,6 +82,11 @@ class SourceRepository(
         jokeDao.deleteBySourceTypes(userTypes)
     }
 
+    suspend fun clearAllFetchedData() {
+        rawDao.deleteAll()
+        jokeDao.deleteAll()
+    }
+
     suspend fun setSourceEnabled(sourceId: String, enabled: Boolean) {
         sourceDao.updateEnabled(sourceId, enabled, System.currentTimeMillis())
     }

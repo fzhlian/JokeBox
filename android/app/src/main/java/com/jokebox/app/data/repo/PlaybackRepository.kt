@@ -86,6 +86,10 @@ class PlaybackRepository(
         )
         playbackStateDao.upsert(state.copy(lastJokeId = null, playedCount = 0, updatedAt = System.currentTimeMillis()))
     }
+
+    suspend fun clearFavorites() {
+        favoriteDao.clearAll()
+    }
 }
 
 private fun normalizeLanguageTag(language: String): String {

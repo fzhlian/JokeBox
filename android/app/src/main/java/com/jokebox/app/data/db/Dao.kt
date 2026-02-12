@@ -61,6 +61,9 @@ interface RawQueueDao {
 
     @Query("DELETE FROM raw_queue WHERE ownerSourceType IN (:types)")
     suspend fun deleteBySourceTypes(types: List<SourceType>)
+
+    @Query("DELETE FROM raw_queue")
+    suspend fun deleteAll()
 }
 
 @Dao
@@ -102,6 +105,9 @@ interface JokeDao {
 
     @Query("DELETE FROM joke WHERE sourceType IN (:types)")
     suspend fun deleteBySourceTypes(types: List<SourceType>)
+
+    @Query("DELETE FROM joke")
+    suspend fun deleteAll()
 }
 
 @Dao
@@ -123,6 +129,9 @@ interface FavoriteDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorite WHERE jokeId = :jokeId)")
     suspend fun isFavorite(jokeId: String): Boolean
+
+    @Query("DELETE FROM favorite")
+    suspend fun clearAll()
 }
 
 @Dao

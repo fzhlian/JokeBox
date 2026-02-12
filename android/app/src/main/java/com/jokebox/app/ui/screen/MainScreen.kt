@@ -52,6 +52,7 @@ fun MainScreen(
     onNext: () -> Unit,
     onFavorite: () -> Unit,
     onUpdate: () -> Unit,
+    onClearAndRefetchChinese: () -> Unit,
     onResetPlayed: () -> Unit,
     onSpeak: () -> Unit,
     onStopSpeak: () -> Unit,
@@ -69,6 +70,7 @@ fun MainScreen(
     onSetContentLanguage: (String) -> Unit,
     onSetAutoUpdateEnabled: (Boolean) -> Unit,
     onSetAutoProcessEnabled: (Boolean) -> Unit,
+    onSetTtsVoiceProfileId: (String) -> Unit,
     onSetTtsSpeed: (Float) -> Unit,
     onSetTtsPitch: (Float) -> Unit
 ) {
@@ -137,6 +139,7 @@ fun MainScreen(
                         onNext = onNext,
                         onFavorite = onFavorite,
                         onUpdate = onUpdate,
+                        onClearAndRefetchChinese = onClearAndRefetchChinese,
                         onResetPlayed = onResetPlayed,
                         onSpeak = onSpeak,
                         onStopSpeak = onStopSpeak,
@@ -164,6 +167,7 @@ fun MainScreen(
                         onSetContentLanguage = onSetContentLanguage,
                         onSetAutoUpdateEnabled = onSetAutoUpdateEnabled,
                         onSetAutoProcessEnabled = onSetAutoProcessEnabled,
+                        onSetTtsVoiceProfileId = onSetTtsVoiceProfileId,
                         onSetTtsSpeed = onSetTtsSpeed,
                         onSetTtsPitch = onSetTtsPitch,
                         onResetPlayed = onResetPlayed

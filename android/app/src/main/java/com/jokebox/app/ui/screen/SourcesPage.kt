@@ -333,13 +333,6 @@ fun SourcesPage(
         OutlinedButton(onClick = onClearUserSourceData, modifier = Modifier.fillMaxWidth()) {
             Text("清空用户来源数据")
         }
-
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("查看合规声明", style = MaterialTheme.typography.titleSmall)
-                Text(COMPLIANCE_DECLARATION, style = MaterialTheme.typography.bodySmall)
-            }
-        }
     }
 }
 

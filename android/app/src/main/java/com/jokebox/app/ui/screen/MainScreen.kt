@@ -5,6 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Storage
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -28,6 +33,15 @@ enum class AppRoute(val route: String, val title: String) {
     MAIN("main", "主页"),
     SOURCES("sources", "来源"),
     SETTINGS("settings", "设置")
+}
+
+@Composable
+private fun routeIcon(route: AppRoute) {
+    when (route) {
+        AppRoute.MAIN -> Icon(Icons.Outlined.Home, contentDescription = route.title)
+        AppRoute.SOURCES -> Icon(Icons.Outlined.Storage, contentDescription = route.title)
+        AppRoute.SETTINGS -> Icon(Icons.Outlined.Settings, contentDescription = route.title)
+    }
 }
 
 @Composable
@@ -90,8 +104,9 @@ fun MainScreen(
                                 launchSingleTop = true
                             }
                         },
-                        icon = { Text(page.title.take(1)) },
-                        label = { Text(page.title) }
+                        icon = { routeIcon(page) },
+                        label = null,
+                        alwaysShowLabel = false
                     )
                 }
             }

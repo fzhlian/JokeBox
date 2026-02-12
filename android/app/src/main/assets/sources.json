@@ -1,28 +1,28 @@
 ﻿[
   {
-    "sourceId": "builtin-icanhazdadjoke",
+    "sourceId": "builtin-btstu-cn-joke",
     "type": "BUILTIN",
-    "name": "icanhazdadjoke Search",
+    "name": "BTStu 中文段子",
     "enabled": true,
-    "supportedLanguages": ["en"],
-    "licenseNote": "API by icanhazdadjoke. Respect API usage policy and attribution requirements.",
-    "toSNote": "https://icanhazdadjoke.com/api",
+    "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
+    "licenseNote": "BTStu 公共接口，需遵守来源方使用规范。",
+    "toSNote": "http://api.btstu.cn/",
     "configJson": {
       "request": {
         "method": "GET",
-        "url": "https://icanhazdadjoke.com/search?term=dad&limit={{limit}}",
+        "url": "http://api.btstu.cn/yan/api.php?charset=utf-8&encode=json",
         "headers": {
           "Accept": "application/json",
-          "User-Agent": "JokeBox/0.1 (https://example.com)"
+          "User-Agent": "JokeBox/0.1"
         }
       },
       "response": {
-        "itemsPath": "results",
-        "cursorPath": "next_page"
+        "itemsPath": "$",
+        "cursorPath": ""
       },
       "mapping": {
-        "content": "joke",
-        "title": "id",
+        "content": "text",
+        "title": "",
         "ageHint": "",
         "language": "",
         "sourceUrl": ""
@@ -30,62 +30,92 @@
     }
   },
   {
-    "sourceId": "builtin-jokeapi",
+    "sourceId": "builtin-local-cn-jokes-daily",
     "type": "BUILTIN",
-    "name": "JokeAPI Single",
+    "name": "内置中文笑话-日常",
     "enabled": true,
-    "supportedLanguages": ["en", "zh"],
-    "licenseNote": "JokeAPI (Sv443). Follow API terms and fair usage.",
-    "toSNote": "https://jokeapi.dev/",
+    "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
+    "licenseNote": "应用内置示例中文笑话数据。",
+    "toSNote": "local builtin source",
     "configJson": {
       "request": {
         "method": "GET",
-        "url": "https://v2.jokeapi.dev/joke/Any?type=single&amount={{limit}}&lang={{lang}}&blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
+        "url": "local://cn-jokes/daily?limit={{limit}}&lang={{lang}}",
         "headers": {
           "Accept": "application/json",
           "User-Agent": "JokeBox/0.1"
         }
       },
       "response": {
-        "itemsPath": "jokes",
+        "itemsPath": "$",
         "cursorPath": ""
       },
       "mapping": {
-        "content": "joke",
-        "title": "id",
+        "content": "content",
+        "title": "",
         "ageHint": "",
-        "language": "lang",
+        "language": "",
         "sourceUrl": ""
       }
     }
   },
   {
-    "sourceId": "builtin-chucknorris",
+    "sourceId": "builtin-local-cn-jokes-tech",
     "type": "BUILTIN",
-    "name": "Chuck Norris Search",
+    "name": "内置中文笑话-程序员",
     "enabled": true,
-    "supportedLanguages": ["en"],
-    "licenseNote": "Internet Chuck Norris Database API. Use according to API policy.",
-    "toSNote": "https://api.chucknorris.io/",
+    "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
+    "licenseNote": "应用内置示例中文笑话数据。",
+    "toSNote": "local builtin source",
     "configJson": {
       "request": {
         "method": "GET",
-        "url": "https://api.chucknorris.io/jokes/search?query=life",
+        "url": "local://cn-jokes/tech?limit={{limit}}&lang={{lang}}",
         "headers": {
           "Accept": "application/json",
           "User-Agent": "JokeBox/0.1"
         }
       },
       "response": {
-        "itemsPath": "result",
+        "itemsPath": "$",
         "cursorPath": ""
       },
       "mapping": {
-        "content": "value",
-        "title": "id",
+        "content": "content",
+        "title": "",
         "ageHint": "",
         "language": "",
-        "sourceUrl": "url"
+        "sourceUrl": ""
+      }
+    }
+  },
+  {
+    "sourceId": "builtin-local-cn-jokes-campus",
+    "type": "BUILTIN",
+    "name": "内置中文笑话-校园",
+    "enabled": true,
+    "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
+    "licenseNote": "应用内置示例中文笑话数据。",
+    "toSNote": "local builtin source",
+    "configJson": {
+      "request": {
+        "method": "GET",
+        "url": "local://cn-jokes/campus?limit={{limit}}&lang={{lang}}",
+        "headers": {
+          "Accept": "application/json",
+          "User-Agent": "JokeBox/0.1"
+        }
+      },
+      "response": {
+        "itemsPath": "$",
+        "cursorPath": ""
+      },
+      "mapping": {
+        "content": "content",
+        "title": "",
+        "ageHint": "",
+        "language": "",
+        "sourceUrl": ""
       }
     }
   }

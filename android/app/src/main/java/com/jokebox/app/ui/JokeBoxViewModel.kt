@@ -169,12 +169,27 @@ class JokeBoxViewModel(
 
     fun runManualUpdate() {
         viewModelScope.launch {
+            sourceRepository.ensureBuiltinSourcesLoaded()
             val fetch = fetcher.fetchOnce()
             if (fetch.isFailure) {
                 localState.value = localState.value.copy(message = "抓取失败：${fetch.exceptionOrNull()?.message}")
                 return@launch
             }
-            processPending("更新完成：抓取${fetch.getOrDefault(0)}")
+            val fetched = fetch.getOrDefault(0)
+            val processed = processPending("更新完成：抓取$fetched")
+            if (fetched == 0 && processed == 0) {
+                val language = settingsStore.contentLanguageFlow.first()
+                importer.importText(
+                    sourceId = "builtin-fallback-zh",
+                    text = fallbackZhJokes().joinToString("\n"),
+                    language = language,
+                    format = "txt"
+                )
+                val fallbackProcessed = processPending("更新完成：抓取$fetched（已启用内置中文兜底）")
+                if (fallbackProcessed == 0) {
+                    localState.value = localState.value.copy(message = "更新完成：暂无可用数据源，请检查来源配置")
+                }
+            }
         }
     }
 
@@ -321,16 +336,31 @@ class JokeBoxViewModel(
         viewModelScope.launch { settingsStore.setTtsPitch(value) }
     }
 
-    private suspend fun processPending(prefix: String) {
+    private suspend fun processPending(prefix: String): Int {
         val ageGroup = settingsStore.getAgeGroup() ?: AgeGroup.ADULT
         val language = settingsStore.contentLanguageFlow.first()
         val threshold = settingsStore.getNearDedupThreshold()
         val processed = processor.processBatch(ageGroup, language, threshold)
+        val inserted = processed.getOrDefault(0)
         localState.value = localState.value.copy(
-            message = "$prefix，入库${processed.getOrDefault(0)}"
+            message = "$prefix，入库$inserted"
         )
+        return inserted
     }
 }
+
+private fun fallbackZhJokes(): List<String> = listOf(
+    "程序员去相亲，对方问会做饭吗？他说：会，煮异常最拿手。",
+    "我问 AI 你会讲笑话吗？它说会，然后给我输出了一个 bug。",
+    "同事说代码要优雅，我把 if 写成了诗，他让我重构。",
+    "产品说这个需求很简单，我的 CPU 当场进入省电模式。",
+    "老板问进度如何，我说已经 80%，剩下 80% 明天完成。",
+    "测试提了 100 个问题，我说这证明系统覆盖率很高。",
+    "我把注释删了，代码跑得更快了，因为没人敢改了。",
+    "数据库说我很稳定，只是偶尔在周五晚上情绪化。",
+    "今天修了一个线上 bug，奖励是再给我一个线上 bug。",
+    "代码评审时我写了 todo，领导说这就是长期规划。"
+)
 
 private data class LanguageSettings(
     val uiMode: LanguageMode,

@@ -6,6 +6,7 @@ import org.json.JSONObject
 object JsonPath {
     fun getNode(root: JSONObject, path: String?): Any? {
         if (path.isNullOrBlank()) return null
+        if (path == "$") return root
         val tokens = path.split(".")
         var cursor: Any = root
         for (token in tokens) {

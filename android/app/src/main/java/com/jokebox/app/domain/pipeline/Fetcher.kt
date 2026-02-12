@@ -1,5 +1,6 @@
 package com.jokebox.app.domain.pipeline
 
+import android.util.Log
 import com.jokebox.app.data.model.OnlineSourceConfig
 import com.jokebox.app.data.model.RequestSpec
 import com.jokebox.app.data.model.ResponseSpec
@@ -34,6 +35,15 @@ class Fetcher(
                         .replace("{{limit}}", limit.toString())
                         .replace("{{cursor}}", "")
 
+                    if (url.startsWith("local://cn-jokes/")) {
+                        val category = url.removePrefix("local://cn-jokes/").substringBefore('?')
+                        val localItems = buildLocalCnJokes(category, limit)
+                        sourceRepository.addRawItems(source, localItems, requestLang)
+                        inserted += localItems.size
+                        Log.i("JokeBoxFetcher", "local source ${source.sourceId} inserted=${localItems.size} lang=$requestLang")
+                        return@runCatching
+                    }
+
                     val reqBuilder = Request.Builder().url(url)
                     cfg.request.headers.forEach { (k, v) -> reqBuilder.addHeader(k, v) }
                     val request = when (cfg.request.method.uppercase()) {
@@ -48,7 +58,10 @@ class Fetcher(
                         val items = JsonPath.getItems(root, cfg.response.itemsPath)
                         sourceRepository.addRawItems(source, items, requestLang)
                         inserted += items.size
+                        Log.i("JokeBoxFetcher", "remote source ${source.sourceId} inserted=${items.size} lang=$requestLang")
                     }
+                }.onFailure {
+                    Log.w("JokeBoxFetcher", "source failed: ${source.sourceId} err=${it.message}")
                 }
             }
             settingsStore.setLastUpdateAt(System.currentTimeMillis())
@@ -123,5 +136,41 @@ private fun normalizeLanguageTag(language: String): String {
         normalized.startsWith("en") -> "en"
         normalized.isBlank() -> "zh-Hans"
         else -> language.trim()
+    }
+}
+
+private fun buildLocalCnJokes(category: String, limit: Int): List<JSONObject> {
+    val seeds = when (category.lowercase()) {
+        "daily" -> listOf(
+            "我从毕业到现在有两个亿，一个是回忆，一个是失忆。",
+            "别人熬夜是追剧，我熬夜是等灵感，结果等来的是黑眼圈。",
+            "今天去买菜，老板夸我会过日子，因为我只敢问价不敢买。",
+            "我说要早睡，手机说再刷五分钟，我们都很坚持。",
+            "我每次减肥都很认真，认真地从明天开始。"
+        )
+        "tech" -> listOf(
+            "程序员去相亲，对方问会做饭吗？他说：会，煮异常最拿手。",
+            "我问 AI 你会讲笑话吗？它说会，然后给我输出了一个 bug。",
+            "同事说代码要优雅，我把 if 写成了诗，他让我重构。",
+            "产品说这个需求很简单，我的 CPU 当场进入省电模式。",
+            "老板问进度如何，我说已经 80%，剩下 80% 明天完成。"
+        )
+        "campus" -> listOf(
+            "老师问我为什么迟到，我说在路上思考人生，结果人生堵车了。",
+            "室友说要早起背单词，闹钟响了三次，他把英语关机了。",
+            "考试前我和同学互相鼓励，考试后我们互相安慰。",
+            "食堂阿姨手不抖的时候，我怀疑今天是不是放假。",
+            "图书馆里最努力的人，是一直在找座位的我。"
+        )
+        else -> listOf(
+            "测试提了 100 个问题，我说这证明系统覆盖率很高。",
+            "我把注释删了，代码跑得更快了，因为没人敢改了。",
+            "数据库说我很稳定，只是偶尔在周五晚上情绪化。",
+            "今天修了一个线上 bug，奖励是再给我一个线上 bug。",
+            "代码评审时我写了 todo，领导说这就是长期规划。"
+        )
+    }
+    return List(limit.coerceAtMost(50)) { idx ->
+        JSONObject(mapOf("content" to seeds[idx % seeds.size]))
     }
 }

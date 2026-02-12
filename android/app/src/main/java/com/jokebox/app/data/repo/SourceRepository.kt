@@ -25,7 +25,7 @@ class SourceRepository(
     fun observeSources(): Flow<List<SourceConfigEntity>> = sourceDao.observeAll()
 
     suspend fun ensureBuiltinSourcesLoaded() {
-        val json = context.assets.open("sources.json").bufferedReader().readText()
+        val json = context.assets.open("sources.json").bufferedReader().readText().trimStart('\uFEFF')
         val arr = JSONArray(json)
         val now = System.currentTimeMillis()
         val entities = buildList {
@@ -38,7 +38,11 @@ class SourceRepository(
                         name = obj.getString("name"),
                         enabled = obj.optBoolean("enabled", true),
                         supportedLanguages = obj.optJSONArray("supportedLanguages")?.join(",") ?: "",
-                        configJson = obj.optJSONObject("configJson")?.toString(),
+                        configJson = when (val cfg = obj.opt("configJson")) {
+                            is JSONObject -> cfg.toString()
+                            is String -> cfg.takeIf { it.isNotBlank() }
+                            else -> null
+                        },
                         licenseNote = obj.optString("licenseNote"),
                         toSNote = obj.optString("toSNote"),
                         createdAt = now,
@@ -47,6 +51,7 @@ class SourceRepository(
                 )
             }
         }
+        sourceDao.deleteByTypes(listOf(SourceType.BUILTIN))
         sourceDao.upsertAll(entities)
     }
 

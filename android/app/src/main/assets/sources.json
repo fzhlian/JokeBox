@@ -2,7 +2,7 @@
   {
     "sourceId": "builtin-btstu-cn-joke",
     "type": "BUILTIN",
-    "name": "BTStu 中文段子",
+    "name": "讲个笑话 API（BTStu）",
     "enabled": true,
     "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
     "licenseNote": "BTStu 公共接口，需遵守来源方使用规范。",
@@ -10,7 +10,7 @@
     "configJson": {
       "request": {
         "method": "GET",
-        "url": "http://api.btstu.cn/yan/api.php?charset=utf-8&encode=json",
+        "url": "https://api.btstu.cn/yan/api.php?charset=utf-8&encode=json",
         "headers": {
           "Accept": "application/json",
           "User-Agent": "JokeBox/0.1"
@@ -22,6 +22,36 @@
       },
       "mapping": {
         "content": "text",
+        "title": "",
+        "ageHint": "",
+        "language": "",
+        "sourceUrl": ""
+      }
+    }
+  },
+  {
+    "sourceId": "builtin-chumor-academic-cn",
+    "type": "BUILTIN",
+    "name": "Chumor 学术语料（内置）",
+    "enabled": true,
+    "supportedLanguages": ["zh", "zh-Hans", "zh-CN"],
+    "licenseNote": "Built-in subset inspired by CHumor academic Chinese humor corpus for local/offline testing.",
+    "toSNote": "local builtin source",
+    "configJson": {
+      "request": {
+        "method": "GET",
+        "url": "local://cn-jokes/chumor?limit={{limit}}&lang={{lang}}",
+        "headers": {
+          "Accept": "application/json",
+          "User-Agent": "JokeBox/0.1"
+        }
+      },
+      "response": {
+        "itemsPath": "$",
+        "cursorPath": ""
+      },
+      "mapping": {
+        "content": "content",
         "title": "",
         "ageHint": "",
         "language": "",

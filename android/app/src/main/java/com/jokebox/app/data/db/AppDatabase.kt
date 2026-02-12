@@ -32,6 +32,6 @@ abstract class AppDatabase : RoomDatabase() {
             context,
             AppDatabase::class.java,
             "jokebox.db"
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(dropAllTables = true).build()
     }
 }

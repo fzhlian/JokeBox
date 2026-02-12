@@ -37,7 +37,7 @@ class SourceRepository(
                         type = SourceType.BUILTIN,
                         name = obj.getString("name"),
                         enabled = obj.optBoolean("enabled", true),
-                        supportedLanguages = obj.optJSONArray("supportedLanguages")?.join(",") ?: "",
+                        supportedLanguages = obj.optJSONArray("supportedLanguages").toCsvLanguages(),
                         configJson = when (val cfg = obj.opt("configJson")) {
                             is JSONObject -> cfg.toString()
                             is String -> cfg.takeIf { it.isNotBlank() }
@@ -218,10 +218,14 @@ class SourceRepository(
     }
 }
 
-private fun JSONArray.join(delimiter: String): String {
+private fun JSONArray?.toCsvLanguages(): String {
+    if (this == null) return ""
     val list = mutableListOf<String>()
-    for (i in 0 until length()) list += getString(i)
-    return list.joinToString(delimiter)
+    for (i in 0 until length()) {
+        val value = optString(i).trim().trim('"')
+        if (value.isNotBlank()) list += value
+    }
+    return list.joinToString(",")
 }
 
 private fun getItemsByPath(root: JSONObject, path: String): List<JSONObject> {

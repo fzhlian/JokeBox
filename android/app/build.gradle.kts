@@ -45,6 +45,12 @@ android {
         compose = true
     }
 
+    lint {
+        // Workaround for AGP/Lint crash in NonNullableMutableLiveDataDetector.
+        disable += "NullSafeMutableLiveData"
+        checkReleaseBuilds = false
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"

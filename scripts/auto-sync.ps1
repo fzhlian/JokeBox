@@ -15,9 +15,11 @@ Set-Location $RepoPath
 & $git add -A
 $status = & $git status --porcelain
 if ([string]::IsNullOrWhiteSpace(($status -join ""))) {
+  & $git pull --rebase origin $Branch | Out-Null
   exit 0
 }
 
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 & $git commit -m "auto-sync: $timestamp"
+& $git pull --rebase origin $Branch
 & $git push origin $Branch

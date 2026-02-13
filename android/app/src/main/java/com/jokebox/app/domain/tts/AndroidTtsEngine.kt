@@ -64,6 +64,8 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
     ): Boolean = withContext(Dispatchers.IO) {
         val appId = BuildConfig.VOLCENGINE_TTS_APP_ID.ifBlank {
             BuildConfig.VOLCENGINE_TTS_APPKEY
+        }.ifBlank {
+            BuildConfig.VOLCENGINE_TTS_API_KEY
         }
         val token = BuildConfig.VOLCENGINE_TTS_TOKEN.ifBlank {
             BuildConfig.VOLCENGINE_TTS_API_KEY
@@ -98,6 +100,7 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
 
         val request = Request.Builder()
             .url(VOLCENGINE_TTS_URL)
+            .addHeader("Authorization", "Bearer $token")
             .post(payload.toString().toRequestBody("application/json".toMediaType()))
             .build()
 

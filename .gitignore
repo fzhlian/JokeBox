@@ -7,6 +7,7 @@ Thumbs.db
 # Android
 android/.gradle/
 android/local.properties
+android/keystore/
 android/**/build/
 android/**/.cxx/
 android/.idea/

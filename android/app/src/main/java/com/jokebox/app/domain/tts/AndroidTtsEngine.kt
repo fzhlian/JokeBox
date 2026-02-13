@@ -40,12 +40,18 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
     }
 
     override suspend fun speak(text: String, speed: Float, pitch: Float, voiceProfileId: String) {
+        val resolvedProfileId = if (voiceProfileId == "default" && BuildConfig.VOLCENGINE_TTS_VOICE_ID.isNotBlank()) {
+            BuildConfig.VOLCENGINE_TTS_VOICE_ID
+        } else {
+            voiceProfileId
+        }
+        Log.i(TAG, "Speak profile=$resolvedProfileId textLen=${text.length}")
         tts.stop()
         stopMediaPlayback()
-        if (voiceProfileId == CUTE_GIRL_VOICE_ID && speakViaVolcengine(text, speed, pitch, voiceProfileId)) {
+        if (resolvedProfileId == CUTE_GIRL_VOICE_ID && speakViaVolcengine(text, speed, pitch, resolvedProfileId)) {
             return
         }
-        chooseVoiceByProfile(voiceProfileId)
+        chooseVoiceByProfile(resolvedProfileId)
         tts.setSpeechRate(speed)
         tts.setPitch(pitch)
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "jokebox-tts")
@@ -100,7 +106,7 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
 
         val request = Request.Builder()
             .url(VOLCENGINE_TTS_URL)
-            .addHeader("Authorization", "Bearer $token")
+            .addHeader("Authorization", "Bearer;$token")
             .post(payload.toString().toRequestBody("application/json".toMediaType()))
             .build()
 
@@ -122,6 +128,7 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
                     Log.w(TAG, "Volcengine TTS no audio data.")
                     return@use false
                 }
+                Log.i(TAG, "Volcengine TTS success, audio bytes(base64)=${audioBase64.length}")
                 playDecodedMp3(audioBase64)
                 true
             }

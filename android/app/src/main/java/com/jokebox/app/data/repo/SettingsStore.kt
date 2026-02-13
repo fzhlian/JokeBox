@@ -56,7 +56,7 @@ class SettingsStore(private val context: Context) {
     val ttsSpeedFlow: Flow<Float> = context.settingsDataStore.data.map { it[Keys.ttsSpeed] ?: 1f }
     val ttsPitchFlow: Flow<Float> = context.settingsDataStore.data.map { it[Keys.ttsPitch] ?: 1f }
     val ttsVoiceProfileIdFlow: Flow<String> =
-        context.settingsDataStore.data.map { it[Keys.ttsVoiceProfileId] ?: "default" }
+        context.settingsDataStore.data.map { it[Keys.ttsVoiceProfileId] ?: "ICL_zh_female_keainvsheng_tob" }
 
     val contentLanguageFlow: Flow<String> = context.settingsDataStore.data.map { pref ->
         val mode = LanguageMode.valueOf(pref[Keys.contentLanguageMode] ?: LanguageMode.SYSTEM.name)
@@ -138,7 +138,7 @@ class SettingsStore(private val context: Context) {
             if (pref[Keys.autoProcessEnabled] == null) pref[Keys.autoProcessEnabled] = true
             if (pref[Keys.ttsSpeed] == null) pref[Keys.ttsSpeed] = 1f
             if (pref[Keys.ttsPitch] == null) pref[Keys.ttsPitch] = 1f
-            if (pref[Keys.ttsVoiceProfileId] == null) pref[Keys.ttsVoiceProfileId] = "default"
+            if (pref[Keys.ttsVoiceProfileId] == null) pref[Keys.ttsVoiceProfileId] = "ICL_zh_female_keainvsheng_tob"
             if (pref[Keys.nearDedupThreshold] == null) pref[Keys.nearDedupThreshold] = 4
         }
     }

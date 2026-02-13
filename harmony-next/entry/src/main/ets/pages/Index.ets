@@ -1,7 +1,9 @@
 ﻿import common from '@ohos.app.ability.common';
+import i18n from '@ohos.i18n';
 import { sourceDao } from '../data/Repositories';
 import { globalRdbStore } from '../data/RdbStore';
 import { SourceConfig, SourceType } from '../model/Models';
+import { UiLang, ageLabel, resolveUiLang, t } from '../model/I18n';
 
 const SAMPLE_JOKES: string[] = [
   'Programmer joke #1: I changed one line and everything works. Nobody knows why.',
@@ -15,26 +17,27 @@ export struct AgeGatePage {
   @Link ageLocked: boolean;
   @Link complianceAccepted: boolean;
   @Link selectedAgeGroup: string;
+  @Prop lang: UiLang = 'en';
+
+  private ageText(age: string): string {
+    const base = ageLabel(this.lang, age);
+    const selected = this.selectedAgeGroup === age ? t(this.lang, 'selectedSuffix') : '';
+    return `${base}${selected}`;
+  }
 
   build() {
     Column({ space: 12 }) {
-      Text('First Launch').fontSize(24).fontWeight(FontWeight.Bold)
-      Text('Choose age group and confirm compliance. This page is shown only once.')
+      Text(t(this.lang, 'firstLaunchTitle')).fontSize(24).fontWeight(FontWeight.Bold)
+      Text(t(this.lang, 'firstLaunchDesc'))
       Row({ space: 8 }) {
-        Button(this.selectedAgeGroup === 'teen' ? 'Teen (Selected)' : 'Teen')
-          .onClick(() => this.selectedAgeGroup = 'teen')
-        Button(this.selectedAgeGroup === 'youth' ? 'Youth (Selected)' : 'Youth')
-          .onClick(() => this.selectedAgeGroup = 'youth')
-        Button(this.selectedAgeGroup === 'adult' ? 'Adult (Selected)' : 'Adult')
-          .onClick(() => this.selectedAgeGroup = 'adult')
+        Button(this.ageText('teen')).onClick(() => this.selectedAgeGroup = 'teen')
+        Button(this.ageText('youth')).onClick(() => this.selectedAgeGroup = 'youth')
+        Button(this.ageText('adult')).onClick(() => this.selectedAgeGroup = 'adult')
       }
       Scroll() {
-        Text(
-          'Compliance Statement: This app provides general joke content only. You agree to local laws, ' +
-          'platform terms, and age suitability responsibilities. User-provided sources are your responsibility.'
-        )
+        Text(t(this.lang, 'compliance'))
       }.height(120)
-      Button('Confirm and Continue').onClick(() => {
+      Button(t(this.lang, 'confirmAndContinue')).onClick(() => {
         this.ageLocked = true;
         this.complianceAccepted = true;
       })
@@ -52,23 +55,22 @@ export struct MainPage {
   @Link currentJoke: string;
   @Link message: string;
   @Link jokeIndex: number;
+  @Prop lang: UiLang = 'en';
 
   private prev(): void {
     this.jokeIndex = this.jokeIndex <= 0 ? SAMPLE_JOKES.length - 1 : this.jokeIndex - 1;
     this.currentJoke = SAMPLE_JOKES[this.jokeIndex];
-    this.message = 'Loaded previous joke';
   }
 
   private next(): void {
     this.jokeIndex = (this.jokeIndex + 1) % SAMPLE_JOKES.length;
     this.currentJoke = SAMPLE_JOKES[this.jokeIndex];
     this.unplayedCount = this.unplayedCount > 0 ? this.unplayedCount - 1 : 0;
-    this.message = 'Loaded next joke';
   }
 
   build() {
     Column({ space: 10 }) {
-      Text(`Age Group: ${this.selectedAgeGroup}`)
+      Text(`Age Group: ${ageLabel(this.lang, this.selectedAgeGroup)}`)
       Text(`Language: ${this.currentLanguage}`)
       Text(`Unplayed: ${this.unplayedCount}, Pending: ${this.processingCount}`)
 
@@ -77,34 +79,32 @@ export struct MainPage {
         Button('Next').onClick(() => this.next())
       }
       Row({ space: 8 }) {
-        Button('Favorite').onClick(() => this.message = 'Favorite toggled')
-        Button('Update').onClick(() => this.message = 'Update requested')
+        Button(t(this.lang, 'favorite')).onClick(() => this.message = t(this.lang, 'favorite'))
+        Button(t(this.lang, 'update')).onClick(() => this.message = t(this.lang, 'update'))
       }
-      Button('Clear and Refetch Chinese').onClick(() => {
+      Button(t(this.lang, 'clearRefetchZh')).onClick(() => {
         this.currentLanguage = 'zh-Hans';
         this.unplayedCount = 20;
         this.processingCount = 0;
         this.currentJoke = SAMPLE_JOKES[0];
-        this.message = 'Refetch requested';
       })
       Row({ space: 8 }) {
-        Button('Speak').onClick(() => this.message = 'Speak started')
-        Button('Stop').onClick(() => this.message = 'Speak stopped')
-        Button('Process').onClick(() => this.message = 'Process requested')
+        Button(t(this.lang, 'speak')).onClick(() => this.message = t(this.lang, 'speak'))
+        Button(t(this.lang, 'stop')).onClick(() => this.message = t(this.lang, 'stop'))
+        Button(t(this.lang, 'process')).onClick(() => this.message = t(this.lang, 'process'))
       }
-      Button('Reset Played').onClick(() => {
+      Button(t(this.lang, 'resetPlayed')).onClick(() => {
         this.unplayedCount = SAMPLE_JOKES.length;
-        this.message = 'Played reset';
       })
       Row({ space: 8 }) {
-        Button('Sources').onClick(() => this.route = 'sources')
-        Button('Settings').onClick(() => this.route = 'settings')
+        Button(t(this.lang, 'sources')).onClick(() => this.route = 'sources')
+        Button(t(this.lang, 'settings')).onClick(() => this.route = 'settings')
       }
       if (this.message) {
         Text(this.message).fontColor('#666666')
       }
       Divider()
-      Text(this.currentJoke ? this.currentJoke : 'No joke available')
+      Text(this.currentJoke ? this.currentJoke : t(this.lang, 'noJoke'))
     }.padding(16)
   }
 }
@@ -112,6 +112,7 @@ export struct MainPage {
 @Component
 export struct SourcesPage {
   @Link route: string;
+  @Prop lang: UiLang = 'en';
   @State sourceName: string = '';
   @State sourceUrl: string = '';
   @State itemsPath: string = 'data.items';
@@ -131,27 +132,37 @@ export struct SourcesPage {
     this.sourceList = await sourceDao.listAll();
   }
 
-  private async testSource(): Promise<void> {
-    const testResult = sourceDao.testConfig(this.sourceUrl.trim(), this.itemsPath.trim(), this.contentPath.trim());
-    if (testResult) {
-      this.error = testResult;
-      this.success = '';
-      return;
+  private validate(url: string): string {
+    if (!this.sourceName.trim()) {
+      return t(this.lang, 'sourceNameRequired');
     }
-    this.error = '';
-    this.success = 'Connection test passed (schema check only)';
+    if (!url) {
+      return t(this.lang, 'urlRequired');
+    }
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return t(this.lang, 'urlPrefix');
+    }
+    if (!this.itemsPath.trim()) {
+      return t(this.lang, 'itemsRequired');
+    }
+    if (!this.contentPath.trim()) {
+      return t(this.lang, 'contentRequired');
+    }
+    return '';
+  }
+
+  private async testSource(): Promise<void> {
+    const result = this.validate(this.sourceUrl.trim());
+    this.error = result;
+    this.success = result ? '' : t(this.lang, 'testPassed');
   }
 
   private async saveSource(): Promise<void> {
-    const name = this.sourceName.trim();
     const url = this.sourceUrl.trim();
-    if (!name) {
-      this.error = 'Source name is required';
-      return;
-    }
-    const testResult = sourceDao.testConfig(url, this.itemsPath.trim(), this.contentPath.trim());
-    if (testResult) {
-      this.error = testResult;
+    const result = this.validate(url);
+    if (result) {
+      this.error = result;
+      this.success = '';
       return;
     }
     const config = {
@@ -169,7 +180,7 @@ export struct SourcesPage {
     await sourceDao.upsert({
       sourceId: `user-${Date.now()}`,
       type: SourceType.USER_ONLINE,
-      name,
+      name: this.sourceName.trim(),
       enabled: true,
       supportedLanguages: ['zh-Hans', 'zh-Hant', 'en'],
       configJson: JSON.stringify(config),
@@ -179,20 +190,21 @@ export struct SourcesPage {
       updatedAt: Date.now()
     });
     this.error = '';
-    this.success = 'Saved';
+    this.success = t(this.lang, 'saved');
     await this.reload();
   }
 
   build() {
     Column({ space: 10 }) {
-      Text('Sources').fontSize(22).fontWeight(FontWeight.Bold)
-      TextInput({ placeholder: 'Source Name', text: this.sourceName }).onChange(v => this.sourceName = v)
-      TextInput({ placeholder: 'URL', text: this.sourceUrl }).onChange(v => this.sourceUrl = v)
-      TextInput({ placeholder: 'Items Path', text: this.itemsPath }).onChange(v => this.itemsPath = v)
-      TextInput({ placeholder: 'Content Path', text: this.contentPath }).onChange(v => this.contentPath = v)
-      TextInput({ placeholder: 'Language Path (optional)', text: this.languagePath }).onChange(v => this.languagePath = v)
-      TextInput({ placeholder: 'Source URL Path (optional)', text: this.sourceUrlPath }).onChange(v => this.sourceUrlPath = v)
-      TextInput({ placeholder: 'License Note (optional)', text: this.licenseNote }).onChange(v => this.licenseNote = v)
+      Text(t(this.lang, 'sources')).fontSize(22).fontWeight(FontWeight.Bold)
+      TextInput({ placeholder: t(this.lang, 'sourceName'), text: this.sourceName }).onChange(v => this.sourceName = v)
+      TextInput({ placeholder: t(this.lang, 'url'), text: this.sourceUrl }).onChange(v => this.sourceUrl = v)
+      TextInput({ placeholder: t(this.lang, 'itemsPath'), text: this.itemsPath }).onChange(v => this.itemsPath = v)
+      TextInput({ placeholder: t(this.lang, 'contentPath'), text: this.contentPath }).onChange(v => this.contentPath = v)
+      TextInput({ placeholder: t(this.lang, 'languagePath'), text: this.languagePath }).onChange(v => this.languagePath = v)
+      TextInput({ placeholder: t(this.lang, 'sourceUrlPath'), text: this.sourceUrlPath }).onChange(v => this.sourceUrlPath = v)
+      TextInput({ placeholder: t(this.lang, 'licenseNote'), text: this.licenseNote }).onChange(v => this.licenseNote = v)
+
       if (this.error) {
         Text(this.error).fontColor(Color.Red)
       }
@@ -200,17 +212,18 @@ export struct SourcesPage {
         Text(this.success).fontColor(Color.Green)
       }
       Row({ space: 8 }) {
-        Button('Back').onClick(() => this.route = 'main')
-        Button('Test').onClick(() => { this.testSource(); })
-        Button('Save').onClick(() => { this.saveSource(); })
+        Button(t(this.lang, 'back')).onClick(() => this.route = 'main')
+        Button(t(this.lang, 'test')).onClick(() => { this.testSource(); })
+        Button(t(this.lang, 'save')).onClick(() => { this.saveSource(); })
       }
-      Button('Clear User Source Data').onClick(async () => {
+      Button(t(this.lang, 'clearUserSource')).onClick(async () => {
         await sourceDao.clearUserOnline();
         await this.reload();
-        this.success = 'User online sources cleared';
+        this.success = t(this.lang, 'cleared');
       })
+
       Divider()
-      Text(`Configured Sources: ${this.sourceList.length}`)
+      Text(`${t(this.lang, 'configuredSources')}: ${this.sourceList.length}`)
       List() {
         ForEach(this.sourceList, (item: SourceConfig) => {
           ListItem() {
@@ -230,7 +243,7 @@ export struct SourcesPage {
             }.padding({ top: 8, bottom: 8 })
           }
         }, (item: SourceConfig) => item.sourceId)
-      }.height('40%')
+      }.height('35%')
     }.padding(16)
   }
 }
@@ -249,32 +262,35 @@ export struct SettingsPage {
   @Link ttsPitch: number;
   @Link unplayedCount: number;
   @Link message: string;
+  @Prop lang: UiLang = 'en';
 
   build() {
     Column({ space: 10 }) {
-      Text('Settings').fontSize(22).fontWeight(FontWeight.Bold)
-      Text('UI Language Mode')
+      Text(t(this.lang, 'settings')).fontSize(22).fontWeight(FontWeight.Bold)
+      Text(t(this.lang, 'uiLanguageMode'))
       Row({ space: 8 }) {
-        Button(this.uiLanguageMode === 'SYSTEM' ? 'System (Selected)' : 'System')
+        Button(this.uiLanguageMode === 'SYSTEM' ? `${t(this.lang, 'systemMode')}${t(this.lang, 'selectedSuffix')}` : t(this.lang, 'systemMode'))
           .onClick(() => this.uiLanguageMode = 'SYSTEM')
-        Button(this.uiLanguageMode === 'MANUAL' ? 'Manual (Selected)' : 'Manual')
+        Button(this.uiLanguageMode === 'MANUAL' ? `${t(this.lang, 'manualMode')}${t(this.lang, 'selectedSuffix')}` : t(this.lang, 'manualMode'))
           .onClick(() => this.uiLanguageMode = 'MANUAL')
       }
-      Text('UI Language')
+
+      Text(t(this.lang, 'uiLanguage'))
       Row({ space: 8 }) {
         Button('zh-Hans').onClick(() => this.uiLanguage = 'zh-Hans')
         Button('zh-Hant').onClick(() => this.uiLanguage = 'zh-Hant')
         Button('en').onClick(() => this.uiLanguage = 'en')
       }
 
-      Text('Content Language Mode')
+      Text(t(this.lang, 'contentLanguageMode'))
       Row({ space: 8 }) {
-        Button(this.contentLanguageMode === 'SYSTEM' ? 'System (Selected)' : 'System')
+        Button(this.contentLanguageMode === 'SYSTEM' ? `${t(this.lang, 'systemMode')}${t(this.lang, 'selectedSuffix')}` : t(this.lang, 'systemMode'))
           .onClick(() => this.contentLanguageMode = 'SYSTEM')
-        Button(this.contentLanguageMode === 'MANUAL' ? 'Manual (Selected)' : 'Manual')
+        Button(this.contentLanguageMode === 'MANUAL' ? `${t(this.lang, 'manualMode')}${t(this.lang, 'selectedSuffix')}` : t(this.lang, 'manualMode'))
           .onClick(() => this.contentLanguageMode = 'MANUAL')
       }
-      Text('Content Language')
+
+      Text(t(this.lang, 'contentLanguage'))
       Row({ space: 8 }) {
         Button('zh-Hans').onClick(() => this.contentLanguage = 'zh-Hans')
         Button('zh-Hant').onClick(() => this.contentLanguage = 'zh-Hant')
@@ -283,30 +299,31 @@ export struct SettingsPage {
 
       Row({ space: 8 }) {
         Toggle({ type: ToggleType.Switch, isOn: this.autoUpdate }).onChange((v: boolean) => this.autoUpdate = v)
-        Text(`Auto Update: ${this.autoUpdate ? 'On' : 'Off'}`)
+        Text(`${t(this.lang, 'autoUpdate')}: ${this.autoUpdate ? 'On' : 'Off'}`)
       }
       Row({ space: 8 }) {
         Toggle({ type: ToggleType.Switch, isOn: this.autoProcess }).onChange((v: boolean) => this.autoProcess = v)
-        Text(`Background Process: ${this.autoProcess ? 'On' : 'Off'}`)
+        Text(`${t(this.lang, 'autoProcess')}: ${this.autoProcess ? 'On' : 'Off'}`)
       }
 
-      Text('TTS Voice')
+      Text(t(this.lang, 'ttsVoice'))
       Row({ space: 8 }) {
-        Button(this.ttsVoiceProfileId === 'default' ? 'System Default (Selected)' : 'System Default')
+        Button(this.ttsVoiceProfileId === 'default' ? `${t(this.lang, 'systemDefaultVoice')}${t(this.lang, 'selectedSuffix')}` : t(this.lang, 'systemDefaultVoice'))
           .onClick(() => this.ttsVoiceProfileId = 'default')
-        Button(this.ttsVoiceProfileId !== 'default' ? 'Volcengine Cute Girl (Selected)' : 'Volcengine Cute Girl')
+        Button(this.ttsVoiceProfileId !== 'default' ? `${t(this.lang, 'volcCuteGirl')}${t(this.lang, 'selectedSuffix')}` : t(this.lang, 'volcCuteGirl'))
           .onClick(() => this.ttsVoiceProfileId = 'ICL_zh_female_keainvsheng_tob')
       }
+
       Text(`TTS Speed: ${this.ttsSpeed.toFixed(2)}`)
       Slider({ value: this.ttsSpeed, min: 0.5, max: 2.0, step: 0.1 }).onChange((v: number) => this.ttsSpeed = v)
       Text(`TTS Pitch: ${this.ttsPitch.toFixed(2)}`)
       Slider({ value: this.ttsPitch, min: 0.5, max: 2.0, step: 0.1 }).onChange((v: number) => this.ttsPitch = v)
 
-      Button('Clear Played').onClick(() => {
+      Button(t(this.lang, 'clearPlayed')).onClick(() => {
         this.unplayedCount = SAMPLE_JOKES.length;
-        this.message = 'Played state cleared';
+        this.message = t(this.lang, 'clearPlayed');
       })
-      Button('Back').onClick(() => this.route = 'main')
+      Button(t(this.lang, 'back')).onClick(() => this.route = 'main')
     }.padding(16)
   }
 }
@@ -337,12 +354,18 @@ struct Index {
   @State ttsVoiceProfileId: string = 'default';
   @State ttsSpeed: number = 1.0;
   @State ttsPitch: number = 1.0;
+  @State systemLanguage: string = 'en';
+
+  private currentUiLang(): UiLang {
+    return resolveUiLang(this.uiLanguageMode, this.uiLanguage, this.systemLanguage);
+  }
 
   async aboutToAppear(): Promise<void> {
     if (this.dbReady) {
       return;
     }
     try {
+      this.systemLanguage = i18n.System.getSystemLanguage();
       const ctx = getContext(this) as common.UIAbilityContext;
       await globalRdbStore.open(ctx);
       this.dbReady = true;
@@ -352,6 +375,7 @@ struct Index {
   }
 
   build() {
+    const lang = this.currentUiLang();
     Navigation() {
       if (this.dbError) {
         Text(this.dbError).fontColor(Color.Red).padding(16)
@@ -361,7 +385,8 @@ struct Index {
         AgeGatePage({
           ageLocked: $ageLocked,
           complianceAccepted: $complianceAccepted,
-          selectedAgeGroup: $selectedAgeGroup
+          selectedAgeGroup: $selectedAgeGroup,
+          lang: lang
         })
       } else if (this.route === 'main') {
         MainPage({
@@ -372,10 +397,11 @@ struct Index {
           processingCount: $processingCount,
           currentJoke: $currentJoke,
           message: $message,
-          jokeIndex: $jokeIndex
+          jokeIndex: $jokeIndex,
+          lang: lang
         })
       } else if (this.route === 'sources') {
-        SourcesPage({ route: $route })
+        SourcesPage({ route: $route, lang: lang })
       } else {
         SettingsPage({
           route: $route,
@@ -389,7 +415,8 @@ struct Index {
           ttsSpeed: $ttsSpeed,
           ttsPitch: $ttsPitch,
           unplayedCount: $unplayedCount,
-          message: $message
+          message: $message,
+          lang: lang
         })
       }
     }.title('JokeBox NEXT')

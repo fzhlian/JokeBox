@@ -348,7 +348,7 @@ class JokeBoxViewModel(
                 message = if (value == "default") {
                     "已切换到系统默认音色"
                 } else {
-                    "已切换到豆包角色档位（当前设备未接入豆包 speakerId 时会回退系统音色）"
+                    "已切换到火山引擎音色档位（当前设备未接入火山引擎 speakerId 时会回退系统音色）"
                 }
             )
         }

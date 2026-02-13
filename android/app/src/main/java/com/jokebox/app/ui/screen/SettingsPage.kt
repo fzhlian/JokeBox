@@ -162,16 +162,12 @@ private fun TtsVoiceProfileRow(current: String, onChange: (String) -> Unit, zh: 
 
 private enum class VoiceProfileOption(val id: String) {
     SYSTEM_DEFAULT("default"),
-    DOUBAO_XKMS_LING("doubao_xkms_ling"),
-    DOUBAO_XKMS_YUN("doubao_xkms_yun"),
-    DOUBAO_XKMS_KIRA("doubao_xkms_kira");
+    VOLC_CUTE_GIRL("ICL_zh_female_keainvsheng_tob");
 
     fun label(zh: Boolean): String {
         return when (this) {
             SYSTEM_DEFAULT -> if (zh) "系统默认" else "System Default"
-            DOUBAO_XKMS_LING -> if (zh) "豆包·星卡梦少女·铃" else "Doubao XKMS Ling"
-            DOUBAO_XKMS_YUN -> if (zh) "豆包·星卡梦少女·云" else "Doubao XKMS Yun"
-            DOUBAO_XKMS_KIRA -> if (zh) "豆包·星卡梦少女·琪拉" else "Doubao XKMS Kira"
+            VOLC_CUTE_GIRL -> if (zh) "火山引擎·可爱女生" else "Volcengine Cute Girl"
         }
     }
 }
@@ -182,7 +178,7 @@ private data object ZhText {
     const val autoUpdate = "自动更新"
     const val autoProcess = "后台处理"
     const val ttsVoice = "TTS 音色"
-    const val ttsVoiceHint = "星卡梦少女角色音色需在豆包/火山引擎控制台绑定真实 speakerId；未接入时将回退系统音色。"
+    const val ttsVoiceHint = "火山引擎音色需配置有效 API Key 与 speakerId（可爱女生：ICL_zh_female_keainvsheng_tob）；未接入时回退系统音色。"
     const val ttsSpeed = "TTS 语速："
     const val ttsPitch = "TTS 音调："
     const val clearPlayed = "清空已播"
@@ -194,7 +190,7 @@ private data object EnText {
     const val autoUpdate = "Auto Update"
     const val autoProcess = "Background Processing"
     const val ttsVoice = "TTS Voice"
-    const val ttsVoiceHint = "XKMS character voices require real speakerId binding in Doubao/Volcengine console. Fallback to system voice when unavailable."
+    const val ttsVoiceHint = "Volcengine voice requires valid API key and speakerId (Cute Girl: ICL_zh_female_keainvsheng_tob). Fallback to system voice when unavailable."
     const val ttsSpeed = "TTS Speed: "
     const val ttsPitch = "TTS Pitch: "
     const val clearPlayed = "Clear Played"

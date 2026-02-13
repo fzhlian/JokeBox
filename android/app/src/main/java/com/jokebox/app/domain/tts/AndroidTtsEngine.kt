@@ -36,9 +36,7 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
         if (voices.isEmpty()) return
 
         val selected = when (profileId) {
-            "doubao_xkms_ling",
-            "doubao_xkms_yun",
-            "doubao_xkms_kira" -> pickVoice(voices, listOf("zh", "female"))
+            "ICL_zh_female_keainvsheng_tob" -> pickVoice(voices, listOf("zh", "female"))
             else -> null
         } ?: pickVoice(voices, listOf("zh", "female"))
             ?: pickVoice(voices, listOf("zh"))
@@ -49,7 +47,7 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
         }
 
         val locale = when {
-            profileId.startsWith("doubao_") -> Locale.SIMPLIFIED_CHINESE
+            profileId == "ICL_zh_female_keainvsheng_tob" -> Locale.SIMPLIFIED_CHINESE
             else -> Locale.getDefault()
         }
         tts.language = locale

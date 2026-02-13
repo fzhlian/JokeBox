@@ -1,0 +1,9 @@
+﻿{
+  "name": "entry",
+  "version": "0.1.1",
+  "description": "entry module",
+  "main": "",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {}
+}

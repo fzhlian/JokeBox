@@ -5,12 +5,23 @@ import { globalRdbStore } from '../data/RdbStore';
 import { SourceConfig, SourceType } from '../model/Models';
 import { UiLang, ageLabel, resolveUiLang, t } from '../model/I18n';
 
-const SAMPLE_JOKES: string[] = [
+const SAMPLE_JOKES_ZH: string[] = [
+  '程序员笑话 1：改了一行，功能就好了。至于为什么，谁也说不清。',
+  '程序员笑话 2：计算机里最难的两件事是命名和缓存失效。',
+  '程序员笑话 3：产品说是小改动，编译器说要全量重建。',
+  '程序员笑话 4：我先写个 TODO，留给未来的我惊喜。'
+];
+
+const SAMPLE_JOKES_EN: string[] = [
   'Programmer joke #1: I changed one line and everything works. Nobody knows why.',
   'Programmer joke #2: There are two hard problems in CS: cache invalidation and naming things.',
   'Programmer joke #3: Product says small change. Compiler says full rebuild.',
   'Programmer joke #4: I write TODO so future me can be surprised.'
 ];
+
+function jokesByLanguageTag(language: string): string[] {
+  return language.toLowerCase().startsWith('zh') ? SAMPLE_JOKES_ZH : SAMPLE_JOKES_EN;
+}
 
 @Component
 export struct AgeGatePage {
@@ -57,36 +68,52 @@ export struct MainPage {
   @Link jokeIndex: number;
   @Prop lang: UiLang = 'en';
 
+  private jokes(): string[] {
+    return jokesByLanguageTag(this.currentLanguage);
+  }
+
   private prev(): void {
-    this.jokeIndex = this.jokeIndex <= 0 ? SAMPLE_JOKES.length - 1 : this.jokeIndex - 1;
-    this.currentJoke = SAMPLE_JOKES[this.jokeIndex];
+    const jokes = this.jokes();
+    if (jokes.length === 0) {
+      this.currentJoke = '';
+      return;
+    }
+    this.jokeIndex = this.jokeIndex <= 0 ? jokes.length - 1 : this.jokeIndex - 1;
+    this.currentJoke = jokes[this.jokeIndex];
   }
 
   private next(): void {
-    this.jokeIndex = (this.jokeIndex + 1) % SAMPLE_JOKES.length;
-    this.currentJoke = SAMPLE_JOKES[this.jokeIndex];
+    const jokes = this.jokes();
+    if (jokes.length === 0) {
+      this.currentJoke = '';
+      return;
+    }
+    this.jokeIndex = (this.jokeIndex + 1) % jokes.length;
+    this.currentJoke = jokes[this.jokeIndex];
     this.unplayedCount = this.unplayedCount > 0 ? this.unplayedCount - 1 : 0;
   }
 
   build() {
     Column({ space: 10 }) {
-      Text(`Age Group: ${ageLabel(this.lang, this.selectedAgeGroup)}`)
-      Text(`Language: ${this.currentLanguage}`)
-      Text(`Unplayed: ${this.unplayedCount}, Pending: ${this.processingCount}`)
+      Text(`${t(this.lang, 'ageGroupLabel')}: ${ageLabel(this.lang, this.selectedAgeGroup)}`)
+      Text(`${t(this.lang, 'languageLabel')}: ${this.currentLanguage}`)
+      Text(`${t(this.lang, 'unplayedLabel')}: ${this.unplayedCount}, ${t(this.lang, 'pendingLabel')}: ${this.processingCount}`)
 
       Row({ space: 8 }) {
-        Button('Prev').onClick(() => this.prev())
-        Button('Next').onClick(() => this.next())
+        Button(t(this.lang, 'prev')).onClick(() => this.prev())
+        Button(t(this.lang, 'next')).onClick(() => this.next())
       }
       Row({ space: 8 }) {
         Button(t(this.lang, 'favorite')).onClick(() => this.message = t(this.lang, 'favorite'))
         Button(t(this.lang, 'update')).onClick(() => this.message = t(this.lang, 'update'))
       }
       Button(t(this.lang, 'clearRefetchZh')).onClick(() => {
+        const jokes = jokesByLanguageTag('zh-Hans');
         this.currentLanguage = 'zh-Hans';
-        this.unplayedCount = 20;
+        this.unplayedCount = jokes.length;
         this.processingCount = 0;
-        this.currentJoke = SAMPLE_JOKES[0];
+        this.jokeIndex = 0;
+        this.currentJoke = jokes.length > 0 ? jokes[0] : '';
       })
       Row({ space: 8 }) {
         Button(t(this.lang, 'speak')).onClick(() => this.message = t(this.lang, 'speak'))
@@ -94,7 +121,7 @@ export struct MainPage {
         Button(t(this.lang, 'process')).onClick(() => this.message = t(this.lang, 'process'))
       }
       Button(t(this.lang, 'resetPlayed')).onClick(() => {
-        this.unplayedCount = SAMPLE_JOKES.length;
+        this.unplayedCount = this.jokes().length;
       })
       Row({ space: 8 }) {
         Button(t(this.lang, 'sources')).onClick(() => this.route = 'sources')
@@ -235,7 +262,7 @@ export struct SourcesPage {
                   await sourceDao.setEnabled(item.sourceId, v);
                   await this.reload();
                 })
-                Button('Delete').onClick(async () => {
+                Button(t(this.lang, 'delete')).onClick(async () => {
                   await sourceDao.delete(item.sourceId);
                   await this.reload();
                 })
@@ -260,6 +287,7 @@ export struct SettingsPage {
   @Link ttsVoiceProfileId: string;
   @Link ttsSpeed: number;
   @Link ttsPitch: number;
+  @Link currentLanguage: string;
   @Link unplayedCount: number;
   @Link message: string;
   @Prop lang: UiLang = 'en';
@@ -299,11 +327,11 @@ export struct SettingsPage {
 
       Row({ space: 8 }) {
         Toggle({ type: ToggleType.Switch, isOn: this.autoUpdate }).onChange((v: boolean) => this.autoUpdate = v)
-        Text(`${t(this.lang, 'autoUpdate')}: ${this.autoUpdate ? 'On' : 'Off'}`)
+        Text(`${t(this.lang, 'autoUpdate')}: ${this.autoUpdate ? t(this.lang, 'on') : t(this.lang, 'off')}`)
       }
       Row({ space: 8 }) {
         Toggle({ type: ToggleType.Switch, isOn: this.autoProcess }).onChange((v: boolean) => this.autoProcess = v)
-        Text(`${t(this.lang, 'autoProcess')}: ${this.autoProcess ? 'On' : 'Off'}`)
+        Text(`${t(this.lang, 'autoProcess')}: ${this.autoProcess ? t(this.lang, 'on') : t(this.lang, 'off')}`)
       }
 
       Text(t(this.lang, 'ttsVoice'))
@@ -314,13 +342,13 @@ export struct SettingsPage {
           .onClick(() => this.ttsVoiceProfileId = 'ICL_zh_female_keainvsheng_tob')
       }
 
-      Text(`TTS Speed: ${this.ttsSpeed.toFixed(2)}`)
+      Text(`${t(this.lang, 'ttsSpeed')}: ${this.ttsSpeed.toFixed(2)}`)
       Slider({ value: this.ttsSpeed, min: 0.5, max: 2.0, step: 0.1 }).onChange((v: number) => this.ttsSpeed = v)
-      Text(`TTS Pitch: ${this.ttsPitch.toFixed(2)}`)
+      Text(`${t(this.lang, 'ttsPitch')}: ${this.ttsPitch.toFixed(2)}`)
       Slider({ value: this.ttsPitch, min: 0.5, max: 2.0, step: 0.1 }).onChange((v: number) => this.ttsPitch = v)
 
       Button(t(this.lang, 'clearPlayed')).onClick(() => {
-        this.unplayedCount = SAMPLE_JOKES.length;
+        this.unplayedCount = jokesByLanguageTag(this.currentLanguage).length;
         this.message = t(this.lang, 'clearPlayed');
       })
       Button(t(this.lang, 'back')).onClick(() => this.route = 'main')
@@ -339,9 +367,9 @@ struct Index {
   @State dbError: string = '';
 
   @State currentLanguage: string = 'zh-Hans';
-  @State unplayedCount: number = SAMPLE_JOKES.length;
+  @State unplayedCount: number = SAMPLE_JOKES_ZH.length;
   @State processingCount: number = 0;
-  @State currentJoke: string = SAMPLE_JOKES[0];
+  @State currentJoke: string = SAMPLE_JOKES_ZH[0];
   @State message: string = '';
   @State jokeIndex: number = 0;
 
@@ -369,8 +397,12 @@ struct Index {
       const ctx = getContext(this) as common.UIAbilityContext;
       await globalRdbStore.open(ctx);
       this.dbReady = true;
+      const jokes = jokesByLanguageTag(this.currentLanguage);
+      this.unplayedCount = jokes.length;
+      this.jokeIndex = 0;
+      this.currentJoke = jokes.length > 0 ? jokes[0] : '';
     } catch (err) {
-      this.dbError = `Database init failed: ${JSON.stringify(err)}`;
+      this.dbError = `${t(this.currentUiLang(), 'dbInitFailed')}: ${JSON.stringify(err)}`;
     }
   }
 
@@ -380,7 +412,7 @@ struct Index {
       if (this.dbError) {
         Text(this.dbError).fontColor(Color.Red).padding(16)
       } else if (!this.dbReady) {
-        Text('Initializing storage...').padding(16)
+        Text(t(lang, 'initializingStorage')).padding(16)
       } else if (!this.ageLocked || !this.complianceAccepted) {
         AgeGatePage({
           ageLocked: $ageLocked,
@@ -414,11 +446,14 @@ struct Index {
           ttsVoiceProfileId: $ttsVoiceProfileId,
           ttsSpeed: $ttsSpeed,
           ttsPitch: $ttsPitch,
+          currentLanguage: $currentLanguage,
           unplayedCount: $unplayedCount,
           message: $message,
           lang: lang
         })
       }
-    }.title('JokeBox NEXT')
+    }.title(t(lang, 'appTitleNext'))
   }
 }
+
+

@@ -1,0 +1,13 @@
+﻿{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "JokeBox Harmony NEXT"
+    },
+    {
+      "name": "module_desc",
+      "value": "JokeBox entry module"
+    }
+  ]
+}
+

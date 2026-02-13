@@ -3,6 +3,10 @@
 const ZH_PREFIX = 'zh';
 
 const TEXTS: Record<string, { zh: string; en: string }> = {
+  appTitle: { zh: '笑话盒子', en: 'JokeBox' },
+  appTitleNext: { zh: '笑话盒子 NEXT', en: 'JokeBox NEXT' },
+  initializingStorage: { zh: '正在初始化存储...', en: 'Initializing storage...' },
+  dbInitFailed: { zh: '数据库初始化失败', en: 'Database init failed' },
   firstLaunchTitle: { zh: '首次启动', en: 'First Launch' },
   firstLaunchDesc: { zh: '请选择年龄段并确认合规声明，仅首次展示。', en: 'Choose age group and confirm compliance. This page is shown only once.' },
   teen: { zh: '少年', en: 'Teen' },
@@ -20,6 +24,12 @@ const TEXTS: Record<string, { zh: string; en: string }> = {
   stop: { zh: '停止', en: 'Stop' },
   process: { zh: '仅处理', en: 'Process' },
   resetPlayed: { zh: '重置已播', en: 'Reset Played' },
+  prev: { zh: '上一个', en: 'Prev' },
+  next: { zh: '下一个', en: 'Next' },
+  ageGroupLabel: { zh: '年龄段', en: 'Age Group' },
+  languageLabel: { zh: '语言', en: 'Language' },
+  unplayedLabel: { zh: '未播', en: 'Unplayed' },
+  pendingLabel: { zh: '待处理', en: 'Pending' },
   noJoke: { zh: '暂无可播放笑话', en: 'No joke available' },
   sourceName: { zh: '来源名称', en: 'Source Name' },
   url: { zh: '链接', en: 'URL' },
@@ -50,9 +60,14 @@ const TEXTS: Record<string, { zh: string; en: string }> = {
   autoUpdate: { zh: '自动更新', en: 'Auto Update' },
   autoProcess: { zh: '后台处理', en: 'Background Process' },
   ttsVoice: { zh: 'TTS 音色', en: 'TTS Voice' },
+  ttsSpeed: { zh: 'TTS 语速', en: 'TTS Speed' },
+  ttsPitch: { zh: 'TTS 音调', en: 'TTS Pitch' },
+  on: { zh: '开', en: 'On' },
+  off: { zh: '关', en: 'Off' },
   systemDefaultVoice: { zh: '系统默认', en: 'System Default' },
   volcCuteGirl: { zh: '火山引擎·可爱女生', en: 'Volcengine Cute Girl' },
-  clearPlayed: { zh: '清空已播', en: 'Clear Played' }
+  clearPlayed: { zh: '清空已播', en: 'Clear Played' },
+  delete: { zh: '删除', en: 'Delete' }
 };
 
 export function resolveUiLang(uiMode: string, uiLang: string, systemLang: string): UiLang {
@@ -73,3 +88,4 @@ export function ageLabel(lang: UiLang, age: string): string {
   if (age === 'youth') return t(lang, 'youth');
   return t(lang, 'adult');
 }
+

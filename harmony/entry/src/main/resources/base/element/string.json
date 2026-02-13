@@ -2,11 +2,12 @@
   "string": [
     {
       "name": "app_name",
-      "value": "JokeBox Harmony"
+      "value": "笑话盒子"
     },
     {
       "name": "module_desc",
-      "value": "JokeBox entry module"
+      "value": "笑话盒子入口模块"
     }
   ]
 }
+

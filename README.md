@@ -5,16 +5,16 @@ JokeBox is a multi-source joke app scaffold with:
 - async fetch/import/process pipeline
 - content policy filtering, exact and near dedup
 - playback controls, favorites, and TTS
-- Android implementation + Harmony/Harmony NEXT aligned scaffolds
+- Android implementation + Harmony/Harmony NEXT projects
 
 ## Structure
 - `android/` Android app (Kotlin, Compose, Room, DataStore, WorkManager)
-- `harmony/` HarmonyOS ArkTS scaffolds
-- `harmony-next/` HarmonyOS NEXT ArkTS scaffolds
+- `harmony/` HarmonyOS Stage project (ArkUI + RDB)
+- `harmony-next/` HarmonyOS NEXT Stage project (ArkUI + RDB)
 
 ## Status
 Core Android flow is implemented and runnable in emulator.
-Harmony and Harmony NEXT include aligned data/pipeline/UI state templates for continued implementation.
+Harmony and Harmony NEXT now contain full Stage-model project structures with runnable ArkUI pages and RDB initialization.
 
 ## Auto Sync (Hidden Window)
 - Use `scripts/auto-sync-hidden.vbs` to run Git auto-sync without showing a PowerShell window.

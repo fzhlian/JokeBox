@@ -1,8 +1,20 @@
-﻿# HarmonyOS Runnable Skeleton
+﻿# HarmonyOS Project
 
-已补齐可运行骨架（ArkUI + RDB）：
-- `entry/src/main/ets/data/RdbStore.ets`：RDB 初始化与建表。
-- `entry/src/main/ets/data/Repositories.ets`：Source DAO 示例。
-- `entry/src/main/ets/pages/Index.ets`：AgeGate/Main/Sources/Settings 页面流转。
+This directory now contains a full Stage-model HarmonyOS project scaffold:
+- App-level files: `AppScope/app.json5`, `build-profile.json5`, `hvigorfile.ts`, `oh-package.json5`
+- Entry module files: `entry/src/main/module.json5`, `entry/src/main/ets/entryability/EntryAbility.ets`
+- ArkUI + RDB pages and data access:
+  - `entry/src/main/ets/pages/Index.ets`
+  - `entry/src/main/ets/data/RdbStore.ets`
+  - `entry/src/main/ets/data/Repositories.ets`
+  - `entry/src/main/ets/model/Models.ets`
 
-建议：在 DevEco Studio 新建 Stage 模型工程后，将上述 `entry/src/main/ets` 目录直接覆盖对应位置运行。
+## Build (DevEco Studio)
+1. Open the `harmony/` directory in DevEco Studio.
+2. Let the IDE sync dependencies.
+3. Build HAP: `Build > Build Hap(s)/APP(s) > Build Hap(s)`.
+4. Package APP (if needed): `Build > Build Hap(s)/APP(s) > Build APP(s)`.
+
+## Notes
+- Current bundle name: `com.jokebox.harmony`.
+- Version: `0.1.1` (code `2`).

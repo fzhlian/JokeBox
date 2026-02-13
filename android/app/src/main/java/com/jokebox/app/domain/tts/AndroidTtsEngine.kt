@@ -40,15 +40,16 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
     }
 
     override suspend fun speak(text: String, speed: Float, pitch: Float, voiceProfileId: String) {
-        val resolvedProfileId = if (voiceProfileId == "default" && BuildConfig.VOLCENGINE_TTS_VOICE_ID.isNotBlank()) {
-            BuildConfig.VOLCENGINE_TTS_VOICE_ID
-        } else {
-            voiceProfileId
+        val configuredVoiceId = BuildConfig.VOLCENGINE_TTS_VOICE_ID
+        val resolvedProfileId = when {
+            configuredVoiceId.isBlank() -> voiceProfileId
+            voiceProfileId == CUTE_GIRL_VOICE_ID -> configuredVoiceId
+            else -> voiceProfileId
         }
         Log.i(TAG, "Speak profile=$resolvedProfileId textLen=${text.length}")
         tts.stop()
         stopMediaPlayback()
-        if (resolvedProfileId == CUTE_GIRL_VOICE_ID && speakViaVolcengine(text, speed, pitch, resolvedProfileId)) {
+        if (shouldUseVolcengine(resolvedProfileId) && speakViaVolcengine(text, speed, pitch, resolvedProfileId)) {
             return
         }
         chooseVoiceByProfile(resolvedProfileId)
@@ -197,6 +198,12 @@ class AndroidTtsEngine(context: Context) : TtsEngine {
         private const val VOLCENGINE_TTS_URL = "https://openspeech.bytedance.com/api/v1/tts"
         private const val MAX_TEXT_LEN = 300
         private const val CUTE_GIRL_VOICE_ID = "ICL_zh_female_keainvsheng_tob"
+    }
+
+    private fun shouldUseVolcengine(profileId: String): Boolean {
+        if (profileId.isBlank() || profileId == "default") return false
+        if (profileId == BuildConfig.VOLCENGINE_TTS_VOICE_ID) return true
+        return profileId.startsWith("ICL_") || profileId.startsWith("zh_")
     }
 }
 

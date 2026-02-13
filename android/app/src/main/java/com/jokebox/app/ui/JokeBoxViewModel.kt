@@ -130,7 +130,12 @@ class JokeBoxViewModel(
             } else {
                 val voiceProfileId = settingsStore.ttsVoiceProfileIdFlow.first()
                 localState.value = localState.value.copy(currentJoke = joke, message = null)
-                ttsEngine.speak(joke.content, uiState.value.ttsSpeed, uiState.value.ttsPitch, voiceProfileId)
+                ttsEngine.speak(
+                    sanitizeForSpeech(joke.content),
+                    uiState.value.ttsSpeed,
+                    uiState.value.ttsPitch,
+                    voiceProfileId
+                )
             }
         }
     }
@@ -161,7 +166,7 @@ class JokeBoxViewModel(
         viewModelScope.launch {
             val joke = uiState.value.currentJoke ?: return@launch
             ttsEngine.speak(
-                joke.content,
+                sanitizeForSpeech(joke.content),
                 uiState.value.ttsSpeed,
                 uiState.value.ttsPitch,
                 uiState.value.ttsVoiceProfileId
@@ -402,6 +407,31 @@ private fun fallbackZhJokes(): List<String> = listOf(
     "今天修了一个线上 bug，奖励是再给我一个线上 bug。",
     "代码评审时我写了 todo，领导说这就是长期规划。"
 )
+
+private fun sanitizeForSpeech(content: String): String {
+    val trimmed = content.trim()
+    if (trimmed.isBlank()) return content
+
+    val inlineSanitized = trimmed.replace(
+        Regex("\\s*[—-]{1,2}\\s*(作者|来源|by)[:：]?\\s*[^\\n]{1,60}$", RegexOption.IGNORE_CASE),
+        ""
+    )
+
+    val lines = inlineSanitized.lines().toMutableList()
+    while (lines.isNotEmpty()) {
+        val last = lines.last().trim()
+        val isAuthorLine = last.matches(Regex("^(作者|来源|by)[:：].*$", RegexOption.IGNORE_CASE))
+        val isDashTail = last.matches(Regex("^[—-]{1,2}\\s*(作者|来源|by)?[:：]?\\s*[^\\n]{1,40}$", RegexOption.IGNORE_CASE))
+        if (isAuthorLine || isDashTail) {
+            lines.removeAt(lines.lastIndex)
+        } else {
+            break
+        }
+    }
+
+    val result = lines.joinToString("\n").trim()
+    return result.ifBlank { trimmed }
+}
 
 private data class LanguageSettings(
     val uiMode: LanguageMode,

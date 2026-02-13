@@ -45,6 +45,34 @@ export class SourceDao {
       ]
     );
   }
+
+  async setEnabled(sourceId: string, enabled: boolean): Promise<void> {
+    await globalRdbStore.execute(
+      'UPDATE source_config SET enabled = ?, updatedAt = ? WHERE sourceId = ?',
+      [enabled ? 1 : 0, Date.now(), sourceId]
+    );
+  }
+
+  async delete(sourceId: string): Promise<void> {
+    await globalRdbStore.execute('DELETE FROM source_config WHERE sourceId = ?', [sourceId]);
+  }
+
+  async clearUserOnline(): Promise<void> {
+    await globalRdbStore.execute("DELETE FROM source_config WHERE type = 'USER_ONLINE'");
+  }
+
+  testConfig(url: string, itemsPath: string, contentPath: string): string {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return 'URL must start with http:// or https://';
+    }
+    if (!itemsPath.trim()) {
+      return 'Items path is required';
+    }
+    if (!contentPath.trim()) {
+      return 'Content path is required';
+    }
+    return '';
+  }
 }
 
 export const sourceDao = new SourceDao();

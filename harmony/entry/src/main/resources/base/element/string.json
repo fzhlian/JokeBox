@@ -1,0 +1,12 @@
+﻿{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "JokeBox Harmony"
+    },
+    {
+      "name": "module_desc",
+      "value": "JokeBox entry module"
+    }
+  ]
+}

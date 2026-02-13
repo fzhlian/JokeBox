@@ -1,5 +1,5 @@
 ﻿import rdb from '@ohos.data.rdb';
-import UIAbility from '@ohos.app.ability.UIAbility';
+import common from '@ohos.app.ability.common';
 
 const DB_NAME: string = 'jokebox.db';
 const DB_VERSION: number = 1;
@@ -56,7 +56,10 @@ const CREATE_SQLS: string[] = [
 export class JokeRdbStore {
   private store?: rdb.RdbStore;
 
-  async open(context: UIAbility['context']): Promise<void> {
+  async open(context: common.UIAbilityContext): Promise<void> {
+    if (this.store) {
+      return;
+    }
     this.store = await rdb.getRdbStore(context, {
       name: DB_NAME,
       securityLevel: rdb.SecurityLevel.S1

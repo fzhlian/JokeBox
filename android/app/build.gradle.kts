@@ -18,6 +18,12 @@ val releaseStoreFile = localProps.getProperty("RELEASE_STORE_FILE")
 val releaseStorePassword = localProps.getProperty("RELEASE_STORE_PASSWORD")
 val releaseKeyAlias = localProps.getProperty("RELEASE_KEY_ALIAS")
 val releaseKeyPassword = localProps.getProperty("RELEASE_KEY_PASSWORD")
+val volcApiKey = localProps.getProperty("VOLCENGINE_TTS_API_KEY", "")
+val volcAppId = localProps.getProperty("VOLCENGINE_TTS_APP_ID", "")
+val volcAppKey = localProps.getProperty("VOLCENGINE_TTS_APPKEY", "")
+val volcToken = localProps.getProperty("VOLCENGINE_TTS_TOKEN", "")
+val volcVoiceId = localProps.getProperty("VOLCENGINE_TTS_VOICE_ID", "ICL_zh_female_keainvsheng_tob")
+fun esc(value: String): String = value.replace("\\", "\\\\").replace("\"", "\\\"")
 val hasReleaseSigning = !releaseStoreFile.isNullOrBlank() &&
     !releaseStorePassword.isNullOrBlank() &&
     !releaseKeyAlias.isNullOrBlank() &&
@@ -33,6 +39,11 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
+        buildConfigField("String", "VOLCENGINE_TTS_API_KEY", "\"${esc(volcApiKey)}\"")
+        buildConfigField("String", "VOLCENGINE_TTS_APP_ID", "\"${esc(volcAppId)}\"")
+        buildConfigField("String", "VOLCENGINE_TTS_APPKEY", "\"${esc(volcAppKey)}\"")
+        buildConfigField("String", "VOLCENGINE_TTS_TOKEN", "\"${esc(volcToken)}\"")
+        buildConfigField("String", "VOLCENGINE_TTS_VOICE_ID", "\"${esc(volcVoiceId)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -74,6 +85,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 

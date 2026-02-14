@@ -40,7 +40,7 @@ goto fail
 set NODE_HOME=%NODE_HOME:"=%
 set NODE_EXE_PATH=%NODE_HOME%/%NODE_EXE%
 
-if exist "%NODE_EXE_PATH%" set NODE_EXE=%NODE_EXE_PATH% && goto execute
+if exist "%NODE_EXE_PATH%" set NODE_EXE=%NODE_EXE_PATH% && set PATH=%NODE_HOME%;%PATH% && goto execute
 echo.
 echo ERROR: NODE_HOME is not set and no 'node' command could be found in your PATH.
 echo.

@@ -1,2 +1,3 @@
-// Script for compiling build behavior. It is built in the build plug-in and cannot be modified currently.
-export { appTasks } from '@ohos/hvigor-ohos-plugin';
+// Script for compiling build behavior.
+const { appTasks } = require('C:/Users/fzhlian/.hvigor/project_caches/2bf22346994211b5d65a78c952167251/workspace/node_modules/@ohos/hvigor-ohos-plugin');
+export { appTasks };

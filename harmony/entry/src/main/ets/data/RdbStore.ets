@@ -50,6 +50,11 @@ const CREATE_SQLS: string[] = [
     lastJokeId TEXT,
     playedCount INTEGER NOT NULL,
     updatedAt INTEGER NOT NULL
+  );`,
+  `CREATE TABLE IF NOT EXISTS app_setting (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL
   );`
 ];
 

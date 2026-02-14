@@ -1,7 +1,7 @@
-import rdb from '@ohos.data.rdb';
+﻿import rdb from '@ohos.data.rdb';
 import common from '@ohos.app.ability.common';
 
-const DB_NAME: string = 'jokebox_next.db';
+const DB_NAME: string = 'jokebox.db';
 const DB_VERSION: number = 1;
 
 const CREATE_SQLS: string[] = [
@@ -50,6 +50,11 @@ const CREATE_SQLS: string[] = [
     lastJokeId TEXT,
     playedCount INTEGER NOT NULL,
     updatedAt INTEGER NOT NULL
+  );`,
+  `CREATE TABLE IF NOT EXISTS app_setting (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL
   );`
 ];
 
@@ -67,6 +72,14 @@ export class JokeRdbStore {
     for (const sql of CREATE_SQLS) {
       await this.store.executeSql(sql);
     }
+  }
+
+  async close(): Promise<void> {
+    if (!this.store) {
+      return;
+    }
+    await this.store.close();
+    this.store = undefined;
   }
 
   async execute(sql: string, bindArgs: Array<rdb.ValueType> = []): Promise<void> {

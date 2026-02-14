@@ -67,7 +67,10 @@ const TEXTS: Record<string, { zh: string; en: string }> = {
   systemDefaultVoice: { zh: '系统默认', en: 'System Default' },
   volcCuteGirl: { zh: '火山引擎·可爱女生', en: 'Volcengine Cute Girl' },
   clearPlayed: { zh: '清空已播', en: 'Clear Played' },
-  delete: { zh: '删除', en: 'Delete' }
+  delete: { zh: '删除', en: 'Delete' },
+  langZhHans: { zh: '简体中文', en: 'Chinese (Simplified)' },
+  langZhHant: { zh: '繁体中文', en: 'Chinese (Traditional)' },
+  langEn: { zh: '英语', en: 'English' }
 };
 
 export function resolveUiLang(uiMode: string, uiLang: string, systemLang: string): UiLang {

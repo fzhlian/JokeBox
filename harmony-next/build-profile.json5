@@ -1,23 +1,32 @@
 ﻿{
-  "apiType": "stageMode",
-  "buildOption": {
-    "externalNativeOptions": {
-      "path": ""
-    }
+  "app": {
+    "signingConfigs": [],
+    "products": [
+      {
+        "name": "default",
+        "compatibleSdkVersion": "5.0.0(12)",
+        "runtimeOS": "HarmonyOS"
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
   },
-  "targets": [
-    {
-      "name": "default",
-      "runtimeOS": "HarmonyOS"
-    }
-  ],
   "modules": [
     {
       "name": "entry",
-      "srcPath": "entry",
+      "srcPath": "./entry",
       "targets": [
         {
-          "name": "default"
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
         }
       ]
     }

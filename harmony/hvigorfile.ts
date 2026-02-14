@@ -1,3 +1,2 @@
-﻿// Script for compiling build behavior.
-const { appTasks } = require('@ohos/hvigor-ohos-plugin');
-export { appTasks };
+﻿// Script for compiling build behavior. It is built in the build plug-in and cannot be modified currently.
+export { appTasks } from '@ohos/hvigor-ohos-plugin';

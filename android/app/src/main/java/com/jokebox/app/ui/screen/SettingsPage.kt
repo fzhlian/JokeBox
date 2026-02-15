@@ -37,7 +37,11 @@ fun SettingsPage(
     onResetPlayed: () -> Unit
 ) {
     val scroll = rememberScrollState()
-    val localeTag = LocalConfiguration.current.locales[0]?.toLanguageTag().orEmpty().lowercase()
+    val systemLocaleTag = LocalConfiguration.current.locales[0]?.toLanguageTag().orEmpty()
+    val localeTag = when (uiState.uiLanguageMode) {
+        LanguageMode.SYSTEM -> systemLocaleTag
+        LanguageMode.MANUAL -> uiState.uiLanguage
+    }.lowercase()
     val zh = localeTag.startsWith("zh")
     val uiLanguageModeText = if (zh) ZhText.uiLanguageMode else EnText.uiLanguageMode
     val contentLanguageModeText = if (zh) ZhText.contentLanguageMode else EnText.contentLanguageMode

@@ -408,7 +408,7 @@ private fun fallbackZhJokes(): List<String> = listOf(
     "代码评审时我写了 todo，领导说这就是长期规划。"
 )
 
-private fun sanitizeForSpeech(content: String): String {
+internal fun sanitizeForSpeech(content: String): String {
     val trimmed = content.trim()
     if (trimmed.isBlank()) return content
 
@@ -422,7 +422,12 @@ private fun sanitizeForSpeech(content: String): String {
         val last = lines.last().trim()
         val isAuthorLine = last.matches(Regex("^(作者|来源|by)[:：].*$", RegexOption.IGNORE_CASE))
         val isDashTail = last.matches(Regex("^[—-]{1,2}\\s*(作者|来源|by)?[:：]?\\s*[^\\n]{1,40}$", RegexOption.IGNORE_CASE))
-        if (isAuthorLine || isDashTail) {
+        val isAnonymousTail = last.matches(
+            Regex("^(?:[（(]\\s*)?(?:佚名|匿名|无名氏|unknown|anonymous)(?:\\s*[）)])?$", RegexOption.IGNORE_CASE)
+        )
+        val previousLineLength = lines.dropLast(1).lastOrNull()?.trim()?.length ?: 0
+        val isLikelyStandaloneAuthorName = previousLineLength >= 8 && isLikelyAuthorName(last)
+        if (isAuthorLine || isDashTail || isAnonymousTail || isLikelyStandaloneAuthorName) {
             lines.removeAt(lines.lastIndex)
         } else {
             break
@@ -431,6 +436,17 @@ private fun sanitizeForSpeech(content: String): String {
 
     val result = lines.joinToString("\n").trim()
     return result.ifBlank { trimmed }
+}
+
+private fun isLikelyAuthorName(value: String): Boolean {
+    if (value.length !in 2..32) return false
+    if (value.any { it.isDigit() }) return false
+    if (value.contains(Regex("[。！？!?；;，,、…]"))) return false
+    val trimmed = value.trim('(', ')', '（', '）', '[', ']', '【', '】', ' ')
+    if (trimmed.isBlank()) return false
+    val zhName = Regex("^[\\u4E00-\\u9FFF·•]{2,8}$")
+    val latinName = Regex("^[A-Za-z][A-Za-z .'-]{1,30}$")
+    return zhName.matches(trimmed) || latinName.matches(trimmed)
 }
 
 private data class LanguageSettings(

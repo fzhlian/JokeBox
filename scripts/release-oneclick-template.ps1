@@ -24,11 +24,11 @@ $cfg = @{
     SignToolJar = "C:\Users\fzhlian\AppData\Local\Huawei\Sdk\openharmony\9\toolchains\lib\hap-sign-tool.jar"
     P12Path = "D:\fzhlian\Code\JokeBox\release\JokeBox.p12"
     P12Password = $p12PasswordFromEnv
-    AppCertFile = "D:\fzhlian\Code\JokeBox\release\JokeBox.csr"
+    AppCertFile = "D:\fzhlian\Code\JokeBox\release\fzhlian.jokebox.app.cer"
     ProfileFile = "D:\fzhlian\Code\JokeBox\release\JokeBoxRelease.p7b"
 
     # Alias/password for private key in P12
-    AppKeyAlias = "release"
+    AppKeyAlias = "ul"
     AppKeyPassword = ""
 
     # Optional: keep empty to auto detect
@@ -38,4 +38,4 @@ $cfg = @{
     ReleaseDir = "release\upload"
 }
 
-powershell -ExecutionPolicy Bypass -File "scripts\release-signed-only.ps1" -SkipAndroid @cfg
+& "scripts\release-signed-only.ps1" -SkipAndroid @cfg

@@ -14,6 +14,9 @@
 )
 
 $ErrorActionPreference = "Stop"
+if (Get-Variable PSNativeCommandUseErrorActionPreference -ErrorAction SilentlyContinue) {
+    $PSNativeCommandUseErrorActionPreference = $false
+}
 
 if ([string]::IsNullOrWhiteSpace($AppKeyAlias)) {
     $AppKeyAlias = "release"
@@ -79,20 +82,29 @@ New-Item -ItemType Directory -Path $tmp -Force | Out-Null
 $outCertChain = Join-Path $tmp "certchain.cer"
 $outProfile = Join-Path $tmp "profile.p7b"
 
+$prevErrorAction = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
 $verifyOutput = & $JavaPath -jar $SignToolJar verify-app `
     -inFile $OutFile `
     -outCertChain $outCertChain `
     -outProfile $outProfile 2>&1
+$ErrorActionPreference = $prevErrorAction
 
 $verifyOutput | ForEach-Object { Write-Output $_ }
-
-if ($LASTEXITCODE -ne 0) {
+$verifyExit = $LASTEXITCODE
+$verifyText = ($verifyOutput | Out-String)
+if ($verifyExit -ne 0) {
     throw "Signed HAP verification failed for: $OutFile"
+}
+if ($verifyText -match "Missing parameter:\s*outproof") {
+    Write-Warning "verify-app reported outproof warning; continuing because signed output exists."
 }
 
 # Verify profile details for bundleName match (defense against wrong AGC profile)
 $profileJson = Join-Path $tmp "verify_profile.json"
+$ErrorActionPreference = "Continue"
 & $JavaPath -jar $SignToolJar verify-profile -inFile $outProfile -outFile $profileJson | Out-Null
+$ErrorActionPreference = $prevErrorAction
 if (Test-Path $profileJson) {
     $text = Get-Content -Raw $profileJson
     if ($text -notmatch [regex]::Escape($BundleName)) {

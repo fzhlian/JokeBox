@@ -83,15 +83,29 @@ function Build-HarmonyLike(
     [string]$stamp,
     [hashtable]$signArgs
 ) {
-    Push-Location $projectDir
+    $unsignedHap = Join-Path $projectDir "entry\build\default\outputs\default\entry-default-unsigned.hap"
+    $buildFailed = $false
     try {
-        if (Test-Path ".\hvigorw.bat") {
-            & .\hvigorw.bat assembleApp
-        } else {
-            & hvigor assembleApp
+        Push-Location $projectDir
+        try {
+            if (Test-Path ".\hvigorw.bat") {
+                & .\hvigorw.bat assembleApp
+            } else {
+                & hvigor assembleApp
+            }
+        } finally {
+            Pop-Location
         }
-    } finally {
-        Pop-Location
+    } catch {
+        $buildFailed = $true
+        if (Test-Path $unsignedHap) {
+            Write-Warning "hvigor build failed for $projectDir, using existing unsigned HAP: $unsignedHap"
+        } else {
+            throw
+        }
+    }
+    if (-not $buildFailed -and !(Test-Path $unsignedHap)) {
+        throw "Unsigned HAP not found after build: $unsignedHap"
     }
 
     $hapOut = Join-Path $outDir "JokeBox-$label-signed-$version-$stamp.hap"
@@ -106,7 +120,7 @@ function Build-HarmonyLike(
         if ($null -ne $signArgs[$k] -and $signArgs[$k] -ne "") { $params[$k] = $signArgs[$k] }
     }
 
-    & powershell -ExecutionPolicy Bypass -File "scripts\sign-harmony-manual.ps1" @params
+    & "scripts\sign-harmony-manual.ps1" @params
     if ($LASTEXITCODE -ne 0 -or !(Test-Path $hapOut)) {
         throw "Signing failed for $projectDir"
     }

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -29,19 +30,30 @@ import com.jokebox.app.data.model.AgeGroup
 import com.jokebox.app.data.model.LanguageMode
 import com.jokebox.app.ui.state.MainUiState
 
-enum class AppRoute(val route: String, val title: String) {
-    MAIN("main", "主页"),
-    SOURCES("sources", "来源"),
-    SETTINGS("settings", "设置")
+enum class AppRoute(val route: String) {
+    MAIN("main"),
+    SOURCES("sources"),
+    SETTINGS("settings")
 }
 
 @Composable
-private fun routeIcon(route: AppRoute) {
+private fun routeIcon(route: AppRoute, label: String) {
     when (route) {
-        AppRoute.MAIN -> Icon(Icons.Outlined.Home, contentDescription = route.title)
-        AppRoute.SOURCES -> Icon(Icons.Outlined.Storage, contentDescription = route.title)
-        AppRoute.SETTINGS -> Icon(Icons.Outlined.Settings, contentDescription = route.title)
+        AppRoute.MAIN -> Icon(Icons.Outlined.Home, contentDescription = label)
+        AppRoute.SOURCES -> Icon(Icons.Outlined.Storage, contentDescription = label)
+        AppRoute.SETTINGS -> Icon(Icons.Outlined.Settings, contentDescription = label)
     }
+}
+
+private fun resolveUiLanguageTag(
+    systemLocaleTag: String,
+    mode: LanguageMode,
+    selected: String
+): String {
+    return when (mode) {
+        LanguageMode.SYSTEM -> systemLocaleTag
+        LanguageMode.MANUAL -> selected
+    }.ifBlank { "zh-Hans" }
 }
 
 @Composable
@@ -79,6 +91,9 @@ fun MainScreen(
         OnboardingScreen(onCompleteOnboarding = onCompleteOnboarding)
         return
     }
+    val systemLocaleTag = LocalConfiguration.current.locales[0]?.toLanguageTag().orEmpty()
+    val uiLanguageTag = resolveUiLanguageTag(systemLocaleTag, uiState.uiLanguageMode, uiState.uiLanguage)
+    val isEn = uiLanguageTag.lowercase().startsWith("en")
 
     LaunchedEffect(uiState.currentJoke?.id, uiState.unplayedCount, needOnboarding) {
         if (!needOnboarding && uiState.currentJoke == null && uiState.unplayedCount > 0) {
@@ -98,6 +113,11 @@ fun MainScreen(
             NavigationBar {
                 AppRoute.entries.forEach { page ->
                     val selected = currentDestination?.hierarchy?.any { it.route == page.route } == true
+                    val label = when (page) {
+                        AppRoute.MAIN -> if (isEn) "Home" else "主页"
+                        AppRoute.SOURCES -> if (isEn) "Sources" else "来源"
+                        AppRoute.SETTINGS -> if (isEn) "Settings" else "设置"
+                    }
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
@@ -106,7 +126,7 @@ fun MainScreen(
                                 launchSingleTop = true
                             }
                         },
-                        icon = { routeIcon(page) },
+                        icon = { routeIcon(page, label) },
                         label = null,
                         alwaysShowLabel = false
                     )
@@ -135,6 +155,7 @@ fun MainScreen(
                 composable(AppRoute.MAIN.route) {
                     MainPage(
                         uiState = uiState,
+                        uiLanguageTag = uiLanguageTag,
                         onPrev = onPrev,
                         onNext = onNext,
                         onFavorite = onFavorite,

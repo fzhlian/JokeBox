@@ -63,11 +63,25 @@ fun SettingsPage(
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(uiLanguageModeText)
                 LanguageModeRow(current = uiState.uiLanguageMode, onChange = onSetUiLanguageMode, zh = zh)
-                LanguageChoiceRow(current = uiState.uiLanguage, onChange = onSetUiLanguage, zh = zh)
+                LanguageChoiceRow(
+                    current = uiState.uiLanguage,
+                    onChange = { lang ->
+                        onSetUiLanguageMode(LanguageMode.MANUAL)
+                        onSetUiLanguage(lang)
+                    },
+                    zh = zh
+                )
 
                 Text(contentLanguageModeText)
                 LanguageModeRow(current = uiState.contentLanguageMode, onChange = onSetContentLanguageMode, zh = zh)
-                LanguageChoiceRow(current = uiState.contentLanguage, onChange = onSetContentLanguage, zh = zh)
+                LanguageChoiceRow(
+                    current = uiState.contentLanguage,
+                    onChange = { lang ->
+                        onSetContentLanguageMode(LanguageMode.MANUAL)
+                        onSetContentLanguage(lang)
+                    },
+                    zh = zh
+                )
             }
         }
 

@@ -14,7 +14,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.jokebox.app.data.model.AgeGroup
 import com.jokebox.app.ui.state.MainUiState
@@ -22,6 +21,7 @@ import com.jokebox.app.ui.state.MainUiState
 @Composable
 fun MainPage(
     uiState: MainUiState,
+    uiLanguageTag: String,
     onPrev: () -> Unit,
     onNext: () -> Unit,
     onFavorite: () -> Unit,
@@ -32,48 +32,59 @@ fun MainPage(
     onStopSpeak: () -> Unit,
     onProcess: () -> Unit
 ) {
-    val language = LocalConfiguration.current.locales[0]?.toLanguageTag().orEmpty()
+    val isEn = uiLanguageTag.lowercase().startsWith("en")
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
-            "年龄段：${ageGroupDisplayName(uiState.selectedAgeGroup, language)}",
+            "${if (isEn) "Age Group" else "年龄段"}: ${ageGroupDisplayName(uiState.selectedAgeGroup, uiLanguageTag)}",
             style = MaterialTheme.typography.titleMedium
         )
-        Text("语言：${uiState.currentJoke?.language ?: "-"}")
-        Text("未播：${uiState.unplayedCount}，待处理：${uiState.processingCount}")
+        Text("${if (isEn) "Language" else "语言"}: ${uiState.currentJoke?.language ?: "-"}")
+        Text(
+            if (isEn) {
+                "Unplayed: ${uiState.unplayedCount}, Pending: ${uiState.processingCount}"
+            } else {
+                "未播：${uiState.unplayedCount}，待处理：${uiState.processingCount}"
+            }
+        )
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = onPrev, modifier = Modifier.weight(1f)) { Text("上一个") }
-            Button(onClick = onNext, modifier = Modifier.weight(1f)) { Text("下一个") }
+            OutlinedButton(onClick = onPrev, modifier = Modifier.weight(1f)) { Text(if (isEn) "Prev" else "上一个") }
+            Button(onClick = onNext, modifier = Modifier.weight(1f)) { Text(if (isEn) "Next" else "下一个") }
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = onFavorite, modifier = Modifier.weight(1f)) { Text("收藏/取消") }
-            OutlinedButton(onClick = onUpdate, modifier = Modifier.weight(1f)) { Text("更新") }
+            OutlinedButton(onClick = onFavorite, modifier = Modifier.weight(1f)) {
+                Text(if (isEn) "Favorite" else "收藏/取消")
+            }
+            OutlinedButton(onClick = onUpdate, modifier = Modifier.weight(1f)) { Text(if (isEn) "Update" else "更新") }
         }
 
         Button(onClick = onClearAndRefetchChinese, modifier = Modifier.fillMaxWidth()) {
-            Text("清库并重抓中文")
+            Text(if (isEn) "Clear & Refetch CN" else "清库并重抓中文")
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = onSpeak, modifier = Modifier.weight(1f)) { Text("朗读") }
-            OutlinedButton(onClick = onStopSpeak, modifier = Modifier.weight(1f)) { Text("停止") }
-            OutlinedButton(onClick = onProcess, modifier = Modifier.weight(1f)) { Text("仅处理") }
+            OutlinedButton(onClick = onSpeak, modifier = Modifier.weight(1f)) { Text(if (isEn) "Speak" else "朗读") }
+            OutlinedButton(onClick = onStopSpeak, modifier = Modifier.weight(1f)) { Text(if (isEn) "Stop" else "停止") }
+            OutlinedButton(onClick = onProcess, modifier = Modifier.weight(1f)) { Text(if (isEn) "Process" else "仅处理") }
         }
 
         OutlinedButton(onClick = onResetPlayed, modifier = Modifier.fillMaxWidth()) {
-            Text("重置已播")
+            Text(if (isEn) "Reset Played" else "重置已播")
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(uiState.currentJoke?.content ?: "暂无可播放笑话，先点击“更新”")
+                Text(
+                    uiState.currentJoke?.content
+                        ?: if (isEn) "No jokes available. Tap Update first." else "暂无可播放笑话，先点击“更新”"
+                )
             }
         }
     }

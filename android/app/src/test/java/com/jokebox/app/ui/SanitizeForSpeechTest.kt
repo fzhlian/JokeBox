@@ -5,23 +5,30 @@ import org.junit.Test
 
 class SanitizeForSpeechTest {
     @Test
-    fun sanitizeForSpeech_shouldDropAnonymousTail() {
-        val input = "今天讲个笑话。\n佚名"
-        val output = sanitizeForSpeech(input)
-        assertEquals("今天讲个笑话。", output)
+    fun stripsAnonymousTail() {
+        val input = "A short joke line.\nanonymous"
+        val result = sanitizeForSpeech(input)
+        assertEquals("A short joke line.", result)
     }
 
     @Test
-    fun sanitizeForSpeech_shouldDropLikelyAuthorNameTail() {
-        val input = "程序员说：这个需求很简单，先加个 if。\n鲁迅"
-        val output = sanitizeForSpeech(input)
-        assertEquals("程序员说：这个需求很简单，先加个 if。", output)
+    fun stripsStandaloneAuthorNameAtTail() {
+        val input = "This is a longer joke sentence for testing.\nLu Xun"
+        val result = sanitizeForSpeech(input)
+        assertEquals("This is a longer joke sentence for testing.", result)
     }
 
     @Test
-    fun sanitizeForSpeech_shouldKeepNormalShortEnding() {
-        val input = "你问我为什么这么写？\n因为这样更稳。"
-        val output = sanitizeForSpeech(input)
-        assertEquals(input, output)
+    fun stripsAuthorPrefixLineAtTail() {
+        val input = "Another joke sentence for testing.\nAuthor: Wang Xiaoming"
+        val result = sanitizeForSpeech(input)
+        assertEquals("Another joke sentence for testing.", result)
+    }
+
+    @Test
+    fun keepsNormalShortEnding() {
+        val input = "Why write it this way?\nBecause it is stable."
+        val result = sanitizeForSpeech(input)
+        assertEquals(input, result)
     }
 }

@@ -1,6 +1,6 @@
 ﻿param(
     [string]$Version = "v0.1.1",
-    [string]$BundleName = "fzhlian.jokebox.app",
+    [string]$BundleName = "fzhlian.JokeBox.app",
     [string]$ReleaseDir = "release\upload",
     [switch]$SkipAndroid,
     [switch]$SkipHarmony,
@@ -56,6 +56,55 @@ function Export-HapPackInfo([string]$hapPath, [string]$packInfoPath) {
     "{}" | Set-Content -Path $packInfoPath -Encoding ASCII
 }
 
+function Ensure-UnsignedHapBundleName([string]$hapPath, [string]$bundleName) {
+    Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyContinue
+    $tmpRoot = Join-Path (Split-Path -Parent $hapPath) ("tmp_fix_bundle_" + [Guid]::NewGuid().ToString("N"))
+    $unpackDir = Join-Path $tmpRoot "unpack"
+    $stagingZip = Join-Path $tmpRoot "unsigned.zip"
+    $rebuiltZip = Join-Path $tmpRoot "unsigned_rebuilt.zip"
+    New-Item -ItemType Directory -Path $unpackDir -Force | Out-Null
+
+    try {
+        Copy-Item $hapPath $stagingZip -Force
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($stagingZip, $unpackDir)
+
+        $changed = $false
+        $modulePath = Join-Path $unpackDir "module.json"
+        if (Test-Path $modulePath) {
+            $moduleObj = Get-Content -Raw $modulePath | ConvertFrom-Json
+            if ($moduleObj.app.bundleName -cne $bundleName) {
+                $moduleObj.app.bundleName = $bundleName
+                $changed = $true
+            }
+            $moduleObj | ConvertTo-Json -Depth 100 -Compress | Set-Content -Path $modulePath -Encoding ASCII
+        }
+
+        $packInfoPath = Join-Path $unpackDir "pack.info"
+        if (Test-Path $packInfoPath) {
+            $packObj = Get-Content -Raw $packInfoPath | ConvertFrom-Json
+            if ($packObj.summary.app.bundleName -cne $bundleName) {
+                $packObj.summary.app.bundleName = $bundleName
+                $changed = $true
+            }
+            $packObj | ConvertTo-Json -Depth 100 -Compress | Set-Content -Path $packInfoPath -Encoding ASCII
+        }
+
+        if ($changed) {
+            if (Test-Path $rebuiltZip) { Remove-Item $rebuiltZip -Force }
+            [System.IO.Compression.ZipFile]::CreateFromDirectory(
+                $unpackDir,
+                $rebuiltZip,
+                [System.IO.Compression.CompressionLevel]::Optimal,
+                $false
+            )
+            Move-Item -Path $rebuiltZip -Destination $hapPath -Force
+            Write-Output "Patched unsigned HAP bundleName -> $bundleName : $hapPath"
+        }
+    } finally {
+        Remove-Item -Recurse -Force $tmpRoot -ErrorAction SilentlyContinue
+    }
+}
+
 function Resolve-ApkSigner {
     $roots = @(
         "C:\Users\fzhlian\Android\Sdk\build-tools",
@@ -72,6 +121,19 @@ function Resolve-ApkSigner {
         if ($candidate) { return $candidate }
     }
     throw "apksigner.bat not found in Android SDK build-tools."
+}
+
+function Resolve-UnsignedHap([string]$projectDir) {
+    $candidateA = Join-Path $projectDir "entry\build\default\outputs\default\app\entry-default.hap"
+    $candidateB = Join-Path $projectDir "entry\build\default\outputs\default\entry-default-unsigned.hap"
+    $existing = @($candidateA, $candidateB) | Where-Object { Test-Path $_ }
+    if ($existing.Count -eq 0) { return $null }
+    if ($existing.Count -eq 1) { return $existing[0] }
+
+    $sorted = $existing |
+        ForEach-Object { Get-Item $_ } |
+        Sort-Object Length -Descending
+    return $sorted[0].FullName
 }
 
 function Build-Android([string]$outDir, [string]$version, [string]$stamp) {
@@ -115,7 +177,7 @@ function Build-HarmonyLike(
     [string]$stamp,
     [hashtable]$signArgs
 ) {
-    $unsignedHap = Join-Path $projectDir "entry\build\default\outputs\default\entry-default-unsigned.hap"
+    $unsignedHap = $null
     $buildFailed = $false
     try {
         Push-Location $projectDir
@@ -130,20 +192,30 @@ function Build-HarmonyLike(
         }
     } catch {
         $buildFailed = $true
-        if (Test-Path $unsignedHap) {
+        $unsignedHap = Resolve-UnsignedHap -projectDir $projectDir
+        if ($unsignedHap) {
             Write-Warning "hvigor build failed for $projectDir, using existing unsigned HAP: $unsignedHap"
         } else {
             throw
         }
     }
-    if (-not $buildFailed -and !(Test-Path $unsignedHap)) {
-        throw "Unsigned HAP not found after build: $unsignedHap"
+    if (-not $buildFailed) {
+        $unsignedHap = Resolve-UnsignedHap -projectDir $projectDir
     }
+    if ([string]::IsNullOrWhiteSpace($unsignedHap) -or !(Test-Path $unsignedHap)) {
+        throw "Unsigned HAP not found after build in: $projectDir"
+    }
+    $unsignedSizeKb = [math]::Round((Get-Item $unsignedHap).Length / 1KB, 2)
+    if ($unsignedSizeKb -lt 300) {
+        Write-Warning "Unsigned HAP seems very small ($unsignedSizeKb KB): $unsignedHap"
+    }
+    Ensure-UnsignedHapBundleName -hapPath $unsignedHap -bundleName $BundleName
 
     $hapOut = Join-Path $outDir "JokeBox-$label-signed-$version-$stamp.hap"
 
     $params = @{
         ProjectDir = $projectDir
+        UnsignedHap = $unsignedHap
         BundleName = $BundleName
         CompatibleVersion = $CompatibleVersion
         OutFile = $hapOut

@@ -1,6 +1,7 @@
 ﻿param(
     [Parameter(Mandatory = $true)][string]$ProjectDir,
-    [string]$BundleName = "fzhlian.jokebox.app",
+    [string]$UnsignedHap,
+    [string]$BundleName = "fzhlian.JokeBox.app",
     [string]$CompatibleVersion = "9",
     [Parameter(Mandatory = $true)][string]$SignToolJar,
     [Parameter(Mandatory = $true)][string]$P12Path,
@@ -49,9 +50,22 @@ foreach ($item in $requiredPaths) {
     }
 }
 
-$unsignedHap = Join-Path $ProjectDir "entry\build\default\outputs\default\entry-default-unsigned.hap"
-if (!(Test-Path $unsignedHap)) {
-    throw "Unsigned HAP not found: $unsignedHap. Run hvigor assembleApp first."
+if ([string]::IsNullOrWhiteSpace($UnsignedHap)) {
+    $candidateA = Join-Path $ProjectDir "entry\build\default\outputs\default\app\entry-default.hap"
+    $candidateB = Join-Path $ProjectDir "entry\build\default\outputs\default\entry-default-unsigned.hap"
+    $existing = @($candidateA, $candidateB) | Where-Object { Test-Path $_ }
+    if ($existing.Count -eq 0) {
+        throw "Unsigned HAP not found under: $ProjectDir. Run hvigor assembleApp first."
+    }
+    if ($existing.Count -eq 1) {
+        $UnsignedHap = $existing[0]
+    } else {
+        $UnsignedHap = ($existing | ForEach-Object { Get-Item $_ } | Sort-Object Length -Descending | Select-Object -First 1).FullName
+    }
+}
+
+if (!(Test-Path $UnsignedHap)) {
+    throw "Unsigned HAP not found: $UnsignedHap"
 }
 
 if ([string]::IsNullOrWhiteSpace($OutFile)) {
@@ -64,7 +78,7 @@ $signOutput = & $JavaPath -jar $SignToolJar sign-app `
     -keyPwd $AppKeyPassword `
     -appCertFile $AppCertFile `
     -profileFile $ProfileFile `
-    -inFile $unsignedHap `
+    -inFile $UnsignedHap `
     -signAlg SHA256withECDSA `
     -keystoreFile $P12Path `
     -keystorePwd $P12Password `
@@ -107,7 +121,7 @@ $ErrorActionPreference = "Continue"
 $ErrorActionPreference = $prevErrorAction
 if (Test-Path $profileJson) {
     $text = Get-Content -Raw $profileJson
-    if ($text -notmatch [regex]::Escape($BundleName)) {
+    if ($text -cnotmatch [regex]::Escape($BundleName)) {
         throw "Profile bundle name mismatch. Expected: $BundleName"
     }
 }

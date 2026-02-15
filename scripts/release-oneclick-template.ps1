@@ -18,7 +18,8 @@ if ([string]::IsNullOrWhiteSpace($p12PasswordFromEnv)) {
 # Fill only this section, then run this script.
 $cfg = @{
     Version = $Version
-    BundleName = "fzhlian.jokebox.app"
+    # Must exactly match AppGallery profile bundle-name (case-sensitive).
+    BundleName = "fzhlian.JokeBox.app"
 
     # Required for Harmony/Harmony NEXT AppGallery signing
     SignToolJar = "C:\Users\fzhlian\AppData\Local\Huawei\Sdk\openharmony\9\toolchains\lib\hap-sign-tool.jar"

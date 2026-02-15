@@ -1,6 +1,6 @@
 ﻿{
   "app": {
-    "bundleName": "fzhlian.jokebox.app",
+    "bundleName": "fzhlian.JokeBox.app",
     "vendor": "fzhlian",
     "versionCode": 2,
     "versionName": "0.1.1",

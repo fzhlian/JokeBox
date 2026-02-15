@@ -24,6 +24,18 @@ function Write-Sha256([string]$filePath) {
     "$hash  $([IO.Path]::GetFileName($filePath))" | Set-Content -Path "$filePath.sha256" -Encoding ASCII
 }
 
+function Resolve-AppPackingTool([string]$signToolJar) {
+    if ([string]::IsNullOrWhiteSpace($signToolJar)) {
+        throw "SignToolJar is required to resolve app_packing_tool.jar"
+    }
+    $dir = Split-Path -Parent $signToolJar
+    $tool = Join-Path $dir "app_packing_tool.jar"
+    if (!(Test-Path $tool)) {
+        throw "app_packing_tool.jar not found: $tool"
+    }
+    return $tool
+}
+
 function Resolve-ApkSigner {
     $roots = @(
         "C:\Users\fzhlian\Android\Sdk\build-tools",
@@ -125,19 +137,29 @@ function Build-HarmonyLike(
         throw "Signing failed for $projectDir"
     }
 
-    $stage = Join-Path $outDir "tmp_app_$label"
-    if (Test-Path $stage) { Remove-Item -Recurse -Force $stage }
-    New-Item -ItemType Directory -Path $stage | Out-Null
-    Copy-Item $hapOut (Join-Path $stage "entry-default-signed.hap")
-
-    $zipPath = Join-Path $outDir "JokeBox-$label-signed-$version-$stamp.zip"
-    if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-    Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zipPath
-
     $appPath = Join-Path $outDir "JokeBox-$label-signed-$version-$stamp.app"
     if (Test-Path $appPath) { Remove-Item $appPath -Force }
-    Move-Item $zipPath $appPath
-    Remove-Item -Recurse -Force $stage
+
+    $packInfo = Join-Path $outDir "pack.info"
+    "{}" | Set-Content -Path $packInfo -Encoding ASCII
+    $appPackingTool = Resolve-AppPackingTool -signToolJar $signArgs["SignToolJar"]
+    $javaExe = $signArgs["JavaPath"]
+    if ([string]::IsNullOrWhiteSpace($javaExe)) {
+        $javaCmd = Get-Command java -ErrorAction SilentlyContinue
+        if (-not $javaCmd) { throw "Java runtime not found for app_packing_tool.jar" }
+        $javaExe = $javaCmd.Source
+    }
+
+    & $javaExe -jar $appPackingTool `
+        --mode app `
+        --hap-path $hapOut `
+        --pack-info-path $packInfo `
+        --out-path $appPath `
+        --force true
+    if ($LASTEXITCODE -ne 0 -or !(Test-Path $appPath)) {
+        throw "app_packing_tool failed for $projectDir"
+    }
+    Remove-Item $packInfo -Force -ErrorAction SilentlyContinue
 
     Write-Sha256 $hapOut
     Write-Sha256 $appPath

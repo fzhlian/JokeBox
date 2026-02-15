@@ -4,17 +4,28 @@
 
 $ErrorActionPreference = "Stop"
 
+# Keep P12 password out of source. Set once in user env:
+# [Environment]::SetEnvironmentVariable("JOKEBOX_P12_PASSWORD", "<your-password>", "User")
+# Current request value has been written by assistant.
+$p12PasswordFromEnv = $env:JOKEBOX_P12_PASSWORD
+if ([string]::IsNullOrWhiteSpace($p12PasswordFromEnv)) {
+    $p12PasswordFromEnv = [Environment]::GetEnvironmentVariable("JOKEBOX_P12_PASSWORD", "User")
+}
+if ([string]::IsNullOrWhiteSpace($p12PasswordFromEnv)) {
+    throw "Environment variable JOKEBOX_P12_PASSWORD is empty. Set it before running."
+}
+
 # Fill only this section, then run this script.
 $cfg = @{
     Version = $Version
     BundleName = "fzhlian.jokebox.app"
 
     # Required for Harmony/Harmony NEXT AppGallery signing
-    SignToolJar = "C:\Users\fzhlian\AppData\Local\Huawei\Sdk\9\toolchains\lib\hap-sign-tool.jar"
-    P12Path = "C:\Path\to\agc-release-key.p12"
-    P12Password = "<P12_PASSWORD>"
-    AppCertFile = "C:\Path\to\agc-release-cert.cer"
-    ProfileFile = "C:\Path\to\agc-profile-release.p7b"
+    SignToolJar = "C:\Users\fzhlian\AppData\Local\Huawei\Sdk\openharmony\9\toolchains\lib\hap-sign-tool.jar"
+    P12Path = "D:\fzhlian\Code\JokeBox\release\JokeBox.p12"
+    P12Password = $p12PasswordFromEnv
+    AppCertFile = "D:\fzhlian\Code\JokeBox\release\JokeBox.csr"
+    ProfileFile = "D:\fzhlian\Code\JokeBox\release\JokeBoxRelease.p7b"
 
     # Alias/password for private key in P12
     AppKeyAlias = "release"

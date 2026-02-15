@@ -36,6 +36,26 @@ function Resolve-AppPackingTool([string]$signToolJar) {
     return $tool
 }
 
+function Export-HapPackInfo([string]$hapPath, [string]$packInfoPath) {
+    Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyContinue
+    $zip = [System.IO.Compression.ZipFile]::OpenRead($hapPath)
+    try {
+        $entry = $zip.Entries | Where-Object { $_.FullName -eq "pack.info" } | Select-Object -First 1
+        if ($entry) {
+            $reader = New-Object System.IO.StreamReader($entry.Open())
+            $content = $reader.ReadToEnd()
+            $reader.Close()
+            if (-not [string]::IsNullOrWhiteSpace($content)) {
+                $content | Set-Content -Path $packInfoPath -Encoding ASCII
+                return
+            }
+        }
+    } finally {
+        $zip.Dispose()
+    }
+    "{}" | Set-Content -Path $packInfoPath -Encoding ASCII
+}
+
 function Resolve-ApkSigner {
     $roots = @(
         "C:\Users\fzhlian\Android\Sdk\build-tools",
@@ -141,7 +161,7 @@ function Build-HarmonyLike(
     if (Test-Path $appPath) { Remove-Item $appPath -Force }
 
     $packInfo = Join-Path $outDir "pack.info"
-    "{}" | Set-Content -Path $packInfo -Encoding ASCII
+    Export-HapPackInfo -hapPath $hapOut -packInfoPath $packInfo
     $appPackingTool = Resolve-AppPackingTool -signToolJar $signArgs["SignToolJar"]
     $javaExe = $signArgs["JavaPath"]
     if ([string]::IsNullOrWhiteSpace($javaExe)) {

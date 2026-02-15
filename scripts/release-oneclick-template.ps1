@@ -38,4 +38,4 @@ $cfg = @{
     ReleaseDir = "release\upload"
 }
 
-powershell -ExecutionPolicy Bypass -File "scripts\release-signed-only.ps1" @cfg
+powershell -ExecutionPolicy Bypass -File "scripts\release-signed-only.ps1" -SkipAndroid @cfg

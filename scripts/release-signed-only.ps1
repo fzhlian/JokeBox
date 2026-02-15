@@ -160,8 +160,15 @@ function Build-HarmonyLike(
     $appPath = Join-Path $outDir "JokeBox-$label-signed-$version-$stamp.app"
     if (Test-Path $appPath) { Remove-Item $appPath -Force }
 
-    $packInfo = Join-Path $outDir "pack.info"
-    Export-HapPackInfo -hapPath $hapOut -packInfoPath $packInfo
+    $packDir = Join-Path $outDir "tmp_pack_$label"
+    if (Test-Path $packDir) { Remove-Item -Recurse -Force $packDir }
+    New-Item -ItemType Directory -Path $packDir | Out-Null
+
+    # Keep app inner hap filename aligned with pack.info package name (entry-default)
+    $packHap = Join-Path $packDir "entry-default.hap"
+    Copy-Item $hapOut $packHap -Force
+    $packInfo = Join-Path $packDir "pack.info"
+    Export-HapPackInfo -hapPath $packHap -packInfoPath $packInfo
     $appPackingTool = Resolve-AppPackingTool -signToolJar $signArgs["SignToolJar"]
     $javaExe = $signArgs["JavaPath"]
     if ([string]::IsNullOrWhiteSpace($javaExe)) {
@@ -172,14 +179,14 @@ function Build-HarmonyLike(
 
     & $javaExe -jar $appPackingTool `
         --mode app `
-        --hap-path $hapOut `
+        --hap-path $packHap `
         --pack-info-path $packInfo `
         --out-path $appPath `
         --force true
     if ($LASTEXITCODE -ne 0 -or !(Test-Path $appPath)) {
         throw "app_packing_tool failed for $projectDir"
     }
-    Remove-Item $packInfo -Force -ErrorAction SilentlyContinue
+    Remove-Item -Recurse -Force $packDir -ErrorAction SilentlyContinue
 
     Write-Sha256 $hapOut
     Write-Sha256 $appPath

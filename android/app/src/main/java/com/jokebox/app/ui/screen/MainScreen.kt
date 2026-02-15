@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.ui.screen
+﻿package fzhlian.jokebox.app.ui.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,9 +26,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import fzhlian.JokeBox.app.data.model.AgeGroup
-import fzhlian.JokeBox.app.data.model.LanguageMode
-import fzhlian.JokeBox.app.ui.state.MainUiState
+import fzhlian.jokebox.app.data.model.AgeGroup
+import fzhlian.jokebox.app.data.model.LanguageMode
+import fzhlian.jokebox.app.ui.state.MainUiState
 
 enum class AppRoute(val route: String) {
     MAIN("main"),
@@ -198,4 +198,5 @@ fun MainScreen(
         }
     }
 }
+
 

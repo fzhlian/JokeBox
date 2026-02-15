@@ -32,11 +32,11 @@ Harmony and Harmony NEXT now contain full Stage-model project structures with ru
   - `powershell -ExecutionPolicy Bypass -File scripts/test-android-emulator.ps1`
 
 ## Signed-Only Packaging
-- App package/bundle name is now unified as: `fzhlian.JokeBox.app`.
+- App package/bundle name is now unified as: `fzhlian.jokebox.app`.
 - Use one-click template and only fill certificate paths/passwords:
   - `powershell -ExecutionPolicy Bypass -File scripts/release-oneclick-template.ps1`
 - Or run signed-only release directly:
-  - `powershell -ExecutionPolicy Bypass -File scripts/release-signed-only.ps1 -Version v0.1.1 -SignToolJar <hap-sign-tool.jar> -P12Path <release.p12> -P12Password <password> -ProfileCertChainPath <profile-release.pem>`
+  - `powershell -ExecutionPolicy Bypass -File scripts/release-signed-only.ps1 -Version v0.1.1 -SignToolJar <hap-sign-tool.jar> -P12Path <agc-release-key.p12> -P12Password <password> -AppCertFile <agc-release-cert.cer> -ProfileFile <agc-profile-release.p7b>`
 - The release pipeline now enforces:
   - Android output must pass `apksigner verify`.
   - Harmony/Harmony NEXT output must pass `hap-sign-tool verify-app`.

@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.ui.screen
+﻿package fzhlian.jokebox.app.ui.screen
 
 val COMPLIANCE_DECLARATION = """
 《内容来源与使用合规声明》
@@ -21,4 +21,5 @@ val COMPLIANCE_DECLARATION = """
 
 8. 你可在设置中随时查看本声明，并可执行“清空用户来源数据”以删除用户来源配置及其导入/抓取内容。
 """
+
 

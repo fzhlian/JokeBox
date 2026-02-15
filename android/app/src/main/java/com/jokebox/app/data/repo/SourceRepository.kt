@@ -1,13 +1,13 @@
-﻿package fzhlian.JokeBox.app.data.repo
+﻿package fzhlian.jokebox.app.data.repo
 
 import android.content.Context
-import fzhlian.JokeBox.app.data.db.RawQueueDao
-import fzhlian.JokeBox.app.data.db.RawQueueEntity
-import fzhlian.JokeBox.app.data.db.SourceConfigDao
-import fzhlian.JokeBox.app.data.db.SourceConfigEntity
-import fzhlian.JokeBox.app.data.db.JokeDao
-import fzhlian.JokeBox.app.data.model.RawStatus
-import fzhlian.JokeBox.app.data.model.SourceType
+import fzhlian.jokebox.app.data.db.RawQueueDao
+import fzhlian.jokebox.app.data.db.RawQueueEntity
+import fzhlian.jokebox.app.data.db.SourceConfigDao
+import fzhlian.jokebox.app.data.db.SourceConfigEntity
+import fzhlian.jokebox.app.data.db.JokeDao
+import fzhlian.jokebox.app.data.model.RawStatus
+import fzhlian.jokebox.app.data.model.SourceType
 import java.util.UUID
 import kotlinx.coroutines.flow.Flow
 import okhttp3.OkHttpClient
@@ -273,4 +273,5 @@ private fun getStringByPath(root: JSONObject, path: String): String? {
     }
     return cursor.toString()
 }
+
 

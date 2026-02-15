@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app
+﻿package fzhlian.jokebox.app
 
 import android.app.Application
 import androidx.work.Constraints
@@ -7,7 +7,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import fzhlian.JokeBox.app.data.model.AgeGroup
+import fzhlian.jokebox.app.data.model.AgeGroup
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -54,4 +54,5 @@ class SyncWorker(appContext: android.content.Context, workerParams: WorkerParame
         return if (process.isSuccess) Result.success() else Result.retry()
     }
 }
+
 

@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.data.repo
+﻿package fzhlian.jokebox.app.data.repo
 
 import android.content.Context
 import androidx.datastore.preferences.core.Preferences
@@ -10,8 +10,8 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import fzhlian.JokeBox.app.data.model.AgeGroup
-import fzhlian.JokeBox.app.data.model.LanguageMode
+import fzhlian.jokebox.app.data.model.AgeGroup
+import fzhlian.jokebox.app.data.model.LanguageMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -143,4 +143,5 @@ class SettingsStore(private val context: Context) {
         }
     }
 }
+
 

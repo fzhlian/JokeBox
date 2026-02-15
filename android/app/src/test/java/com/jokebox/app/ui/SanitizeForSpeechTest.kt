@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.ui
+﻿package fzhlian.jokebox.app.ui
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -32,4 +32,5 @@ class SanitizeForSpeechTest {
         assertEquals(input, result)
     }
 }
+
 

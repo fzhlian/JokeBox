@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.domain.policy
+﻿package fzhlian.jokebox.app.domain.policy
 
 import java.security.MessageDigest
 
@@ -76,4 +76,5 @@ object ContentPolicy {
         return true
     }
 }
+
 

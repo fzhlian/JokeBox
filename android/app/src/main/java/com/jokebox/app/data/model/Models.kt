@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.data.model
+﻿package fzhlian.jokebox.app.data.model
 
 enum class AgeGroup(val value: Int) {
     TEEN(0),
@@ -35,4 +35,5 @@ data class JokeUiItem(
     val language: String,
     val favorite: Boolean
 )
+
 

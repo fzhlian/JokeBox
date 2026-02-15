@@ -1,28 +1,30 @@
-﻿$ErrorActionPreference = "Stop"
+﻿param(
+    [string]$Version = "v0.1.1"
+)
+
+$ErrorActionPreference = "Stop"
 
 # Fill only this section, then run this script.
 $cfg = @{
-    Version = "v0.1.1"
-    BundleName = "fzhlian.JokeBox.app"
+    Version = $Version
+    BundleName = "fzhlian.jokebox.app"
 
-    # Required for Harmony/Harmony NEXT signing
-    SignToolJar = "C:\\Path\\to\\hap-sign-tool.jar"
-    P12Path = "C:\\Path\\to\\your-release.p12"
+    # Required for Harmony/Harmony NEXT AppGallery signing
+    SignToolJar = "C:\Users\fzhlian\AppData\Local\Huawei\Sdk\9\toolchains\lib\hap-sign-tool.jar"
+    P12Path = "C:\Path\to\agc-release-key.p12"
     P12Password = "<P12_PASSWORD>"
-    ProfileCertChainPath = "C:\\Path\\to\\your-profile-release.pem"
+    AppCertFile = "C:\Path\to\agc-release-cert.cer"
+    ProfileFile = "C:\Path\to\agc-profile-release.p7b"
 
-    # Optional: keep default if your aliases are standard
-    AppKeyAlias = "openharmony application release"
+    # Alias/password for private key in P12
+    AppKeyAlias = "release"
     AppKeyPassword = ""
-    ProfileKeyAlias = "openharmony application profile release"
-    ProfileKeyPassword = ""
 
-    # Optional: leave empty to auto-detect from JAVA_HOME/PATH
-    JavaPath = ""
-    KeytoolPath = ""
-
+    # Optional: keep empty to auto detect
+    JavaPath = "C:\Users\fzhlian\tools\jdk-17.0.14+7\bin\java.exe"
     CompatibleVersion = "9"
-    ReleaseDir = "release\\upload"
+
+    ReleaseDir = "release\upload"
 }
 
-powershell -ExecutionPolicy Bypass -File "scripts\\release-signed-only.ps1" @cfg
+powershell -ExecutionPolicy Bypass -File "scripts\release-signed-only.ps1" @cfg

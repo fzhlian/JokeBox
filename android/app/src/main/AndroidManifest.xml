@@ -22,12 +22,13 @@
             android:name=".DebugActionsReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="fzhlian.JokeBox.app.DEBUG_REFETCH_ZH" />
+                <action android:name="fzhlian.jokebox.app.DEBUG_REFETCH_ZH" />
             </intent-filter>
         </receiver>
     </application>
 
 </manifest>
+
 
 
 

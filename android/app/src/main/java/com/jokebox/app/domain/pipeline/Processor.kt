@@ -1,17 +1,17 @@
-﻿package fzhlian.JokeBox.app.domain.pipeline
+﻿package fzhlian.jokebox.app.domain.pipeline
 
-import fzhlian.JokeBox.app.data.db.JokeDao
-import fzhlian.JokeBox.app.data.db.JokeEntity
-import fzhlian.JokeBox.app.data.db.RawQueueDao
-import fzhlian.JokeBox.app.data.db.RawQueueEntity
-import fzhlian.JokeBox.app.data.db.SourceConfigDao
-import fzhlian.JokeBox.app.data.db.SourceConfigEntity
-import fzhlian.JokeBox.app.data.model.AgeGroup
-import fzhlian.JokeBox.app.data.model.RawStatus
-import fzhlian.JokeBox.app.domain.policy.ContentPolicy
-import fzhlian.JokeBox.app.domain.policy.Hashing
-import fzhlian.JokeBox.app.domain.policy.SimHash64
-import fzhlian.JokeBox.app.domain.policy.TextNormalizer
+import fzhlian.jokebox.app.data.db.JokeDao
+import fzhlian.jokebox.app.data.db.JokeEntity
+import fzhlian.jokebox.app.data.db.RawQueueDao
+import fzhlian.jokebox.app.data.db.RawQueueEntity
+import fzhlian.jokebox.app.data.db.SourceConfigDao
+import fzhlian.jokebox.app.data.db.SourceConfigEntity
+import fzhlian.jokebox.app.data.model.AgeGroup
+import fzhlian.jokebox.app.data.model.RawStatus
+import fzhlian.jokebox.app.domain.policy.ContentPolicy
+import fzhlian.jokebox.app.domain.policy.Hashing
+import fzhlian.jokebox.app.domain.policy.SimHash64
+import fzhlian.jokebox.app.domain.policy.TextNormalizer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -127,4 +127,5 @@ private enum class ProcessDecision {
     DROPPED_POLICY,
     DROPPED_DUP
 }
+
 

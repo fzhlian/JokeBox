@@ -1,11 +1,11 @@
-﻿package fzhlian.JokeBox.app
+﻿package fzhlian.jokebox.app
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import fzhlian.JokeBox.app.data.model.AgeGroup
-import fzhlian.JokeBox.app.data.model.LanguageMode
+import fzhlian.jokebox.app.data.model.AgeGroup
+import fzhlian.jokebox.app.data.model.LanguageMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -68,7 +68,7 @@ class DebugActionsReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        const val ACTION_REFETCH_ZH = "fzhlian.JokeBox.app.DEBUG_REFETCH_ZH"
+        const val ACTION_REFETCH_ZH = "fzhlian.jokebox.app.DEBUG_REFETCH_ZH"
         private const val TAG = "JokeBoxDebug"
     }
 }
@@ -85,4 +85,5 @@ private fun buildFallbackZhJokes(): List<String> = listOf(
     "今天修了一个线上 bug，奖励是再给我一个线上 bug。",
     "代码评审时我写了 todo，领导说这就是长期规划。"
 )
+
 

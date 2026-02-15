@@ -1,6 +1,6 @@
 ﻿{
   "app": {
-    "bundleName": "fzhlian.JokeBox.app",
+    "bundleName": "fzhlian.jokebox.app",
     "vendor": "fzhlian",
     "versionCode": 2,
     "versionName": "0.1.1",
@@ -8,3 +8,4 @@
     "label": "$string:app_name"
   }
 }
+

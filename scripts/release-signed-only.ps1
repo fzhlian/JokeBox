@@ -1,6 +1,6 @@
 ﻿param(
     [string]$Version = "v0.1.1",
-    [string]$BundleName = "fzhlian.JokeBox.app",
+    [string]$BundleName = "fzhlian.jokebox.app",
     [string]$ReleaseDir = "release\upload",
     [switch]$SkipAndroid,
     [switch]$SkipHarmony,
@@ -9,13 +9,11 @@
     [string]$SignToolJar,
     [string]$P12Path,
     [string]$P12Password,
-    [string]$ProfileCertChainPath,
-    [string]$AppKeyAlias = "openharmony application release",
+    [string]$AppCertFile,
+    [string]$ProfileFile,
+    [string]$AppKeyAlias = "release",
     [string]$AppKeyPassword,
-    [string]$ProfileKeyAlias = "openharmony application profile release",
-    [string]$ProfileKeyPassword,
     [string]$JavaPath,
-    [string]$KeytoolPath,
     [string]$CompatibleVersion = "9"
 )
 
@@ -134,7 +132,6 @@ function Build-HarmonyLike(
 }
 
 if ([string]::IsNullOrWhiteSpace($AppKeyPassword)) { $AppKeyPassword = $P12Password }
-if ([string]::IsNullOrWhiteSpace($ProfileKeyPassword)) { $ProfileKeyPassword = $P12Password }
 
 $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
 if (Test-Path $ReleaseDir) {
@@ -153,22 +150,20 @@ $signConfig = @{
     SignToolJar = $SignToolJar
     P12Path = $P12Path
     P12Password = $P12Password
-    ProfileCertChainPath = $ProfileCertChainPath
+    AppCertFile = $AppCertFile
+    ProfileFile = $ProfileFile
     AppKeyAlias = $AppKeyAlias
     AppKeyPassword = $AppKeyPassword
-    ProfileKeyAlias = $ProfileKeyAlias
-    ProfileKeyPassword = $ProfileKeyPassword
     JavaPath = $JavaPath
-    KeytoolPath = $KeytoolPath
 }
 
 if ((-not $SkipHarmony) -or (-not $SkipHarmonyNext)) {
     $missingSign = @()
-    foreach ($required in @("SignToolJar","P12Path","P12Password","ProfileCertChainPath")) {
+    foreach ($required in @("SignToolJar","P12Path","P12Password","AppCertFile","ProfileFile")) {
         if ([string]::IsNullOrWhiteSpace($signConfig[$required])) { $missingSign += $required }
     }
     if ($missingSign.Count -gt 0) {
-        throw "Harmony signing parameters missing: $($missingSign -join ', ')"
+        throw "Harmony AppGallery signing parameters missing: $($missingSign -join ', ')"
     }
 }
 

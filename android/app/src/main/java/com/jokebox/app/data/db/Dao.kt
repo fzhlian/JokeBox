@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.data.db
+﻿package fzhlian.jokebox.app.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -6,8 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import fzhlian.JokeBox.app.data.model.RawStatus
-import fzhlian.JokeBox.app.data.model.SourceType
+import fzhlian.jokebox.app.data.model.RawStatus
+import fzhlian.jokebox.app.data.model.SourceType
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -149,4 +149,5 @@ interface CleanupDao {
     @Query("SELECT 1")
     suspend fun touch()
 }
+
 

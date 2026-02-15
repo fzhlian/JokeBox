@@ -1,10 +1,10 @@
-﻿package fzhlian.JokeBox.app.data.db
+﻿package fzhlian.jokebox.app.data.db
 
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import fzhlian.JokeBox.app.data.model.RawStatus
-import fzhlian.JokeBox.app.data.model.SourceType
+import fzhlian.jokebox.app.data.model.RawStatus
+import fzhlian.jokebox.app.data.model.SourceType
 
 @Entity(
     tableName = "source_config",
@@ -83,4 +83,5 @@ data class PlaybackStateEntity(
     val playedCount: Long,
     val updatedAt: Long
 )
+
 

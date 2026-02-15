@@ -1,4 +1,4 @@
-﻿package fzhlian.JokeBox.app.domain.policy
+﻿package fzhlian.jokebox.app.domain.policy
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -29,4 +29,5 @@ class TextProcessingTest {
         assertTrue(SimHash64.hammingDistance(a, b) < 20)
     }
 }
+
 

@@ -30,11 +30,11 @@ val hasReleaseSigning = !releaseStoreFile.isNullOrBlank() &&
     !releaseKeyPassword.isNullOrBlank()
 
 android {
-    namespace = "fzhlian.JokeBox.app"
+    namespace = "fzhlian.jokebox.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "fzhlian.JokeBox.app"
+        applicationId = "fzhlian.jokebox.app"
         minSdk = 26
         targetSdk = 35
         versionCode = 2
@@ -138,4 +138,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 }
+
 

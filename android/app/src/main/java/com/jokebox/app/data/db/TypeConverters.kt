@@ -1,8 +1,8 @@
-﻿package fzhlian.JokeBox.app.data.db
+﻿package fzhlian.jokebox.app.data.db
 
 import androidx.room.TypeConverter
-import fzhlian.JokeBox.app.data.model.RawStatus
-import fzhlian.JokeBox.app.data.model.SourceType
+import fzhlian.jokebox.app.data.model.RawStatus
+import fzhlian.jokebox.app.data.model.SourceType
 
 class RoomConverters {
     @TypeConverter
@@ -17,4 +17,5 @@ class RoomConverters {
     @TypeConverter
     fun stringToRawStatus(value: String): RawStatus = RawStatus.valueOf(value)
 }
+
 

@@ -40,4 +40,4 @@ Harmony and Harmony NEXT now contain full Stage-model project structures with ru
   - `powershell -ExecutionPolicy Bypass -File scripts/sign-harmony-manual.ps1 -ProjectDir harmony-next -BundleName com.jokebox.next -CompatibleVersion 9`
 - Note:
   - Newer hvigor versions require encrypted signing password when configured in `build-profile.json5`.
-  - The script avoids storing encrypted secrets in repo and signs from SDK default OpenHarmony materials.
+  - `scripts/sign-harmony-manual.ps1` is best-effort for local SDK default materials and will print explicit next-step guidance if signing is rejected.

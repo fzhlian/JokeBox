@@ -69,7 +69,7 @@ Write-Output "Signing profile..."
 
 $signedHap = Join-Path $ProjectDir "entry\build\default\outputs\default\entry-default-manual-signed.hap"
 Write-Output "Signing app..."
-& $java -jar $signTool sign-app `
+$signOutput = & $java -jar $signTool sign-app `
     -mode localSign `
     -keyAlias "openharmony application release" `
     -keyPwd 123456 `
@@ -80,11 +80,15 @@ Write-Output "Signing app..."
     -keystoreFile $p12 `
     -keystorePwd 123456 `
     -outFile $signedHap `
-    -compatibleVersion $CompatibleVersion
+    -compatibleVersion $CompatibleVersion 2>&1
+
+$signOutput | ForEach-Object { Write-Output $_ }
 
 if (Test-Path $signedHap) {
     Write-Output "SIGNED_HAP: $signedHap"
     exit 0
 }
 
-throw "Manual sign did not produce output: $signedHap"
+Write-Output "SIGN_FAILED: manual sign did not produce output."
+Write-Output "NEXT_STEP: use DevEco Studio Project Structure > Signing Configs to generate encrypted signing config, then rebuild."
+exit 2

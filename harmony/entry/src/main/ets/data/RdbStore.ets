@@ -66,8 +66,7 @@ export class JokeRdbStore {
       return;
     }
     this.store = await rdb.getRdbStore(context, {
-      name: DB_NAME,
-      securityLevel: rdb.SecurityLevel.S1
+      name: DB_NAME
     }, DB_VERSION);
     for (const sql of CREATE_SQLS) {
       await this.store.executeSql(sql);
@@ -78,7 +77,6 @@ export class JokeRdbStore {
     if (!this.store) {
       return;
     }
-    await this.store.close();
     this.store = undefined;
   }
 

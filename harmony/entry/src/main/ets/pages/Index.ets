@@ -545,18 +545,17 @@ struct Index {
   }
 
   build() {
-    const lang = this.currentUiLang();
-    Navigation() {
+    Column() {
       if (this.dbError) {
         Text(this.dbError).fontColor(Color.Red).padding(16)
       } else if (!this.dbReady) {
-        Text(t(lang, 'initializingStorage')).padding(16)
+        Text(t(this.currentUiLang(), 'initializingStorage')).padding(16)
       } else if (!this.ageLocked || !this.complianceAccepted) {
         AgeGatePage({
           ageLocked: $ageLocked,
           complianceAccepted: $complianceAccepted,
           selectedAgeGroup: $selectedAgeGroup,
-          lang: lang,
+          lang: this.currentUiLang(),
           onConfirmed: () => {
             void this.persistAgeGate();
           }
@@ -571,11 +570,11 @@ struct Index {
           currentJoke: $currentJoke,
           message: $message,
           jokeIndex: $jokeIndex,
-          lang: lang,
+          lang: this.currentUiLang(),
           onClearRefetchZh: () => this.onClearRefetchZh()
         })
       } else if (this.route === 'sources') {
-        SourcesPage({ route: $route, lang: lang })
+        SourcesPage({ route: $route, lang: this.currentUiLang() })
       } else {
         SettingsPage({
           route: $route,
@@ -591,11 +590,11 @@ struct Index {
           currentLanguage: $currentLanguage,
           unplayedCount: $unplayedCount,
           message: $message,
-          lang: lang,
+          lang: this.currentUiLang(),
           onSettingsChanged: () => this.onSettingsChanged(),
           onContentLanguageChanged: () => this.onContentLanguageChanged()
         })
       }
-    }.title(t(lang, 'appTitle'))
+    }.width('100%').height('100%')
   }
 }

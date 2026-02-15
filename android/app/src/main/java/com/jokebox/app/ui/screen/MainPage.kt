@@ -1,4 +1,4 @@
-﻿package com.jokebox.app.ui.screen
+﻿package fzhlian.JokeBox.app.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jokebox.app.data.model.AgeGroup
-import com.jokebox.app.ui.state.MainUiState
+import fzhlian.JokeBox.app.data.model.AgeGroup
+import fzhlian.JokeBox.app.ui.state.MainUiState
 
 @Composable
 fun MainPage(
@@ -100,3 +100,4 @@ private fun ageGroupDisplayName(ageGroup: AgeGroup?, uiLanguage: String): String
         null -> "-"
     }
 }
+

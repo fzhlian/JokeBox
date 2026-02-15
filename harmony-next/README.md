@@ -16,5 +16,6 @@ This directory now contains a full Stage-model HarmonyOS NEXT project scaffold:
 4. Package APP (if needed): `Build > Build Hap(s)/APP(s) > Build APP(s)`.
 
 ## Notes
-- Current bundle name: `com.jokebox.next`.
+- Current bundle name: `fzhlian.JokeBox.app`.
 - Version: `0.1.1` (code `2`).
+

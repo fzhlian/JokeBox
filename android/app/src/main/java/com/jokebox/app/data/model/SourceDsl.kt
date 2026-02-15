@@ -1,4 +1,4 @@
-package com.jokebox.app.data.model
+﻿package fzhlian.JokeBox.app.data.model
 
 data class OnlineSourceConfig(
     val request: RequestSpec,
@@ -26,3 +26,4 @@ data class MappingSpec(
     val language: String? = null,
     val sourceUrl: String? = null
 )
+

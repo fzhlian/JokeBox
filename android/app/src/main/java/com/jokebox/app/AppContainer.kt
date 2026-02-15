@@ -1,14 +1,14 @@
-package com.jokebox.app
+﻿package fzhlian.JokeBox.app
 
 import android.content.Context
-import com.jokebox.app.data.db.AppDatabase
-import com.jokebox.app.data.repo.PlaybackRepository
-import com.jokebox.app.data.repo.SettingsStore
-import com.jokebox.app.data.repo.SourceRepository
-import com.jokebox.app.domain.pipeline.Fetcher
-import com.jokebox.app.domain.pipeline.Importer
-import com.jokebox.app.domain.pipeline.Processor
-import com.jokebox.app.domain.tts.AndroidTtsEngine
+import fzhlian.JokeBox.app.data.db.AppDatabase
+import fzhlian.JokeBox.app.data.repo.PlaybackRepository
+import fzhlian.JokeBox.app.data.repo.SettingsStore
+import fzhlian.JokeBox.app.data.repo.SourceRepository
+import fzhlian.JokeBox.app.domain.pipeline.Fetcher
+import fzhlian.JokeBox.app.domain.pipeline.Importer
+import fzhlian.JokeBox.app.domain.pipeline.Processor
+import fzhlian.JokeBox.app.domain.tts.AndroidTtsEngine
 
 class AppContainer(context: Context) {
     private val db = AppDatabase.create(context)
@@ -28,3 +28,4 @@ class AppContainer(context: Context) {
 
     val rawQueueDao = db.rawQueueDao()
 }
+

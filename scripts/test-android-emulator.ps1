@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+﻿$ErrorActionPreference = "Stop"
 
 function Resolve-AdbPath {
     $candidates = @(
@@ -44,17 +44,17 @@ if ($devices -notmatch "emulator-\d+\s+device") {
 Wait-BootCompleted -adb $adb
 
 Write-Output "[2/5] Installing APK..."
-& $adb uninstall com.jokebox.app | Out-Null
+& $adb uninstall fzhlian.JokeBox.app | Out-Null
 & $adb install -r $apk | Out-Null
-& $adb shell pm clear com.jokebox.app | Out-Null
+& $adb shell pm clear fzhlian.JokeBox.app | Out-Null
 & $adb logcat -c
 
 Write-Output "[3/5] Launching app..."
-& $adb shell monkey -p com.jokebox.app -c android.intent.category.LAUNCHER 1 | Out-Null
+& $adb shell monkey -p fzhlian.JokeBox.app -c android.intent.category.LAUNCHER 1 | Out-Null
 Start-Sleep -Seconds 5
 
 Write-Output "[4/5] Triggering Chinese refetch..."
-& $adb shell am broadcast -a com.jokebox.app.DEBUG_REFETCH_ZH -n com.jokebox.app/.DebugActionsReceiver | Out-Null
+& $adb shell am broadcast -a fzhlian.JokeBox.app.DEBUG_REFETCH_ZH -n fzhlian.JokeBox.app/.DebugActionsReceiver | Out-Null
 Start-Sleep -Seconds 20
 
 Write-Output "[5/5] Collecting logs..."
@@ -74,3 +74,4 @@ if (($focus | Select-String -Pattern "inserted=\d+").Count -gt 0) {
 
 Write-Output "RESULT: WARN (no insertion marker found, inspect logs above)"
 exit 2
+

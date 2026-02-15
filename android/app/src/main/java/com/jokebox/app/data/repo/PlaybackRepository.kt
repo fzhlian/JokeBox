@@ -1,13 +1,13 @@
-package com.jokebox.app.data.repo
+﻿package fzhlian.JokeBox.app.data.repo
 
-import com.jokebox.app.data.db.FavoriteDao
-import com.jokebox.app.data.db.JokeDao
-import com.jokebox.app.data.db.PlaybackStateDao
-import com.jokebox.app.data.db.PlaybackStateEntity
-import com.jokebox.app.data.db.PlayedDao
-import com.jokebox.app.data.db.PlayedEntity
-import com.jokebox.app.data.model.AgeGroup
-import com.jokebox.app.data.model.JokeUiItem
+import fzhlian.JokeBox.app.data.db.FavoriteDao
+import fzhlian.JokeBox.app.data.db.JokeDao
+import fzhlian.JokeBox.app.data.db.PlaybackStateDao
+import fzhlian.JokeBox.app.data.db.PlaybackStateEntity
+import fzhlian.JokeBox.app.data.db.PlayedDao
+import fzhlian.JokeBox.app.data.db.PlayedEntity
+import fzhlian.JokeBox.app.data.model.AgeGroup
+import fzhlian.JokeBox.app.data.model.JokeUiItem
 import kotlinx.coroutines.flow.Flow
 import java.util.ArrayDeque
 
@@ -70,7 +70,7 @@ class PlaybackRepository(
             favoriteDao.remove(jokeId)
             false
         } else {
-            favoriteDao.upsert(com.jokebox.app.data.db.FavoriteEntity(jokeId, System.currentTimeMillis()))
+            favoriteDao.upsert(fzhlian.JokeBox.app.data.db.FavoriteEntity(jokeId, System.currentTimeMillis()))
             true
         }
     }
@@ -103,9 +103,10 @@ private fun normalizeLanguageTag(language: String): String {
     }
 }
 
-private fun com.jokebox.app.data.db.JokeEntity.toUiItem(favorite: Boolean) = JokeUiItem(
+private fun fzhlian.JokeBox.app.data.db.JokeEntity.toUiItem(favorite: Boolean) = JokeUiItem(
     id = id,
     content = content,
     language = language,
     favorite = favorite
 )
+

@@ -1,9 +1,9 @@
-package com.jokebox.app.ui.state
+﻿package fzhlian.JokeBox.app.ui.state
 
-import com.jokebox.app.data.model.AgeGroup
-import com.jokebox.app.data.model.LanguageMode
-import com.jokebox.app.data.model.JokeUiItem
-import com.jokebox.app.data.db.SourceConfigEntity
+import fzhlian.JokeBox.app.data.model.AgeGroup
+import fzhlian.JokeBox.app.data.model.LanguageMode
+import fzhlian.JokeBox.app.data.model.JokeUiItem
+import fzhlian.JokeBox.app.data.db.SourceConfigEntity
 
 data class MainUiState(
     val initialized: Boolean = false,
@@ -25,3 +25,4 @@ data class MainUiState(
     val ttsPitch: Float = 1f,
     val message: String? = null
 )
+

@@ -1,4 +1,4 @@
-﻿package com.jokebox.app.ui.screen
+﻿package fzhlian.JokeBox.app.ui.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jokebox.app.data.model.AgeGroup
+import fzhlian.JokeBox.app.data.model.AgeGroup
 
 @Composable
 fun OnboardingScreen(onCompleteOnboarding: (AgeGroup) -> Unit) {
@@ -101,3 +101,4 @@ private fun AgeOptionRow(text: String, selected: Boolean, onClick: () -> Unit) {
         Text(text)
     }
 }
+

@@ -1,4 +1,4 @@
-package com.jokebox.app
+﻿package fzhlian.JokeBox.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,9 +9,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jokebox.app.ui.JokeBoxViewModel
-import com.jokebox.app.ui.JokeBoxViewModelFactory
-import com.jokebox.app.ui.screen.MainScreen
+import fzhlian.JokeBox.app.ui.JokeBoxViewModel
+import fzhlian.JokeBox.app.ui.JokeBoxViewModelFactory
+import fzhlian.JokeBox.app.ui.screen.MainScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,3 +67,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

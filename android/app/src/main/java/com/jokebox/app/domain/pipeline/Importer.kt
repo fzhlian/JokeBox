@@ -1,9 +1,9 @@
-package com.jokebox.app.domain.pipeline
+﻿package fzhlian.JokeBox.app.domain.pipeline
 
-import com.jokebox.app.data.db.RawQueueDao
-import com.jokebox.app.data.db.RawQueueEntity
-import com.jokebox.app.data.model.RawStatus
-import com.jokebox.app.data.model.SourceType
+import fzhlian.JokeBox.app.data.db.RawQueueDao
+import fzhlian.JokeBox.app.data.db.RawQueueEntity
+import fzhlian.JokeBox.app.data.model.RawStatus
+import fzhlian.JokeBox.app.data.model.SourceType
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -85,3 +85,4 @@ class Importer(private val rawDao: RawQueueDao) {
         return noTags.lines().map { it.trim() }.filter { it.length >= 6 }
     }
 }
+

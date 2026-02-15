@@ -31,13 +31,14 @@ Harmony and Harmony NEXT now contain full Stage-model project structures with ru
 - Run one-click emulator smoke test (install + launch + refetch + log check):
   - `powershell -ExecutionPolicy Bypass -File scripts/test-android-emulator.ps1`
 
-## Harmony Signing (CLI)
-- Build unsigned package first:
-  - `cd harmony` then run `hvigor assembleApp`
-  - `cd harmony-next` then run `hvigor assembleApp`
-- Try manual CLI signing:
-  - `powershell -ExecutionPolicy Bypass -File scripts/sign-harmony-manual.ps1 -ProjectDir harmony -BundleName com.jokebox.harmony -CompatibleVersion 9`
-  - `powershell -ExecutionPolicy Bypass -File scripts/sign-harmony-manual.ps1 -ProjectDir harmony-next -BundleName com.jokebox.next -CompatibleVersion 9`
-- Note:
-  - Newer hvigor versions require encrypted signing password when configured in `build-profile.json5`.
-  - `scripts/sign-harmony-manual.ps1` is best-effort for local SDK default materials and will print explicit next-step guidance if signing is rejected.
+## Signed-Only Packaging
+- App package/bundle name is now unified as: `fzhlian.JokeBox.app`.
+- Use one-click template and only fill certificate paths/passwords:
+  - `powershell -ExecutionPolicy Bypass -File scripts/release-oneclick-template.ps1`
+- Or run signed-only release directly:
+  - `powershell -ExecutionPolicy Bypass -File scripts/release-signed-only.ps1 -Version v0.1.1 -SignToolJar <hap-sign-tool.jar> -P12Path <release.p12> -P12Password <password> -ProfileCertChainPath <profile-release.pem>`
+- The release pipeline now enforces:
+  - Android output must pass `apksigner verify`.
+  - Harmony/Harmony NEXT output must pass `hap-sign-tool verify-app`.
+  - Artifacts are generated to `release/upload/` with `-signed-` naming only.
+

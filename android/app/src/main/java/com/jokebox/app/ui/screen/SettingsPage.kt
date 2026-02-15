@@ -1,4 +1,4 @@
-﻿package com.jokebox.app.ui.screen
+﻿package fzhlian.JokeBox.app.ui.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.jokebox.app.data.model.LanguageMode
-import com.jokebox.app.ui.state.MainUiState
+import fzhlian.JokeBox.app.data.model.LanguageMode
+import fzhlian.JokeBox.app.ui.state.MainUiState
 
 @Composable
 fun SettingsPage(
@@ -213,3 +213,4 @@ private data object EnText {
     const val ttsPitch = "TTS Pitch: "
     const val clearPlayed = "Clear Played"
 }
+

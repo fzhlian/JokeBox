@@ -1,20 +1,20 @@
-﻿package com.jokebox.app.ui
+﻿package fzhlian.JokeBox.app.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.jokebox.app.data.db.RawQueueDao
-import com.jokebox.app.data.model.AgeGroup
-import com.jokebox.app.data.model.LanguageMode
-import com.jokebox.app.data.model.RawStatus
-import com.jokebox.app.data.repo.PlaybackRepository
-import com.jokebox.app.data.repo.SettingsStore
-import com.jokebox.app.data.repo.SourceRepository
-import com.jokebox.app.domain.pipeline.Fetcher
-import com.jokebox.app.domain.pipeline.Importer
-import com.jokebox.app.domain.pipeline.Processor
-import com.jokebox.app.domain.tts.TtsEngine
-import com.jokebox.app.ui.state.MainUiState
+import fzhlian.JokeBox.app.data.db.RawQueueDao
+import fzhlian.JokeBox.app.data.model.AgeGroup
+import fzhlian.JokeBox.app.data.model.LanguageMode
+import fzhlian.JokeBox.app.data.model.RawStatus
+import fzhlian.JokeBox.app.data.repo.PlaybackRepository
+import fzhlian.JokeBox.app.data.repo.SettingsStore
+import fzhlian.JokeBox.app.data.repo.SourceRepository
+import fzhlian.JokeBox.app.domain.pipeline.Fetcher
+import fzhlian.JokeBox.app.domain.pipeline.Importer
+import fzhlian.JokeBox.app.domain.pipeline.Processor
+import fzhlian.JokeBox.app.domain.tts.TtsEngine
+import fzhlian.JokeBox.app.ui.state.MainUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -499,3 +499,4 @@ class JokeBoxViewModelFactory(
         ) as T
     }
 }
+

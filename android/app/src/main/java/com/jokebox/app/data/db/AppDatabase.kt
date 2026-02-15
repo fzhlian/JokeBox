@@ -1,4 +1,4 @@
-package com.jokebox.app.data.db
+﻿package fzhlian.JokeBox.app.data.db
 
 import android.content.Context
 import androidx.room.Database
@@ -35,3 +35,4 @@ abstract class AppDatabase : RoomDatabase() {
         ).fallbackToDestructiveMigration(dropAllTables = true).build()
     }
 }
+

@@ -1,4 +1,4 @@
-package com.jokebox.app.domain.tts
+﻿package fzhlian.JokeBox.app.domain.tts
 
 interface TtsEngine {
     suspend fun listVoices(): List<String>
@@ -6,3 +6,4 @@ interface TtsEngine {
     suspend fun speak(text: String, speed: Float, pitch: Float, voiceProfileId: String = "default")
     suspend fun stop()
 }
+

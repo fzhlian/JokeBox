@@ -1,12 +1,12 @@
-﻿package com.jokebox.app.domain.pipeline
+﻿package fzhlian.JokeBox.app.domain.pipeline
 
 import android.util.Log
-import com.jokebox.app.data.model.MappingSpec
-import com.jokebox.app.data.model.OnlineSourceConfig
-import com.jokebox.app.data.model.RequestSpec
-import com.jokebox.app.data.model.ResponseSpec
-import com.jokebox.app.data.repo.SettingsStore
-import com.jokebox.app.data.repo.SourceRepository
+import fzhlian.JokeBox.app.data.model.MappingSpec
+import fzhlian.JokeBox.app.data.model.OnlineSourceConfig
+import fzhlian.JokeBox.app.data.model.RequestSpec
+import fzhlian.JokeBox.app.data.model.ResponseSpec
+import fzhlian.JokeBox.app.data.repo.SettingsStore
+import fzhlian.JokeBox.app.data.repo.SourceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -217,3 +217,4 @@ private fun buildLocalCnJokes(category: String, limit: Int): List<JSONObject> {
         JSONObject(mapOf("content" to seeds[idx % seeds.size]))
     }
 }
+

@@ -1,4 +1,4 @@
-﻿package com.jokebox.app.ui.screen
+﻿package fzhlian.JokeBox.app.ui.screen
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
@@ -7,7 +7,7 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.jokebox.app.ui.state.MainUiState
+import fzhlian.JokeBox.app.ui.state.MainUiState
 import org.junit.Rule
 import org.junit.Test
 
@@ -92,3 +92,4 @@ class MainScreenNavigationTest {
         composeRule.onNodeWithText("UI语言模式").assertIsDisplayed()
     }
 }
+

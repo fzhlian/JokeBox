@@ -1,4 +1,4 @@
-﻿package com.jokebox.app.ui.screen
+﻿package fzhlian.JokeBox.app.ui.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jokebox.app.data.model.SourceType
-import com.jokebox.app.ui.state.MainUiState
+import fzhlian.JokeBox.app.data.model.SourceType
+import fzhlian.JokeBox.app.ui.state.MainUiState
 
 private data class SourceFormErrors(
     val name: String? = null,
@@ -399,3 +399,4 @@ private fun validatePathToken(path: String, fieldName: String): String? {
         "$fieldName 仅允许字母、数字、_、.、$、[]、-"
     }
 }
+

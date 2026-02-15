@@ -23,3 +23,5 @@ harmony-next/**/build/
 emulator_screen.png
 *.apk
 *.hprof
+release/upload/
+release/tmp_sign_*/

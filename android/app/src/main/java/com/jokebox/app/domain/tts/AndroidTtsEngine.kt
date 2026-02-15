@@ -1,4 +1,4 @@
-package com.jokebox.app.domain.tts
+﻿package fzhlian.JokeBox.app.domain.tts
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -6,7 +6,7 @@ import android.util.Base64
 import android.util.Log
 import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
-import com.jokebox.app.BuildConfig
+import fzhlian.JokeBox.app.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
@@ -214,3 +214,4 @@ private fun pickVoice(voices: List<Voice>, keywords: List<String>): Voice? {
         lowerKeywords.all { bag.contains(it) }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.jokebox.app.domain.policy
+﻿package fzhlian.JokeBox.app.domain.policy
 
 import java.security.MessageDigest
 
@@ -60,8 +60,8 @@ object SimHash64 {
 }
 
 object ContentPolicy {
-    private val strictBanWords = setOf("hate", "terror", "kill", "毒品", "仇恨", "极端")
-    private val youthExtraBanWords = setOf("sex", "nsfw", "暴力", "色情")
+    private val strictBanWords = setOf("hate", "terror", "kill", "姣掑搧", "浠囨仺", "鏋佺")
+    private val youthExtraBanWords = setOf("sex", "nsfw", "鏆村姏", "鑹叉儏")
 
     fun allow(contentNorm: String, ageGroup: Int): Boolean {
         val hardRejected = strictBanWords.any { contentNorm.contains(it) }
@@ -76,3 +76,4 @@ object ContentPolicy {
         return true
     }
 }
+

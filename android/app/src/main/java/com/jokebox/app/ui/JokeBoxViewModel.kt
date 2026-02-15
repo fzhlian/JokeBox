@@ -413,15 +413,16 @@ internal fun sanitizeForSpeech(content: String): String {
     if (trimmed.isBlank()) return content
 
     val inlineSanitized = trimmed.replace(
-        Regex("\\s*[—-]{1,2}\\s*(作者|来源|by)[:：]?\\s*[^\\n]{1,60}$", RegexOption.IGNORE_CASE),
+        Regex("\\s*[—-]{1,2}\\s*(作者|来源|by|author)[:：]?\\s*[^\\n]{1,60}$", RegexOption.IGNORE_CASE),
         ""
     )
 
     val lines = inlineSanitized.lines().toMutableList()
     while (lines.isNotEmpty()) {
         val last = lines.last().trim()
-        val isAuthorLine = last.matches(Regex("^(作者|来源|by)[:：].*$", RegexOption.IGNORE_CASE))
-        val isDashTail = last.matches(Regex("^[—-]{1,2}\\s*(作者|来源|by)?[:：]?\\s*[^\\n]{1,40}$", RegexOption.IGNORE_CASE))
+        val isAuthorLine = last.matches(Regex("^(作者|来源|by|author)[:：].*$", RegexOption.IGNORE_CASE))
+        val isDashTail =
+            last.matches(Regex("^[—-]{1,2}\\s*(作者|来源|by|author)?[:：]?\\s*[^\\n]{1,40}$", RegexOption.IGNORE_CASE))
         val isAnonymousTail = last.matches(
             Regex("^(?:[（(]\\s*)?(?:佚名|匿名|无名氏|unknown|anonymous)(?:\\s*[）)])?$", RegexOption.IGNORE_CASE)
         )
@@ -441,7 +442,7 @@ internal fun sanitizeForSpeech(content: String): String {
 private fun isLikelyAuthorName(value: String): Boolean {
     if (value.length !in 2..32) return false
     if (value.any { it.isDigit() }) return false
-    if (value.contains(Regex("[。！？!?；;，,、…]"))) return false
+    if (value.contains(Regex("[。！？!?；;，,、….:：]"))) return false
     val trimmed = value.trim('(', ')', '（', '）', '[', ']', '【', '】', ' ')
     if (trimmed.isBlank()) return false
     val zhName = Regex("^[\\u4E00-\\u9FFF·•]{2,8}$")

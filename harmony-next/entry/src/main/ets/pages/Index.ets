@@ -1,5 +1,6 @@
 ﻿import common from '@ohos.app.ability.common';
 import i18n from '@ohos.i18n';
+import util from '@ohos.util';
 import { sourceDao } from '../data/Repositories';
 import { settingsDao } from '../data/SettingsDao';
 import { globalRdbStore } from '../data/RdbStore';
@@ -27,8 +28,45 @@ function normalizeLanguageTag(language: string): string {
   return 'en';
 }
 
+let BUNDLED_JOKES_ZH: string[] = [...SAMPLE_JOKES_ZH];
+let BUNDLED_JOKES_EN: string[] = [...SAMPLE_JOKES_EN];
+
 function jokesByLanguageTag(language: string): string[] {
-  return normalizeLanguageTag(language).startsWith('zh') ? SAMPLE_JOKES_ZH : SAMPLE_JOKES_EN;
+  return normalizeLanguageTag(language).startsWith('zh') ? BUNDLED_JOKES_ZH : BUNDLED_JOKES_EN;
+}
+
+function decodeUtf8(buffer: Uint8Array): string {
+  const decoder = new util.TextDecoder('utf-8', { ignoreBOM: true });
+  return decoder.decodeWithStream(buffer, { stream: false });
+}
+
+function parseJokeList(content: string): string[] {
+  try {
+    const parsed = JSON.parse(content) as string[];
+    const cleaned = parsed.map(item => `${item}`.trim()).filter(item => item.length > 0);
+    return cleaned.length > 0 ? cleaned : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+async function loadBundledJokes(context: common.UIAbilityContext): Promise<void> {
+  const rm = context.resourceManager;
+  try {
+    const zhRaw = await rm.getRawFileContent('jokes_zh_hans.json');
+    const zhList = parseJokeList(decodeUtf8(zhRaw));
+    if (zhList.length > 0) {
+      BUNDLED_JOKES_ZH = zhList;
+    }
+  } catch (_) {}
+
+  try {
+    const enRaw = await rm.getRawFileContent('jokes_en.json');
+    const enList = parseJokeList(decodeUtf8(enRaw));
+    if (enList.length > 0) {
+      BUNDLED_JOKES_EN = enList;
+    }
+  } catch (_) {}
 }
 
 @Component
@@ -443,9 +481,9 @@ struct Index {
   @State dbError: string = '';
 
   @State currentLanguage: string = 'zh-Hans';
-  @State unplayedCount: number = SAMPLE_JOKES_ZH.length;
+  @State unplayedCount: number = BUNDLED_JOKES_ZH.length;
   @State processingCount: number = 0;
-  @State currentJoke: string = SAMPLE_JOKES_ZH[0];
+  @State currentJoke: string = BUNDLED_JOKES_ZH[0];
   @State message: string = '';
   @State jokeIndex: number = 0;
 
@@ -517,6 +555,7 @@ struct Index {
     try {
       this.systemLanguage = i18n.System.getSystemLanguage();
       const ctx = getContext(this) as common.UIAbilityContext;
+      await loadBundledJokes(ctx);
       await globalRdbStore.open(ctx);
       await this.loadSettings();
       this.applyCurrentLanguageJokes();
@@ -598,4 +637,6 @@ struct Index {
     }.width('100%').height('100%')
   }
 }
+
+
 

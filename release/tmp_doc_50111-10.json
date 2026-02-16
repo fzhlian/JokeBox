@@ -1,0 +1,98 @@
+﻿{
+    "code":  0,
+    "message":  "success",
+    "value":  {
+                  "docId":  "dab66393b64049bdb0d9659c0a7c3159",
+                  "title":  "人工智能生成合成内容标识常见问题",
+                  "lang":  "cn",
+                  "domain":  "10200000",
+                  "businessName":  "应用分发",
+                  "businessType":  "10202000",
+                  "businessTypeName":  "应用市场",
+                  "serviceType":  "12100000",
+                  "version":  "V8",
+                  "anchorList":  [
+                                     {
+                                         "anchorId":  "h1-1755911980134-0",
+                                         "level":  "1",
+                                         "title":  "1、什么是人工智能生成合成内容？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h2-1755911980134-1",
+                                         "level":  "1",
+                                         "title":  "2、人工智能生成合成内容标识的类型有哪些？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h2-1755911980134-2",
+                                         "level":  "1",
+                                         "title":  "3、需添加人工智能生成合成内容标识的人工智能生成合成内容适用场景有哪些？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h1-1763088554727-0",
+                                         "level":  "1",
+                                         "title":  "4、为什么要在生成合成内容中添加显式标识？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h1-1763088554727-1",
+                                         "level":  "1",
+                                         "title":  "5、添加生成合成内容显式标识的具体方法是什么？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h1-1760595758649-0",
+                                         "level":  "1",
+                                         "title":  "6、为什么要在生成合成内容的文件元数据中添加隐式标识？文件元数据指的是什么？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h1-1755913342929-0",
+                                         "level":  "1",
+                                         "title":  "7、添加生成合成内容文件元数据隐式标识的具体方法是什么？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h1-1755913831750-0",
+                                         "level":  "1",
+                                         "title":  "8、为什么要提交人工智能生成合成内容标识相关材料？",
+                                         "apiAtomic":  0
+                                     },
+                                     {
+                                         "anchorId":  "h1-1755912191827-2",
+                                         "level":  "1",
+                                         "title":  "9、人工智能生成合成内容标识相关材料具体包含哪些文件？",
+                                         "apiAtomic":  0
+                                     }
+                                 ],
+                  "status":  "4",
+                  "content":  {
+                                  "type":  "html",
+                                  "content":  "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ch1 id=\"h1-1755911980134-0\"\u003e\u003cstrong\u003e1、什么是人工智能生成合成内容？\u003c/strong\u003e\u003c/h1\u003e  \u003cp\u003e依照《人工智能生成合成内容标识办法》第三条，人工智能生成合成内容是指利用人工智能技术生成、合成的文本、图片、音频、视频、虚拟场景等信息。\u003c/p\u003e  \u003ch1 id=\"h2-1755911980134-1\"\u003e\u003cstrong\u003e2、人工智能生成合成内容标识的类型有哪些？\u003c/strong\u003e\u003c/h1\u003e  \u003cp\u003e依照《人工智能生成合成内容标识办法》第三条，人工智能生成合成内容标识包括显式标识和隐式标识。显式标识是指在生成合成内容或者交互场景界面中添加的，以文字、声音、图形等方式呈现并可以被用户明显感知到的标识。隐式标识是指采取技术措施在生成合成内容文件数据中添加的，不易被用户明显感知到的标识。\u003c/p\u003e  \u003ch1 id=\"h2-1755911980134-2\"\u003e\u003cstrong\u003e3、需添加人工智能生成合成内容标识的人工智能生成合成内容适用场景有哪些？\u003c/strong\u003e\u003c/h1\u003e  \u003cp\u003e依照《互联网信息服务深度合成管理规定》第十七条，深度合成服务提供者提供以下深度合成服务，可能导致公众混淆或者误认的，应当在生成或者编辑的信息内容的合理位置、区域进行显著标识，向公众提示深度合成情况：\u003c/p\u003e  \u003cp\u003e（一）智能对话、智能写作等模拟自然人进行文本的生成或者编辑服务；\u003c/p\u003e  \u003cp\u003e（二）合成人声、仿声等语音生成或者显著改变个人身份特征的编辑服务；\u003c/p\u003e  \u003cp\u003e（三）人脸生成、人脸替换、人脸操控、姿态操控等人物图像、视频生成或者显著改变个人身份特征的编辑服务；\u003c/p\u003e  \u003cp\u003e（四）沉浸式拟真场景等生成或者编辑服务；\u003c/p\u003e  \u003cp\u003e（五）其他具有生成或者显著改变信息内容功能的服务。\u003c/p\u003e  \u003cp\u003e深度合成服务提供者提供前款规定之外的深度合成服务的，应当提供显著标识功能，并提示深度合成服务使用者可以进行显著标识。\u003c/p\u003e  \u003ch1 id=\"h1-1763088554727-0\"\u003e4、为什么要在生成合成内容中添加显式标识？\u003c/h1\u003e  \u003cp\u003e依照《人工智能生成合成内容标识办法》第四条，服务提供者提供的生成合成服务属于《互联网信息服务深度合成管理规定》第十七条第一款情形的，应当按照下列要求对生成合成内容添加显式标识：\u003c/p\u003e  \u003cp\u003e（一）在文本的起始、末尾或者中间适当位置添加文字提示或者通用符号提示等标识，或者在交互场景界面、文字周边添加显著的提示标识；\u003c/p\u003e  \u003cp\u003e（二）在音频的起始、末尾或者中间适当位置添加语音提示或者音频节奏提示等标识，或者在交互场景界面中添加显著的提示标识；\u003c/p\u003e  \u003cp\u003e（三）在图片的适当位置添加显著的提示标识；\u003c/p\u003e  \u003cp\u003e（四）在视频起始画面和视频播放周边的适当位置添加显著的提示标识，可以在视频末尾和中间适当位置添加显著的提示标识；\u003c/p\u003e  \u003cp\u003e（五）呈现虚拟场景时，在起始画面的适当位置添加显著的提示标识，可以在虚拟场景持续服务过程中的适当位置添加显著的提示标识；\u003c/p\u003e  \u003cp\u003e（六）其他生成合成服务场景根据自身应用特点添加显著的提示标识。\u003c/p\u003e  \u003cp\u003e服务提供者提供生成合成内容下载、复制、导出等功能时，应当确保文件中含有满足要求的显式标识。\u003c/p\u003e  \u003ch1 id=\"h1-1763088554727-1\"\u003e5、添加生成合成内容显式标识的具体方法是什么？\u003c/h1\u003e  \u003cp\u003e\u003cstrong\u003e（1）文本内容显式标识方法如下：\u003c/strong\u003e\u003c/p\u003e  \u003cp\u003ea) 文本内容显式标识应采用文字或角标形式。\u003c/p\u003e  \u003cp\u003eb) 文字形式的文本内容显式标识应同时包含以下要素：\u003cbr\u003e 1) 人工智能要素：包含“人工智能”或“AI”，表明使用人工智能技术;\u003cbr\u003e 2) 生成合成要素：包含“生成”和/或“合成”，表明内容制作方式为生成和/或合成。\u003c/p\u003e  \u003cp\u003ec) 角标形式的文本内容显式标识应包含“AI”。\u003c/p\u003e  \u003cp\u003ed) 文本内容显式标识应位于以下一个或多个位置:\u003cbr\u003e 1) 文本的起始位置；\u003cbr\u003e 2) 文本的末尾位置；\u003cbr\u003e 3) 文本的中间适当位置。\u003c/p\u003e  \u003cp\u003ee) 文本内容显式标识使用的字型和颜色应清晰可辨。\u003c/p\u003e  \u003cp style=\"text-align: center;\"\u003e\u003cspan class=\"easyimage easyimage-full\"\u003e\u003cimg src=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250823093601.42523075391348096182318739840436:50001231000000:2800:8CFBF0D96CD8FAA4478038E82DBE6B60890D1231B6E5FB5F272B40B6ECD441F8.png\"\u003e\u003c/span\u003e\u003c/p\u003e  \u003cp\u003e\u003cstrong\u003e（2）图片内容显式标识方法如下：\u003c/strong\u003e\u003c/p\u003e  \u003cp\u003ea) 图片内容显式标识应采用文字提示。\u003c/p\u003e  \u003cp\u003eb) 图片内容显式标识应同时包含以下要素：\u003cbr\u003e 1) 人工智能要素：包含“人工智能”或“AI”，表明使用人工智能技术；\u003cbr\u003e 2) 生成合成要素：包含“生成”和/或“合成”，表明内容制作方式为生成和/或合成。\u003c/p\u003e  \u003cp\u003ec) 图片内容显式标识应位于图片的边或角。\u003c/p\u003e  \u003cp\u003ed) 图片内容显式标识使用的字型应清晰可辨。\u003c/p\u003e  \u003cp\u003ee) 图片内容显式标识的文字高度不应低于画面最短边长度的5%。\u003cbr\u003e 注：非矩形图片的最短边指可完全将该图片包含在内部的矩形的最短边。\u003c/p\u003e  \u003cp style=\"text-align: center;\"\u003e\u003cspan class=\"easyimage easyimage-full\"\u003e\u003cimg src=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250830083450.56245547375767463817938066038223:50001231000000:2800:2BFD716D6DE325E7708FEB7AC9BFC9BE5BF9171E5AD913E6B13DCEC6E8AB1DAB.png\"\u003e\u003c/span\u003e\u003c/p\u003e  \u003cp\u003e\u003cstrong\u003e（3）音频内容显式标识方法如下：\u003c/strong\u003e\u003c/p\u003e  \u003cp\u003ea) 音频内容显式标识应采用语音标识或音频节奏标识。\u003c/p\u003e  \u003cp\u003eb) 语音标识应包含以下要素：\u003cbr\u003e 1) 人工智能要素：包含“人工智能”或“AI”，表明使用人工智能技术;\u003cbr\u003e 2) 生成合成要素：包含“生成”和/或“合成”，表明内容制作方式为生成和/或合成。\u003c/p\u003e  \u003cp\u003ec) 音频节奏标识应为“短长 短短”的节奏。\u003cbr\u003e 注1：“短长 短短”节奏为“AI”的摩斯码表示。\u003c/p\u003e  \u003cp\u003ed) 音频内容显式标识应位于以下一个或多个位置：\u003cbr\u003e 1) 音频的起始位置；\u003cbr\u003e 2) 音频的末尾位置；\u003cbr\u003e 3) 音频的中间适当位置。\u003cbr\u003e 注2：音频的起始位置位于生成合成的音频内容开始之前。音频的末尾位置位于生成合成的音频内容结束之后。\u003cbr\u003e 注3：在智能语音助手、智能客服、智能导航等音频的高频交互场景中，音频的起始位置、末尾位置是指一轮交互的起始位置和末尾位置。\u003c/p\u003e  \u003cp\u003ee) 语音标识应使用正常语速。\u003cbr\u003e 注4：汉语正常语速约在120字/min~160字/min。\u003c/p\u003e  \u003cp\u003ef) 节奏标识应清晰可辨。\u003c/p\u003e  \u003cp style=\"text-align: center;\"\u003e\u003cspan class=\"easyimage easyimage-full\"\u003e\u003cimg src=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250825092841.63337694319683407716431754122531:50001231000000:2800:DDA4FA67DA5D785830C5E2AE4FEDFE41DF9775DBD554115AA1A1D90C03AE41BE.png\"\u003e\u003c/span\u003e\u003c/p\u003e  \u003cp\u003e\u003cstrong\u003e（4）视频内容显式标识方法如下：\u003c/strong\u003e\u003c/p\u003e  \u003cp\u003ea) 视频内容显式标识应采用文字提示。\u003c/p\u003e  \u003cp\u003eb) 视频内容显式标识应同时包含以下要素：\u003cbr\u003e 1) 人工智能要素：包含“人工智能”或“AI”，表明使用人工智能技术；\u003cbr\u003e 2) 生成合成要素：包含“生成”和/或“合成”，表明内容制作方式为生成和/或合成。\u003c/p\u003e  \u003cp\u003ec) 视频内容显式标识应位于视频起始画面，可位于视频末尾和中间适当位置。\u003c/p\u003e  \u003cp\u003ed) 视频内容显式标识应位于视频画面的边或角。\u003c/p\u003e  \u003cp\u003ee) 视频内容显式标识使用的字型应清晰可辨。\u003c/p\u003e  \u003cp\u003ef) 视频内容显式标识的文字高度不应低于画面最短边长度的5%。\u003c/p\u003e  \u003cp\u003eg) 在视频正常播放速度下，视频内容显式标识持续时间不应少于2s。\u003c/p\u003e  \u003cp style=\"text-align: center;\"\u003e\u003cspan class=\"easyimage easyimage-full\"\u003e\u003cimg src=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250823094722.70024653542357763098728114746094:50001231000000:2800:195FA9455496046C9E33D32F638CE29599DDBF3DACA5BC1E101E2483C8F8B5A3.png\"\u003e\u003c/span\u003e\u003c/p\u003e  \u003cp\u003e\u003cstrong\u003e（5）虚拟场景显式标识方法如下：\u003c/strong\u003e\u003c/p\u003e  \u003cp\u003ea) 虚拟场景显式标识应采用文字提示。\u003c/p\u003e  \u003cp\u003eb) 虚拟场景显式标识应同时包含以下要素：\u003cbr\u003e 1) 人工智能要素：包含“人工智能”或“AI”，表明使用人工智能技术；\u003cbr\u003e 2) 生成合成要素：包含“生成”和/或“合成”，表明内容制作方式为生成和/或合成。\u003c/p\u003e  \u003cp\u003ec) 虚拟场景显式标识应位于虚拟场景起始画面，可位于虚拟场景持续服务过程中的适当位置。\u003c/p\u003e  \u003cp\u003ed) 位于虚拟场景起始画面的虚拟场景显式标识应位于画面的边或角。\u003c/p\u003e  \u003cp\u003ee) 虚拟场景显式标识使用的字型应清晰可辨。\u003c/p\u003e  \u003cp\u003ef) 虚拟场景显式标识的文字高度不应低于画面最短边长度的5%。\u003c/p\u003e  \u003cp\u003e\u003cstrong\u003e（6）交互场景界面显式标识方法如下：\u003c/strong\u003e\u003c/p\u003e  \u003cp\u003ea) 交互场景界面显式标识应采用文字提示。\u003c/p\u003e  \u003cp\u003eb) 交互场景界面显式标识应同时包含以下要素：\u003cbr\u003e 1) 人工智能要素：包含“人工智能”或“AI”，表明使用人工智能技术;\u003cbr\u003e 2) 生成合成要素：包含“生成”和/或“合成”，表明内容制作方式为生成和/或合成。\u003c/p\u003e  \u003cp\u003ec) 交互场景界面显式标识应采取以下一种或多种方式：\u003cbr\u003e 1) 在内容附近持续显示提示文字；\u003cbr\u003e 2) 在交互场景界面顶部、底部、背景等适当位置持续显示提示文字。\u003c/p\u003e  \u003cp\u003ed) 交互场景界面显式标识使用的字型和颜色应清晰可辨。\u003c/p\u003e  \u003cp style=\"text-align: center;\"\u003e\u003cspan class=\"easyimage easyimage-full\"\u003e\u003cimg src=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250825092901.41478939654723503594950246634334:50001231000000:2800:C788072BE131DBBAD4A25CC79583D31D5562E5C348C3BEB3962011AF7191EE10.png\"\u003e\u003c/span\u003e\u003c/p\u003e  \u003ch1 id=\"h1-1760595758649-0\"\u003e\u003cstrong\u003e6、为什么要在生成合成内容的文件元数据中添加隐式标识？文件元数据指的是什么？\u003c/strong\u003e\u003c/h1\u003e  \u003cp\u003e（1）依照《人工智能生成合成内容标识办法》第五条：服务提供者应当按照《互联网信息服务深度合成管理规定》第十六条（深度合成服务提供者对使用其服务生成或者编辑的信息内容，应当采取技术措施添加不影响用户使用的标识，并依照法律、行政法规和国家有关规定保存日志信息。）的规定，在生成合成内容的文件元数据中添加隐式标识。\u003c/p\u003e  \u003cp\u003e（2）文件元数据指的是按照特定编码格式嵌入到文件头部的描述性信息，用于记录文件来源、属性、用途、版权等信息。\u003c/p\u003e  \u003cdiv class=\"hw-editor-tip\"\u003e \u003cdiv class=\"icon-panel\"\u003e \u003cdiv class=\"icon-img icon-img-info\"\u003e\u003c/div\u003e \u003c/div\u003e  \u003cdiv class=\"content-panel\"\u003e \u003cdiv class=\"title\"\u003e提示：\u003c/div\u003e  \u003cdiv class=\"content\"\u003e如您的应用未提供文本、音频、图片、视频等人工智能生成合成内容文件的导出或下载等功能，不涉及人工智能生成合成内容文件元数据和隐式标识，无需提供文件元数据隐式标识说明文件和文件元数据中已添加隐式标识的截图。\u003c/div\u003e \u003c/div\u003e \u003c/div\u003e  \u003ch1 id=\"h1-1755913342929-0\"\u003e\u003cstrong\u003e7、添加生成合成内容文件元数据隐式标识的具体方法是什么？\u003c/strong\u003e\u003c/h1\u003e  \u003cp\u003e\u003cstrong\u003e（1）隐式标识应包括以下要素：\u003c/strong\u003e\u003c/p\u003e  \u003cp\u003ea) 生成合成标签要素:内容的人工智能生成合成属性信息；\u003c/p\u003e  \u003cp\u003eb) 生成合成服务提供者要素：生成合成服务提供者的名称或编码；\u003c/p\u003e  \u003cp\u003ec) 内容制作编号要素：生成合成服务提供者对该内容的唯一编号；\u003c/p\u003e  \u003cp\u003ed) 内容传播服务提供者要素：内容传播服务提供者的名称或编码；\u003c/p\u003e  \u003cp\u003ee) 内容传播编号要素：内容传播服务提供者对该内容的唯一编号。\u003c/p\u003e  \u003cp\u003e\u003cstrong\u003e（2） 文件元数据隐式标识格式应符合\u003c/strong\u003e\u003ca href=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyManage/011/111/111/0000000000011111111.20250910163538.32492094789289547946572237248057:50001231000000:2800:2C8ABEB47097F3CE10B109FB5922E1A673387958367C69A93B0097A395B89D38.zip?needInitFileName=true\" target=\"_blank\"\u003e附 录 E.zip\u003c/a\u003e，更多信息可参考\u003ca href=\"https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=F32EA2A561F1886CD8D606513512D547\" target=\"_blank\"\u003e《人工智能生成合成内容标识方法》\u003c/a\u003e、\u003ca href=\"https://www.tc260.org.cn/portal/article/2/20250828165129\" target=\"_blank\"\u003e关于发布《人工智能生成合成内容标识方法 文件元数据隐式标识 文本文件》等6项网络安全标准实践指南的通知\u003c/a\u003e。\u003c/p\u003e  \u003cp\u003e\u003cstrong\u003e（3）人工智能生成合成的内容文件中，应仅保留一份文件元数据隐式标识。\u003c/strong\u003e\u003c/p\u003e  \u003cdiv class=\"hw-editor-tip\"\u003e \u003cdiv class=\"icon-panel\"\u003e \u003cdiv class=\"icon-img icon-img-info\"\u003e\u003c/div\u003e \u003c/div\u003e  \u003cdiv class=\"content-panel\"\u003e \u003cdiv class=\"title\"\u003e提示：\u003c/div\u003e  \u003cdiv class=\"content\"\u003e如您的应用未提供文本、音频、图片、视频等人工智能生成合成内容文件的导出或下载等功能，不涉及人工智能生成合成内容文件元数据和隐式标识，无需提供文件元数据隐式标识说明文件和文件元数据中已添加隐式标识的截图。\u003c/div\u003e \u003c/div\u003e \u003c/div\u003e  \u003cp\u003e\u003cstrong\u003e\u003cspan class=\"easyimage easyimage-full\"\u003e\u003cimg src=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20250830083609.69655358560304101508217319774517:50001231000000:2800:C966811750E1F060122E9BD5D218F5C1124E458442C3ACE315282FBBE68A5FE1.png\"\u003e\u003c/span\u003e\u003c/strong\u003e\u003c/p\u003e  \u003ch1 id=\"h1-1755913831750-0\"\u003e\u003cstrong\u003e8、为什么要提交人工智能生成合成内容标识相关材料？\u003c/strong\u003e\u003c/h1\u003e  \u003cp\u003e依照《人工智能生成合成内容标识办法》第七条：互联网应用程序分发平台在应用程序上架或者上线审核时，应当要求互联网应用程序服务提供者说明是否提供人工智能生成合成服务。互联网应用程序服务提供者提供人工智能生成合成服务的，互联网应用程序分发平台应当核验其生成合成内容标识相关材料。\u003c/p\u003e  \u003ch1 id=\"h1-1755912191827-2\"\u003e\u003cstrong\u003e9、人工智能生成合成内容标识相关材料具体包含哪些文件？\u003c/strong\u003e\u003c/h1\u003e  \u003cp\u003e（1）文件元数据隐式标识说明文件，说明文件模板请参考\u003ca href=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyManage/011/111/111/0000000000011111111.20250823095415.33547535971754877547264587760440:50001231000000:2800:AF284FC0BB14D369EB7B10DE6E50D53C468DD44A0BC63D7E81CD2889E7F150FB.zip?needInitFileName=true\" target=\"_blank\"\u003e人工智能生成合成内容文件元数据隐式标识说明函.zip\u003c/a\u003e；\u003c/p\u003e  \u003cp\u003e（2）应用内生成合成内容中已添加显式标识的截图；\u003c/p\u003e  \u003cp\u003e（3）应用内生成合成内容的文件元数据中已添加隐式标识的截图。\u003c/p\u003e  \u003cdiv class=\"hw-editor-tip\"\u003e \u003cdiv class=\"icon-panel\"\u003e \u003cdiv class=\"icon-img icon-img-info\"\u003e\u003c/div\u003e \u003c/div\u003e  \u003cdiv class=\"content-panel\"\u003e \u003cdiv class=\"title\"\u003e提示：\u003c/div\u003e  \u003cdiv class=\"content\"\u003e如您的应用未提供文本、音频、图片、视频等人工智能生成合成内容文件的导出或下载等功能，不涉及人工智能生成合成内容文件元数据和隐式标识，无需提供文件元数据隐式标识说明文件和文件元数据中已添加隐式标识的截图。\u003c/div\u003e \u003c/div\u003e \u003c/div\u003e\u003c/body\u003e\u003c/html\u003e"
+                              },
+                  "catalogName":  "app",
+                  "isImport":  0,
+                  "tag":  "10203006",
+                  "fileName":  "50111-10",
+                  "navigationAddress":  "/hmos/newdistribute/",
+                  "updatedDate":  "2026-02-03 13:23:49",
+                  "websiteType":  "1",
+                  "isGray":  0,
+                  "restrictedType":  0,
+                  "platform":  0,
+                  "intelligentRecommendFlag":  true,
+                  "versionLabels":  [
+
+                                    ],
+                  "contentLabels":  [
+                                        "celin-common2",
+                                        "celin-hmos",
+                                        "odd-even",
+                                        "osType"
+                                    ],
+                  "careClassificationId":  "97",
+                  "displayUpdateTime":  "2026-02-10 01:43:00"
+              }
+}

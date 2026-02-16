@@ -1,0 +1,48 @@
+﻿{
+    "code":  0,
+    "message":  "success",
+    "value":  {
+                  "docId":  "f036ff0a89bc4128a6e332f7c52b7df1",
+                  "title":  "发布应用（APP）",
+                  "lang":  "cn",
+                  "domain":  "10200000",
+                  "businessName":  "应用分发",
+                  "businessType":  "10202000",
+                  "businessTypeName":  "AppGallery Connect",
+                  "serviceType":  "12100006",
+                  "version":  "V7",
+                  "anchorList":  [
+
+                                 ],
+                  "status":  "4",
+                  "content":  {
+                                  "type":  "html",
+                                  "content":  "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ca name=\"ZH-CN_TOPIC_0000001933963166\"\u003e\u003c/a\u003e\u003ca name=\"ZH-CN_TOPIC_0000001933963166\"\u003e\u003c/a\u003e  \u003ch1\u003e发布应用（APP）\u003c/h1\u003e \u003cdiv id=\"body0000001933963166\"\u003e\u003cp id=\"ZH-CN_TOPIC_0000001933963166__p8060118\"\u003e\u003c/p\u003e \u003c/div\u003e \u003cdiv\u003e \u003cul class=\"ullinks\"\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-add-releasecert-0000001946273961\"\u003e申请发布证书\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-add-releaseprofile-0000001914714796\"\u003e申请发布Profile\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-harmonyos-releaseapp-non-next-0000002179322402\"\u003e发布HarmonyOS应用\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-harmonyos-releaseservice-0000001946273965\"\u003e发布元服务\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003c/ul\u003e \u003c/div\u003e\u003c/body\u003e\u003c/html\u003e"
+                              },
+                  "catalogName":  "app",
+                  "isImport":  2,
+                  "fileName":  "agc-help-releaseharmony-0000001933963166",
+                  "navigationAddress":  "/hmos/newdistribute/",
+                  "updatedDate":  "2025-09-09 01:34:10",
+                  "websiteType":  "1",
+                  "isGray":  0,
+                  "restrictedType":  0,
+                  "searchTitle":  "",
+                  "keywords":  "",
+                  "platform":  0,
+                  "intelligentRecommendFlag":  false,
+                  "versionLabels":  [
+
+                                    ],
+                  "contentLabels":  [
+                                        "DoubleFrame",
+                                        "celin-hmos",
+                                        "hmos-40",
+                                        "hmos-next-d",
+                                        "hmos-recommended",
+                                        "notuse",
+                                        "osType"
+                                    ],
+                  "careClassificationId":  "9069"
+              }
+}

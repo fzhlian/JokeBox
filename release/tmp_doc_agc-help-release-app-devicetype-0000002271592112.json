@@ -1,0 +1,46 @@
+﻿{
+    "code":  0,
+    "message":  "success",
+    "value":  {
+                  "docId":  "c3046b68546b46e79c1e007c6674d67e",
+                  "title":  "配置支持设备",
+                  "lang":  "cn",
+                  "domain":  "10200000",
+                  "businessName":  "应用分发",
+                  "businessType":  "10202000",
+                  "businessTypeName":  "AppGallery Connect",
+                  "serviceType":  "12100006",
+                  "version":  "V8",
+                  "anchorList":  [
+
+                                 ],
+                  "status":  "4",
+                  "content":  {
+                                  "type":  "html",
+                                  "content":  "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ca name=\"ZH-CN_TOPIC_0000002271592112\"\u003e\u003c/a\u003e\u003ca name=\"ZH-CN_TOPIC_0000002271592112\"\u003e\u003c/a\u003e  \u003ch1\u003e配置支持设备\u003c/h1\u003e \u003cdiv id=\"body0000002271592112\"\u003e\u003cp id=\"ZH-CN_TOPIC_0000002271592112__p2046621845510\"\u003e发布时，您可以为应用配置分发至多种设备，默认发布设备为您创建应用时选择的设备类型，您可以根据实际情况进行修改。您只需发布一次，用户即可在多种设备上使用您的应用。\u003c/p\u003e \u003col id=\"ZH-CN_TOPIC_0000002271592112__ol55216411516\"\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__zh-cn_topic_0000001099996700_zh-cn_topic_0000001064950298_li193381814174519\"\u003e登录\u003ca href=\"https://developer.huawei.com/consumer/cn/service/josp/agc/index.html\" target=\"_blank\"\u003eAppGallery Connect\u003c/a\u003e，点击“APP与元服务”。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__zh-cn_topic_0000001099996700_zh-cn_topic_0000001064950298_li928021775413\"\u003e选择要发布的应用。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li1918317174173\"\u003e左侧导航选择“应用上架 \u0026gt; 应用信息”。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li1511395961716\"\u003e进入“基本信息”区域，配置应用的支持设备。\u003cul id=\"ZH-CN_TOPIC_0000002271592112__ul184614405910\"\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li0846340593\"\u003e\u003cstrong\u003e应用分发至中国大陆地区时：\u003c/strong\u003e\u003cul id=\"ZH-CN_TOPIC_0000002271592112__ul19443410171512\"\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li13108141143211\"\u003e支持选择手机、平板、PC/2in1、智慧屏、智能手表、运动手表设备。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li157361939578\"\u003e当设备类型包含手机时，即便包里未声明平板，应用也会默认以兼容的方式分发到HarmonyOS NEXT平板。若您已在包中声明了平板设备，请直接在“支持设备”栏勾选“平板”。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li39820298399\"\u003e手机和平板应用经过测试后会默认发布到PC/2in1，为了提供更好的用户体验，请了解PC/2in1设备相对其他设备的\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/best-practices/bpta-pc-guide#section1650910471918\" target=\"_blank\"\u003e差异\u003c/a\u003e。如有疑问，请联系华为接口人或者\u003ca href=\"https://developer.huawei.com/consumer/cn/support/feedback/#/\" target=\"_blank\"\u003e客服\u003c/a\u003e。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li480621455818\"\u003e智慧屏设备还支持选择遥控器作为操作设备。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li1062598572\"\u003e在应用提交上架前，您可随时修改设备，支持由单设备改为多设备，或多设备改为单设备。但是应用一旦发布，升级版本只支持增加设备，无法删除已选择的设备。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li148121866340\"\u003e请确保您软件包里声明的设备（即module.json5配置文件中\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/module-configuration-file#devicetypes标签\" target=\"_blank\"\u003e“deviceTypes”标签\u003c/a\u003e的枚举值）范围大于等于AppGallery Connect上最终勾选的支持设备范围。\u003c/li\u003e\u003c/ul\u003e \u003c/li\u003e\u003c/ul\u003e \u003cul id=\"ZH-CN_TOPIC_0000002271592112__ul1478131262012\"\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li124780121204\"\u003e\u003cstrong\u003e应用分发至中国大陆以外的国家或地区时：\u003c/strong\u003e\u003cul id=\"ZH-CN_TOPIC_0000002271592112__ul119631828164115\"\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li1963152820416\"\u003e当前仅智能手表和运动手表应用支持分发至中国大陆以外的国家或地区，因此请勾选智能手表或运动手表。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li17416194442518\"\u003e在应用提交上架前，您可随时修改设备，支持由单设备改为多设备，或多设备改为单设备。但是应用一旦发布，升级版本只支持增加设备，无法删除已选择的设备。\u003c/li\u003e\u003cli id=\"ZH-CN_TOPIC_0000002271592112__li1268483254114\"\u003e请确保您软件包里声明的设备（即module.json5配置文件中\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/module-configuration-file#devicetypes标签\" target=\"_blank\"\u003e“deviceTypes”标签\u003c/a\u003e的枚举值）范围大于等于AppGallery Connect上最终勾选的支持设备范围。\u003c/li\u003e\u003c/ul\u003e \u003c/li\u003e\u003c/ul\u003e \u003cp id=\"ZH-CN_TOPIC_0000002271592112__p108423286356\"\u003e\u003cspan\u003e\u003cimg originheight=\"415\" originwidth=\"865\" src=\"https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20251104103220.40655459397015329787176250683085:50001231000000:2800:7F01193988CC6B243E51AE42D74D3414FDF75843B3D6B1C4823C382300861A71.png\"\u003e\u003c/span\u003e\u003c/p\u003e \u003cp id=\"ZH-CN_TOPIC_0000002271592112__p79724411538\"\u003e\u003c/p\u003e \u003c/li\u003e\u003c/ol\u003e \u003c/div\u003e \u003cdiv\u003e\u003c/div\u003e\u003c/body\u003e\u003c/html\u003e"
+                              },
+                  "catalogName":  "app",
+                  "isImport":  2,
+                  "fileName":  "agc-help-release-app-devicetype-0000002271592112",
+                  "navigationAddress":  "/hmos/newdistribute/",
+                  "updatedDate":  "2025-11-04 02:32:20",
+                  "websiteType":  "1",
+                  "isGray":  0,
+                  "restrictedType":  0,
+                  "searchTitle":  "",
+                  "keywords":  "",
+                  "platform":  0,
+                  "intelligentRecommendFlag":  true,
+                  "versionLabels":  [
+
+                                    ],
+                  "contentLabels":  [
+                                        "OSnext",
+                                        "celin-hmos",
+                                        "celin-next",
+                                        "osType"
+                                    ],
+                  "showBeta":  0,
+                  "careClassificationId":  "9069"
+              }
+}

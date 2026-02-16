@@ -1,0 +1,47 @@
+﻿{
+    "code":  0,
+    "message":  "success",
+    "value":  {
+                  "docId":  "315fc3e0e9284a32a91045de854e1606",
+                  "title":  "发布HarmonyOS应用",
+                  "lang":  "cn",
+                  "domain":  "10200000",
+                  "businessName":  "应用分发",
+                  "businessType":  "10202000",
+                  "businessTypeName":  "AppGallery Connect",
+                  "serviceType":  "12100006",
+                  "version":  "V4",
+                  "anchorList":  [
+
+                                 ],
+                  "status":  "4",
+                  "content":  {
+                                  "type":  "html",
+                                  "content":  "\u003chtml\u003e\u003chead\u003e\u003c/head\u003e\u003cbody\u003e\u003ca name=\"ZH-CN_TOPIC_0000002271695230\"\u003e\u003c/a\u003e\u003ca name=\"ZH-CN_TOPIC_0000002271695230\"\u003e\u003c/a\u003e  \u003ch1\u003e发布HarmonyOS应用\u003c/h1\u003e \u003cdiv id=\"body0000002271695230\"\u003e\u003c/div\u003e \u003cdiv\u003e \u003cul class=\"ullinks\"\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-guide-0000002287176372\"\u003e发布指引\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-prepare-0000002306311921\"\u003e发布准备工作\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-upload-pkg-0000002277983368\"\u003e上传软件包\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-devicetype-0000002271592112\"\u003e配置支持设备\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-nameicon-0000002306265009\"\u003e配置本地化基础信息（应用名称、图标）\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-class-tag-0000002271695234\"\u003e配置应用分类、标签\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-devinfo-0000002306311925\"\u003e配置开发者服务信息\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-choose-pkg-0000002278981434\"\u003e选择待发布软件包\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-area-0000002313510997\"\u003e配置发布国家或地区\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-intro-0000002313477961\"\u003e配置本地化基础信息（介绍、特性、素材）\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-goods-0000002278981442\"\u003e配置应用内资费类型和应用内商品\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-rating-0000002313511005\"\u003e配置内容分级\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-privacy-desc-0000002313477969\"\u003e配置隐私说明\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-privacy-state-0000002278878296\"\u003e配置隐私声明\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-privacy-tag-0000002316420993\"\u003e配置隐私标签信息\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-ai-0000002485431261\"\u003e配置AI功能声明\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-copyright-0000002278981450\"\u003e配置版权信息\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-record-0000002319594705\"\u003e配置备案信息\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-reviewinfo-0000002320780365\"\u003e填写审核信息与联系方式\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-review-time-0000002293233458\"\u003e设置上架时间\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003cli class=\"ulchildlink\"\u003e\u003cstrong\u003e\u003ca href=\"https://developer.huawei.com/consumer/cn/doc/app/agc-help-release-app-submit-0000002286180890\"\u003e提交审核\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e \u003c/li\u003e \u003c/ul\u003e \u003c/div\u003e\u003c/body\u003e\u003c/html\u003e"
+                              },
+                  "catalogName":  "app",
+                  "isImport":  2,
+                  "fileName":  "agc-help-release-app-0000002271695230",
+                  "navigationAddress":  "/hmos/newdistribute/",
+                  "updatedDate":  "2026-01-27 10:09:14",
+                  "websiteType":  "1",
+                  "isGray":  0,
+                  "restrictedType":  0,
+                  "searchTitle":  "",
+                  "keywords":  "",
+                  "platform":  0,
+                  "intelligentRecommendFlag":  false,
+                  "versionLabels":  [
+
+                                    ],
+                  "contentLabels":  [
+                                        "OSnext",
+                                        "celin-hmos",
+                                        "celin-next",
+                                        "osType"
+                                    ],
+                  "showBeta":  0,
+                  "careClassificationId":  "9069",
+                  "displayUpdateTime":  "2026-01-28 01:37:30"
+              }
+}

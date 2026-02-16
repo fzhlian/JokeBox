@@ -1,0 +1,25 @@
+{
+  "verifiedPassed": true,
+  "message": "OK",
+  "content": {
+    "version-code": 2,
+    "version-name": "2.0.0",
+    "uuid": "4b48b752-66da-4635-b53f-f36545d32a90",
+    "type": "release",
+    "app-distribution-type": "app_gallery",
+    "validity": {
+      "not-before": 1771141608,
+      "not-after": 1865836008
+    },
+    "bundle-info": {
+      "developer-id": "10086000923118287",
+      "distribution-certificate": "-----BEGIN CERTIFICATE-----\nMIICwDCCAkegAwIBAgIOCf0y2yi24SK5DwBSFDUwCgYIKoZIzj0EAwMwYjELMAkG\nA1UEBgwCQ04xDzANBgNVBAoMBkh1YXdlaTETMBEGA1UECwwKSHVhd2VpIENCRzEt\nMCsGA1UEAwwkSHVhd2VpIENCRyBEZXZlbG9wZXIgUmVsYXRpb25zIENBIEcyMB4X\nDTI2MDIxNTA3NDY0OFoXDTI5MDIxNTA3NDY0OFowcTELMAkGA1UEBhMCQ04xEjAQ\nBgNVBAoMCeeOi+WImuatpjEcMBoGA1UECwwTMTg4NjM0Mjk5NTU0NDkyNDczNzEw\nMC4GA1UEAwwn546L5Yia5q2mKDE4ODYzNDI5OTU1NDQ5MjQ3MzcpXCxSZWxlYXNl\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECJUCvCMUltpXq8xKtQxeFnQciPu9\n5CKAEYn5GBhj1PbI2VTJc+WsyRs3k9rqZYT6/PYqFMOTskv6s9tHZMXDlaOB0TCB\nzjAdBgNVHQ4EFgQUXHvL+nhdk0ZWKrJNqNBCaqrIF/AwDAYDVR0TAQH/BAIwADAf\nBgNVHSMEGDAWgBTbXpOyI+jQ5P5xembppHNHW3/zXjBZBgNVHR8EUjBQME6gTKBK\nhkhodHRwOi8vaDVob3N0aW5nLWRyY24uZGJhbmtjZG4uY24vY2NoNS9jcmwvaGRy\nY2FnMi9IdWF3ZWlDQkdIRFJHMmNybC5jcmwwDgYDVR0PAQH/BAQDAgeAMBMGA1Ud\nJQQMMAoGCCsGAQUFBwMDMAoGCCqGSM49BAMDA2cAMGQCMFvJG3TRFo61aBGOjMhH\nAdl4k1pDnWmD/nZlGlAUxEmxuhDt+4gg/vUQeboI8wcMkAIwY8Aedo4JlTA98iPg\nmJUvj5FY4WRhNiJGJNYhpHJl23c5ZDxgyoMSM/c8CMIz16j6\n-----END CERTIFICATE-----\n",
+      "bundle-name": "fzhlian.JokeBox.app",
+      "apl": "normal",
+      "app-feature": "hos_normal_app"
+    },
+    "acls": {},
+    "permissions": {},
+    "issuer": "app_gallery"
+  }
+}
